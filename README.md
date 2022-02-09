@@ -3,7 +3,7 @@ A repository for a [LiveCoMS Perpetual Review](https://livecomsjournal.org/index
 
 ## List of Authors
 - Jérôme Hénin, Laboratoire de Biochimie Théorique UPR 9080, CNRS, Université de Paris, Paris, France, and Institut de Biologie Physico-Chimique-Fondation Edmond de Rothschild, Paris, France
-- Tony Leliévre, CERMICS, Ecole des Ponts, INRIA, Marne-la-Vallée, France
+- Tony Lelièvre, CERMICS, Ecole des Ponts, INRIA, Marne-la-Vallée, France
 - Michael R. Shirts, Department of Chemical and Biological Engineering, University of Colorado Boulder, Boulder, CO, USA
 - Omar Valsson, University of North Texas, Department of Chemistry, Denton, TX, USA
 - Lucie Delemotte, KTH Royal Institute of Technology, Science for Life Laboratory, Stockholm, Sweden
