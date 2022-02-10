@@ -1,5 +1,12 @@
 #! /usr/bin/env python
 
+# Author: Omar Valsson
+# Script to generate Metadynamics figure (Figure 3 in version 1.0).
+# The figure is for a model potential given by
+# F(z)=a*x**4-4*a*x**2+b*x (see parameters below)
+# The hill file is taken from a metadynamics run on this 
+# model system.
+
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
