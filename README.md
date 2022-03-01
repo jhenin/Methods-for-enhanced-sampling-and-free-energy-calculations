@@ -1,5 +1,5 @@
 # Enhanced Sampling Methods for Molecular Dynamics Simulations
-A repository for a [LiveCoMS Perpetual Review](https://livecomsjournal.org/index.php/livecoms/catalog/category/reviews) on enhanced sampling methods titled "Enhanced Sampling Methods for Molecular Dynamics Simulations" (currently under review)
+A repository for a [LiveCoMS Perpetual Review](https://livecomsjournal.org/index.php/livecoms/catalog/category/reviews) on enhanced sampling methods titled "Enhanced Sampling Methods for Molecular Dynamics Simulations" ([preprint](https://arxiv.org/abs/2202.04164) currently under review)
 
 ## List of Authors
 - Jérôme Hénin, Laboratoire de Biochimie Théorique UPR 9080, CNRS, Université de Paris, Paris, France, and Institut de Biologie Physico-Chimique-Fondation Edmond de Rothschild, Paris, France
