@@ -233,7 +233,7 @@ schemes. We introduce here the notation we will use throughout the paper. Note t
 \item Cartesian coordinates of atoms (or coarse-grain particles) denoted by $\vx$ and momenta denoted by $\vp$.
 \item Potential energy function denoted by $U(\vx)$, defined by a classical molecular mechanics force field, various levels of electronic structure theory in an \emph{ab initio} dynamics framework, or a QM/MM hybrid and kinetic energy $K(\vp)$
 \item Force on particles $\vF(\vx) = -\nabla_\vx U(\vx)$.
-\item Absolute temperature $T$, inverse temperature $\beta = 1/(k_B T)$.
+\item Absolute temperature $T$, inverse temperature $\beta = 1/(k_\mathrm{B} T)$.
 \item \hypertarget{ref:AuxVar} {Extended (auxiliary) variable}: $\lambda$. This auxiliary variable can be a thermodynamic parameter, such as the temperature $T$ or the pressure $P$, or a parameter of the energy function $U_\lambda(\vx)$. The auxiliary variable can have a fixed value per simulation, can follow a pre-determined schedule, or can obey some dynamical equation of motion. It can have multiple dimensions, which we represent by the bold-faced vector $\boldsymbol{\lambda}$.
 
 \end{itemize}
@@ -428,7 +428,7 @@ Note that in \hyperlink{ref:ExpEns} {expanded ensemble} approaches, a free energ
 \end{align}
 
 There is a very general relation between thermodynamic quantities (with the dimension of an energy) and probabilistic quantities.
-The latter can be expressed as minus thermal energy ($-k_B T = -\beta^{-1}$) times the natural logarithm of the former: this process is called Boltzmann inversion.
+The latter can be expressed as minus thermal energy ($-k_\mathrm{B} T = -\beta^{-1}$) times the natural logarithm of the former: this process is called Boltzmann inversion.
 The main quantities discussed above are summarized in Table~\ref{tab:quantities}.
 
 
@@ -658,7 +658,7 @@ On the other hand, the term extended Lagrangian is more often used when  the fic
 
 
 \paragraph{Temperature-based sampling} Refers to enhanced-sampling methods relying on an increased temperature $\tilde T$ to reduce metastability. This can be done on some replicas within a set of replicas, on some fraction of the time within a given trajectory, or effectively on some fraction of the system by selective scaling of potential energy terms.
-In the latter case, if $U = U^\mathrm{unscaled} + U^\mathrm{scaled}$, scaling $U^\mathrm{scaled}$ to reach effective inverse temperature $\tilde \beta = 1/(k_b \tilde T)$ gives an expression of the bias potential $\tilde U$:
+In the latter case, if $U = U^\mathrm{unscaled} + U^\mathrm{scaled}$, scaling $U^\mathrm{scaled}$ to reach effective inverse temperature $\tilde \beta = 1/(k_\mathrm{B} \tilde T)$ gives an expression of the bias potential $\tilde U$:
 \begin{equation}
 \tilde U = U^\mathrm{unscaled} + \frac{\tilde \beta}{\beta} U^\mathrm{scaled}.
 \end{equation}
@@ -875,7 +875,7 @@ This can be solved by a number of numerical techniques as implemented in many so
 So in the case of fixed $c$, this is not an iterative
 equation.
 Bennett and others~\cite{fenwick-escobedo:jcp:2003:replica-exchange-expanded-ensembles,Paliwal_comparison_2011} have
-shown that when $c_k$ is relatively close to $f_k$ (within 1-2 $k_B T$)
+shown that when $c_k$ is relatively close to $f_k$ (within 1-2 $k_\mathrm{B} T$)
 it is still an excellent estimate of the free energy.  Thus, one can
 maintain the averages in the numerator and the denominator for a range
 of possible $c_k$, and whichever gives the free energy closest to
