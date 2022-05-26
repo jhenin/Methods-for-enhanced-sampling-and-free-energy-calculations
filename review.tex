@@ -308,7 +308,7 @@ For the sake of intuition, consider a discrete-time version of Langevin dynamics
 where $\mathbf{G}$ is a Gaussian-distributed stochastic 3N-vector of zero mean and variance 1.
 Note that in practice, more sophisticated discrete Langevin integration schemes are used, which bring much better accuracy, stability, and performance~\cite{Skeel2002, Leimkuhler2012}.
 Still, comparing the simple-minded Equations~\ref{eq:md_discrete} and \ref{eq:Langevin_discrete} shows that Langevin dynamics can be interpreted intuitively as similar to Hamiltonian dynamics, but including a modified force with added friction and stochastic collision terms. When $\gamma$ is zero, it reduces exactly to Hamiltonian dynamics.
-Note that there are many other possible thermostats that can be replace Hamiltonian dynamics, each with different numerical benefits and pitfalls. Note that some historic algorithms maintain an approximate target temperature, but do not sample from the canonical ensemble.
+Note that there are many other possible thermostats that can replace Hamiltonian dynamics, each with different numerical benefits and pitfalls. Note that some historic algorithms maintain an approximate target temperature, but do not sample from the canonical ensemble.
 Isothermal-isobaric dynamics also includes a barostat, producing volume fluctuations consistent with a given target pressure $P$, and samples the isothermal-isobaric ensemble (NPT).
 Again, there exists a variety of equations of motions with this property, and numerical algorithms implementing them. Langevin dynamics will be used as a basic example in later sections of this review.
 
@@ -753,7 +753,7 @@ If one is considering a simulation that allows transitions between two thermodyn
 \begin{equation}
 e^{f_j-f_i} = \frac{Q_i}{Q_j} = \frac{\left \langle  P_{i\rightarrow j}(x)\right\rangle}{\left \langle P_{j\rightarrow i}(x) \right \rangle}
 \end{equation}
-where $P_{i\rightarrow j}(x)$ is the probability of accepting a move from state $i$ to state $j$ proposed from configuration $\vx$. For simplicity we assume that the probability of moves proposed in from $i$ to $j$ is equal to the probability of transition from $j$ to $i$; more general transitions can also be included~\cite{escobedo_transition_2006}. We can construct a matrix of all possible transitions between any pair of states; hence we can call this a transition count matrix or \textit{transition matrix}.
+where $P_{i\rightarrow j}(x)$ is the probability of accepting a move from state $i$ to state $j$ proposed from configuration $\vx$. For simplicity we assume that the probability of moves proposed from $i$ to $j$ is equal to the probability of transition from $j$ to $i$; more general transitions can also be included~\cite{escobedo_transition_2006}. We can construct a matrix of all possible transitions between any pair of states; hence we can call this a transition count matrix or \textit{transition matrix}.
 
 Typically, this averaging is carried out over the transitions that were actually observed. However, this average can be performed over transitions \emph{that were not actually performed}. If one calculates the probability that the transition would occur even when a move is not made, it can be included in the average as well.
 
@@ -819,13 +819,13 @@ Equation~\ref{eq:TI1} can indeed be seen as a special case of Equation~\ref{eq:T
     - \frac{2}{r} \right\rangle_{\xi(\vx) = r}
     \label{eq:fes_grad}
 \end{equation}
-As mentioned in Section~\ref{sec:glossary}, the historic definition of the ``potential of mean force'' (PMF) for $r$ is simply the potential arising from the mean force and corresponds to the first term in~\ref{eq:fes_grad}:
+As mentioned in Section~\ref{sec:glossary}, the historic definition of the ``potential of mean force'' (PMF) for $r$ is simply the potential arising from the mean force and corresponds to the first term in Equation~\ref{eq:fes_grad}:
 \begin{equation}
     \frac{\mathrm{d} w}{\mathrm{d} r} = \left\langle \frac{\partial u}{\partial r} \right\rangle_{\xi(\vx) = r}
     \label{eq:pmf_grad}
 \end{equation}
 
-Slightly more complicated expressions of the free gradient hold for multidimensional collective variables $\xi$~\cite{Carter1989, denOtter2000, Henin2004, Ciccotti2005, lelievre-rousset-stoltz-07-a, Darve2008, Lesage2017}. Computing its integral, that is, the free energy itself, is easy when using a scalar \hyperlink{ref:CV} {collective variable}. In dimension greater than one, however, special integration methods are required~\cite{Henin2021integration}.
+Slightly more complicated expressions of the free energy gradient hold for multidimensional collective variables $\xi$~\cite{Carter1989, denOtter2000, Henin2004, Ciccotti2005, lelievre-rousset-stoltz-07-a, Darve2008, Lesage2017}. Computing its integral, that is, the free energy itself, is easy when using a scalar \hyperlink{ref:CV} {collective variable}. In dimension greater than one, however, special integration methods are required~\cite{Henin2021integration}.
 
 
 \subsection{Exponential averaging}
@@ -865,7 +865,7 @@ One standard approach is to derive the thermodynamic identity:
 \Delta f_{ij} = \ln \frac{\left\langle \frac{1}{1 + \exp(-\Delta u_{ij}+c))}\right\rangle_j}{\left \langle \frac{1}{1 + \exp(\Delta u_{ij}-c)}\right\rangle_i} + c-\ln\frac{N_j}{N_i}
 \end{eqnarray}
 Where $c$ is an arbitrary constant. This expression is an asymptotically unbiased estimator (meaning, if enough data is collected, it will converge to the correct answer) for any choice
-of $c$. However, one can prove that the lowest variance estimate of free energy is obtained when $c=\Delta f_{ij}$. To find $\Delta f_{ij}$, is equation needs to be solved self-consistently, resulting in the equation for $c$ (and therefore $f_ij$):
+of $c$. However, one can prove that the lowest variance estimate of free energy is obtained when $c=\Delta f_{ij}$. To find $\Delta f_{ij}$, this equation needs to be solved self-consistently, resulting in the equation for $c$ (and therefore $f_ij$):
 \begin{equation}
 \sum_{i=1}^{N_j} \frac{1}{1 + \exp(-\Delta u_{ij}+c))} - \sum_{j=1}^{N_i} \frac{1}{1 + \exp(\Delta u_{ij})-c} = 0
 \end{equation}
@@ -904,7 +904,7 @@ the computation of high precision uncertainties in the $\Delta
 f_{ij}$'s, as it can take into account the correlations in $f_i$ and
 $f_j$ thanks to their simultaneous estimation.
 
-A key fact is that the MBAR system of equations in the case of two states, and thus a single free energy differences, reduces exactly to the BAR~\cite{shirts-chodera:jcp:2008:mbar}.
+A key fact is that the MBAR system of equations in the case of two states, and thus a single free energy difference, reduces exactly to the BAR~\cite{shirts-chodera:jcp:2008:mbar}.
 
 MBAR can also be seen as free energy perturbation/exponential averaging to target distributions described by the reduced potential $u_i(\vx)$ from the mixture distribution $\mu_{mix}(\vx)$~\cite{reweighting_mixture_distribution}, formed by combining all the simulations proportional to the number of samples $N_k$ from each simulation, by rewriting Equation~\ref{eq:MBAR} as:
 \begin{eqnarray}
@@ -1196,7 +1196,7 @@ where $T$ is the time at the end of the simulation.
 
 Using $O(\vx) = \delta[\vz-\xi(\vx)]$ in Equation~\ref{wtmetad_reweighting} or~\ref{wtmetad_reweighting_lastbias}, allows us to use \hyperlink{ref:Reweighting} {reweighting} to estimate the \hyperlink{ref:FES} {FES} as a function of the biased \hyperlink{ref:CV} {CV}s, or for any other set of \hyperlink{ref:CV} {CV}s. It is a good practice to compare the \hyperlink{ref:FES} {FES} estimated from the bias potential via Equation~\ref{eq:metad_sumhills} to the \hyperlink{ref:FES} {FES} estimated using \hyperlink{ref:Reweighting} {reweighting}. They should give the same results and a major disagreement would indicate that the simulation is not converged or that the \hyperlink{ref:CV} {CV}s might not be good enough. Furthermore, we can estimate error bars for reweighted \hyperlink{ref:FES} {FES}s using block averaging (see PLUMED tutorials~\cite{plumed_masterclass}).
 
-Another post-processing methods for obtaining the \hyperlink{ref:FES} {FES} include mean force integration~\cite{10.1063/1.5123498} and a weighted histogram analysis method~\cite{10.1016/j.cplett.2020.137384}, which both allow for estimating the \hyperlink{ref:FES} {FES} by combining different independent metadynamics simulations. Metadynamics has also been combined with Gaussian Process Regression for obtaining the \hyperlink{ref:FES} {FES}~\cite{Mones2016}.
+Other post-processing methods for obtaining the \hyperlink{ref:FES} {FES} include mean force integration~\cite{10.1063/1.5123498} and a weighted histogram analysis method~\cite{10.1016/j.cplett.2020.137384}, which both allow for estimating the \hyperlink{ref:FES} {FES} by combining different independent metadynamics simulations. Metadynamics has also been combined with Gaussian Process Regression for obtaining the \hyperlink{ref:FES} {FES}~\cite{Mones2016}.
 
 
 \subsubsection{Conventional Metadynamics}
@@ -1209,7 +1209,7 @@ A(\vz) = - \frac{1}{n-n_0} \sum^{n}_{k=n_0} U^{\mathrm{bias}}_k(\vz).
 \end{equation}
 The accuracy of this estimate will depend on how well the biased \hyperlink{ref:CV} {CV}s are \hyperlink{ref:AdiabaticDyn} {adiabatically} separated from the dynamics of the other variables~\cite{laio-gervasio-08,jourdain-lelievre-zitt-21}, see Ref~\cite{BussiLaio_ReviewMetaD_2020} for further discussion regarding this point.
 
-In conventional metadynamics simulations, it is a common practise to introduce restraining walls (i.e., bias potential) to avoid exploring unimportant free energy regions. This is generally not needed in well-tempered metadynamics simulations as the bias factor and the well-tempered distribution naturally limits the extend of CV space exploration.
+In conventional metadynamics simulations, it is a common practise to introduce restraining walls (i.e., bias potential) to avoid exploring unimportant free energy regions. This is generally not needed in well-tempered metadynamics simulations as the bias factor and the well-tempered distribution naturally limits the extent of CV space exploration.
 
 \subsubsection{Multiple Walkers Metadynamics}
 A way to reduce the wall-clock time for convergence and make a better usage of modern parallel HPC resources is to employ multiple walkers or replicas~\cite{Raiteri-JPCB-2006}. The walkers collaboratively sample the free energy \hyperlink{ref:FES} {landscape} and share a bias potential that is constructed by considering the Gaussians deposited by all the walkers.
@@ -1224,7 +1224,7 @@ Parallel-bias metadynamics~\cite{Pfaendtner2015_pbmetad} allows for biasing a la
 
 
 \subsubsection{Infrequent Metadynamics}
-Well-tempered metadynamics has been extended for obtaining kinetics of rare events in a so-called infrequent metadynamics method~\cite{Tiwary-PRL-2013}. The idea is to reduce the deposition rate, in other words increase $N_{G}$, the number of simulation steps between depositing Gaussians. In this way, we can avoid putting bias on the transition state. If there is no bias on the transition state, we can rescale the time using the ideas of hyperdynamics~\cite{Voter-PRL-1997} and conformational flooding~\cite{Grubmuller-PRE-1995}. The physical time $t_b$ is obtain by summing up the MD steps and scaling the MD time step $dt$ by the bias acting at each step
+Well-tempered metadynamics has been extended for obtaining kinetics of rare events in a so-called infrequent metadynamics method~\cite{Tiwary-PRL-2013}. The idea is to reduce the deposition rate, in other words increase $N_{G}$, the number of simulation steps between depositing Gaussians. In this way, we can avoid putting bias on the transition state. If there is no bias on the transition state, we can rescale the time using the ideas of hyperdynamics~\cite{Voter-PRL-1997} and conformational flooding~\cite{Grubmuller-PRE-1995}. The physical time $t_b$ is obtained by summing up the MD steps and scaling the MD time step $dt$ by the bias acting at each step
 \begin{equation}
 \label{wtmetad_hyperdynamics}
 t_b = \sum_{i} dt \, e^{\beta U^{\mathrm{bias}}(\vz(t_{i}),t_{i})},
@@ -1243,7 +1243,7 @@ flux-tempered metadynamics~\cite{Singh-JStatPhys-2011,Singh-JCTC-2012},
 path-metadynamics~\cite{10.1103/physrevlett.109.020601,10.1063/1.5027392},
 funnel metadynamics~\cite{10.1073/pnas.1303186110,10.1038/s41596-020-0342-4},
 algorithms for boundary corrections~\cite{McGovern-JCP-2013},
-transition-tempered Metadynamics~\cite{Dama-JCTC-2014}, metabasin metadynamics~\cite{10.1021/acs.jctc.5b00907},
+transition-tempered metadynamics~\cite{Dama-JCTC-2014}, metabasin metadynamics~\cite{10.1021/acs.jctc.5b00907},
 experiment directed metadynamics~\cite{White_EDM_2015}
 ensemble-biased metadynamics~\cite{Marinelli_EnsembleBiased_2015},
 target metadynamics~\cite{GilLey_TargetMetaD_2016},
@@ -1445,7 +1445,7 @@ ABF-FUNN is part of SSAGES.\cite{Sidky2018}
 \subsection{Adaptive Biasing Potential Methods Using the Potential Energy as a Collective Variable}
 \label{sec:abp_energy}
 
-A certain class of enhanced sampling methods can be loosely defined as adaptive biasing potential methods using the potential energy $U$ as a CV though they might not be explicitly formulated in terms of a bias potential. What unites these methods is that they aim to sample a potential energy distribution $p_{\mathrm{tg}}(U)$ (i.e., a target potential energy distribution) that is broadened or expanded as compared to unbiased distribution corresponding to the simulation temperature. Thus, they can be considered as sampling from a ensemble where the sampling should be easier\footnote{sometimes called a generalized ensemble in the literature, see the following Section~\ref{sec:generalized-ensemble} for a more broader discussion of this idea.}. A well known example of this is the multicanonical (or multithermal) ensemble where the aim to sample the potential energy near uniformly in a given range. The idea can also be extended to multithermal-multibaric simulations by incorporating the volume as a variable those dynamics is biased or modified~\cite{Okumura_MultiTP_2004,Shell_MultiTP_2002}. Furthermore, sometime only a subset of the potential energy is used to better focus the sampling enhancement~\cite{Yang_SITS_2009}.
+A certain class of enhanced sampling methods can be loosely defined as adaptive biasing potential methods using the potential energy $U$ as a CV though they might not be explicitly formulated in terms of a bias potential. What unites these methods is that they aim to sample a potential energy distribution $p_{\mathrm{tg}}(U)$ (i.e., a target potential energy distribution) that is broadened or expanded as compared to unbiased distribution corresponding to the simulation temperature. Thus, they can be considered as sampling from a ensemble where the sampling should be easier\footnote{sometimes called a generalized ensemble in the literature, see the following Section~\ref{sec:generalized-ensemble} for a more broader discussion of this idea.}. A well known example of this is the multicanonical (or multithermal) ensemble where the aim to sample the potential energy near uniformly in a given range. The idea can also be extended to multithermal-multibaric simulations by incorporating the volume as a variable whose dynamics is biased or modified~\cite{Okumura_MultiTP_2004,Shell_MultiTP_2002}. Furthermore, sometime only a subset of the potential energy is used to better focus the sampling enhancement~\cite{Yang_SITS_2009}.
 
 Methods in this category include for example
 the multicanonical ensemble~\cite{Berg1992_Multicanonical},
@@ -1460,7 +1460,7 @@ To achieve the given target potential energy distribution $p_{\mathrm{tg}}(U)$, 
 \begin{equation}
 U_\mathrm{bias}(U) = - A(U) -\frac{1}{\beta} \ln p_{\mathrm{tg}}(U) = - U + \frac{1}{\beta} \ln \Omega(U) -\frac{1}{\beta} \ln p_{\mathrm{tg}}(U),
 \end{equation}
-where $\Omega(U) = \int d\vx \, \delta(U-U(\vx))$ is the density of states, and we ignore unimportant constants. Therefore, we can loosely define these methods as adaptive biasing potential methods using the potential energy $U$ as a CV. From this equation, we can also see an certain theoretical equivalence between methods that work with the density of states, such as Wang-Landau sampling and statistical temperature MD, and methods that work with the free energy, such as metadynamics, see Ref~\cite{Junghans2014wte-wl} for further discussion on this point.
+where $\Omega(U) = \int d\vx \, \delta(U-U(\vx))$ is the density of states, and we ignore unimportant constants. Therefore, we can loosely define these methods as adaptive biasing potential methods using the potential energy $U$ as a CV. From this equation, we can also see a certain theoretical equivalence between methods that work with the density of states, such as Wang-Landau sampling and statistical temperature MD, and methods that work with the free energy, such as metadynamics, see Ref~\cite{Junghans2014wte-wl} for further discussion on this point.
 
 \section{Generalized ensemble and replica exchange methods}
 \label{sec:generalized-ensemble}
@@ -1619,7 +1619,7 @@ If we think of sampling this joint space in configuration and state in the conte
 \end{eqnarray}
 
 Sampling from the conditional probability distribution
-$\nu(\vx | k)$ is just standard molecular sampling that generates correlated samples. Fortunately, the sampling in $\nu(k | \vx)$ is often much simpler.   If we have a
+$\nu(\vx | k)$ is just standard molecular sampling that generates correlated samples. Fortunately, the sampling in $\nu(k | \vx)$ is often much simpler.   If we have
 discrete states which can be enumerated, we can simply calculate
 $u_k(\vx)$ for each state and select randomly with $\nu(k|\vx)$.  The
 probabilities only depend on the \hyperlink{ref:reduced} {reduced} energy differences $\Delta
@@ -1828,7 +1828,7 @@ In the ``single sweep" method, TAMD is used to estimate local free energy gradie
 
 Driven-AFED (d-AFED)~\cite{doi:10.1021/jp805039u}, unified free energy dynamics (UFED)~\cite{doi:10.1063/1.4733389}, canonical adiabatic free energy sampling (CAFES)~\cite{doi:10.1021/jp013346k} and on-the-fly free energy parameterization (OTFP)~\cite{ABRAMS2012114} are all related to this scheme.
 
-Note also that conventional (non well-tempered) metadynamics (see Section~\ref{sec:meta-classic}) implicitly makes such an adiabatic hypothesis to get an unbiased the \hyperlink{ref:FEestimator} {free energy estimator}~\cite{laio-gervasio-08, jourdain-lelievre-zitt-21}.
+Note also that conventional (non well-tempered) metadynamics (see Section~\ref{sec:meta-classic}) implicitly makes such an adiabatic hypothesis to get an unbiased \hyperlink{ref:FEestimator} {free energy estimator}~\cite{laio-gervasio-08, jourdain-lelievre-zitt-21}.
 
 
 \section{Hybrid methods}
@@ -1938,7 +1938,7 @@ and thus reduced by a factor of $\gamma$ as compered to conventional replica exc
 \subsubsection{Replica Exchange with collective variable tempering}
 %JH \hyperlink{ref:CV} {collective variable} Tempering}
 
-The idea behind replica exchange with \hyperlink{ref:CV} {collective variable} tempering~\cite{Gil-Ley_JCTC-2015} is to reduce the number of replicas needed for replica-exchange simulations by focusing only on selected degrees of freedom. One considers $M$ replicas with the same temperature and within each replica, one performs concurrent well-tempered metadynamics simulations where one considers the same \hyperlink{ref:CV} {CV} set within replica and biases each \hyperlink{ref:CV} {CV} by a separate one-dimensional metadynamics potential. One can then bias a large number of degrees of freedom (e.g., all dihedral angles). The replicas are arranged in a ladder of increasing bias factor values where the lowest replica corresponds to the canonical ensemble ($\gamma=1$). Thus, by going up the replica ladder, the fluctuations of the biased degrees of freedom are enhanced. Though one consider a large number of degrees of freedom, this is considerably smaller than the total number of the system's degrees of freedom. Therefore, the number of replicas needed is considerably less than parallel-tempering, where fluctuations of all degrees of freedom are enhanced by heating the system.
+The idea behind replica exchange with \hyperlink{ref:CV} {collective variable} tempering~\cite{Gil-Ley_JCTC-2015} is to reduce the number of replicas needed for replica-exchange simulations by focusing only on selected degrees of freedom. One considers $M$ replicas with the same temperature and within each replica, one performs concurrent well-tempered metadynamics simulations where one considers the same \hyperlink{ref:CV} {CV} set within replica and biases each \hyperlink{ref:CV} {CV} by a separate one-dimensional metadynamics potential. One can then bias a large number of degrees of freedom (e.g., all dihedral angles). The replicas are arranged in a ladder of increasing bias factor values where the lowest replica corresponds to the canonical ensemble ($\gamma=1$). Thus, by going up the replica ladder, the fluctuations of the biased degrees of freedom are enhanced. Though one considers a large number of degrees of freedom, this is considerably smaller than the total number of the system's degrees of freedom. Therefore, the number of replicas needed is considerably less than parallel-tempering, where fluctuations of all degrees of freedom are enhanced by heating the system.
 
 \subsection{Combination of metadynamics and other enhanced sampling methods}
 
@@ -1962,7 +1962,7 @@ Structural ensemble determination methods~\cite{Bonomi_StructEnsembleDeterm_Revi
 
 
 In Ref~\cite{Bonomi_MetadynamicMetainference_SciRep2016}, parallel-bias metadynamics is combined with metainference~\cite{Bonomi_Metainference_SciAdv2016} that is a structural ensemble determination methods that incorporates experimental errors via a Bayesian inference framework. In Ref~\cite{Amirkulova_PTWTE-EDS_JPCB2020}, parallel-tempering in the well-tempered ensemble (Section~\ref{sec:pt-wte}) is combined with experiment directed simulations~\cite{White_EDS_JCTC2014}.
-A older work along this line is replica-average metadynamics~\cite{Camilloni_RAM_2013,Camilloni_RAM-2_JACS20214}, where metadynamics or bias-exchange metadynamics is combined with replica-averaging.
+An older work along this line is replica-average metadynamics~\cite{Camilloni_RAM_2013,Camilloni_RAM-2_JACS20214}, where metadynamics or bias-exchange metadynamics is combined with replica-averaging.
 
 Related to the idea of structural ensemble determination methods are experiment directed metadynamics~\cite{White_EDM_2015}, ensemble-biased metadynamics~\cite{Marinelli_EnsembleBiased_2015}, and target metadynamics~\cite{GilLey_TargetMetaD_2016}. In these variants of metadynamics, the bias updating procedure is modified such that the biased CV distribution that the simulation converges to is some predefined \hyperlink{ref:targetdist}{target probability distribution}. Thus, by taking this \hyperlink{ref:targetdist}{target distribution} from experimental measurements, it is possible to obtain a structural ensemble that is compatible with the experimental results. In a similar spirit, the \hyperlink{ref:targetdist}{target distribution} in variationally enhanced sampling~\cite{Valsson_VES_PRL_2014,Valsson2020Handbook_VES} (Section~\ref{sec:ves}) can be taken from experimental measurements.
 
@@ -2010,7 +2010,7 @@ DESMOND & Umbrella sampling, Metadynamics & \cite{Desmond2006} \\
 \hline
 LAMMPS  & Harmonic restraints, applying external forces, replica exchange, parallel replica dynamics, temperature accelerated dynamics, original hyperdynamics, local hyperdynamics. &  \cite{LAMMPS_2022}\\
 \hline
-HOOMD-Blue &  Restraints, applying external forces, versatile python framework to implement any scheme. & \cite{HOOMD-blue_2020} \\
+HOOMD-blue &  Restraints, applying external forces, versatile python framework to implement any scheme. & \cite{HOOMD-blue_2020} \\
 \hline
 Tinker-HP & Steered MD, Gaussian-accelerated MD, umbrella sampling & \cite{Celerse2019,Celerse2021} \\
 \hline
