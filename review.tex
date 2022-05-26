@@ -1185,14 +1185,14 @@ Another \hyperlink{ref:Reweighting} {reweighting} procedure that avoids the calc
 \,
 e^{
 \beta
-U^{\mathrm{bias}}(\xi(\vx),T)
+U^{\mathrm{bias}}(\xi(\vx),t_F)
 }\rangle_{\tilde U}}
 {\langle
 e^{\beta
-U^{\mathrm{bias}}(\xi(\vx),T)
+U^{\mathrm{bias}}(\xi(\vx),t_F)
 } \rangle_{\tilde U}},
 \end{equation}
-where $T$ is the time at the end of the simulation.
+where $t_F$ is the time at the end of the simulation.
 
 Using $O(\vx) = \delta[\vz-\xi(\vx)]$ in Equation~\ref{wtmetad_reweighting} or~\ref{wtmetad_reweighting_lastbias}, allows us to use \hyperlink{ref:Reweighting} {reweighting} to estimate the \hyperlink{ref:FES} {FES} as a function of the biased \hyperlink{ref:CV} {CV}s, or for any other set of \hyperlink{ref:CV} {CV}s. It is a good practice to compare the \hyperlink{ref:FES} {FES} estimated from the bias potential via Equation~\ref{eq:metad_sumhills} to the \hyperlink{ref:FES} {FES} estimated using \hyperlink{ref:Reweighting} {reweighting}. They should give the same results and a major disagreement would indicate that the simulation is not converged or that the \hyperlink{ref:CV} {CV}s might not be good enough. Furthermore, we can estimate error bars for reweighted \hyperlink{ref:FES} {FES}s using block averaging (see PLUMED tutorials~\cite{plumed_masterclass}).
 
@@ -1286,7 +1286,7 @@ To obtain a better understanding of the functional in Equation~\ref{ves_omega}, 
 \begin{equation}
 \beta \Omega [U^{\mathrm{bias}}] = D_{\mathrm{KL}}(p_{\mathrm{tg}}||\tilde{\rho})-D_{\mathrm{KL}}(p_{\mathrm{tg}}||\rho),
 \end{equation}
-where $D_{\mathrm{KL}}(\cdot||\cdot)$ is the Kullback-Leibler divergence between two probability distribution. Therefore, minimizing $\Omega [U^{\mathrm{bias}}]$ is equivalent to minimizing the Kullback-Leibler divergence (or the relative entropy or cross entropy) between the biased distribution $\tilde{\rho}(\vz)$ and the \hyperlink{ref:targetdist}{target distribution} $p_{\mathrm{tg}}(\vz)$~\cite{Rubinstein-MetCompAppProb-1999,Shell-JCP-2008,Bilionis-JCompPhys-2012,Zhang_SIAM-JSC-2014}.
+where $D_{\mathrm{KL}}(p||q)=\int p(\vx) \ln\frac{p(\vx)}{q(\vx)} \, d\vx$ is the Kullback-Leibler divergence from probability distribution $p(\vx)$ to probability distribution $q(\vx)$. Therefore, minimizing $\Omega [U^{\mathrm{bias}}]$ is equivalent to minimizing the Kullback-Leibler divergence (or the relative entropy or cross entropy) between the \hyperlink{ref:targetdist}{target distribution} $p_{\mathrm{tg}}(\vz)$ and the biased distribution $\tilde{\rho}(\vz)$~\cite{Rubinstein-MetCompAppProb-1999,Shell-JCP-2008,Bilionis-JCompPhys-2012,Zhang_SIAM-JSC-2014}.
 
 In practice, $\Omega [U^{\mathrm{bias}}]$ is minimized by introducing a functional form for the bias potential $U^\mathrm{bias}(\vz,\boldsymbol{\alpha})$ that depends on a set of variational parameters $\boldsymbol{\alpha}$. We then go from an abstract functional minimization to a minimization of the multidimensional function $\Omega(\boldsymbol{\alpha}) = \Omega [U^{\mathrm{bias}}(\boldsymbol{\alpha})]$. The elements of the gradient $\nabla \Omega(\boldsymbol{\alpha})$ are defined as
 \begin{equation}
