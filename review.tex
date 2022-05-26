@@ -479,7 +479,7 @@ The potential of mean force $W(r)$ between two particles was defined based on it
 where $A(r)$ is the \hyperlink{ref:FES} {FES} along the interparticle distance and $C$ is an arbitrary constant.
 The historic PMF and FES are therefore related, but distinct quantities.
 
-The phrase ``potential of mean force'' describes very literally that $W(r)$ is a potential arising from a average force that would act on a particle at that location. In particular, it is zero in non-interacting systems (if $U(\vx) = 0$ for all $\vx$ then $W(r) = 0$ for all $r$), which is not generally the case for free energy surfaces.
+The phrase ``potential of mean force'' describes very literally that $W(r)$ is a potential arising from an average force that would act on a particle at that location. In particular, it is zero in non-interacting systems (if $U(\vx) = 0$ for all $\vx$ then $W(r) = 0$ for all $r$), which is not generally the case for free energy surfaces.
 For details, refer to Section~\ref{sec:fe_estimators:TI} on Thermodynamic Integration.
 
 Here again, one may define the reduced version of $W(r)$:
@@ -598,7 +598,7 @@ Detailed balance is a constraint on the way moves from a given state of a system
 where $P(i)$ and $P(j)$ are the desired probabilities of $i$ and $j$, and $P_{i\rightarrow j}$ and $P_{j\rightarrow i}$ are the probabilities of transitioning from state $i$ to $j$ and state $j$ to $i$ during some process.
 Generally, physical systems obey detailed balance, and most common simulation methods, such as molecular dynamics or Metropolis Monte Carlo obey detailed balance, and thus preserve the overall probability distribution of the system.
 
-Balance is a weaker requirement~\cite{deem:jcp:1999:balance}, and is merely that the desired probability distribution is preserved. This can be done without the forcing the ratio of the fluxes between states being equal to the ratio of the probabilities of two states, as is the case in detailed balance.  For example, you could have a cycle of flux between three states $i$,$j$, and $k$, and still preserve the probability distribution.  Proving a given set of ways to perform moves between states obeys balance is usually significantly harder than proving that a set of moves preserves detailed balance.
+Balance is a weaker requirement~\cite{deem:jcp:1999:balance}, and is merely that the desired probability distribution is preserved. This can be done without forcing the ratio of the fluxes between states being equal to the ratio of the probabilities of two states, as is the case in detailed balance.  For example, you could have a cycle of flux between three states $i$,$j$, and $k$, and still preserve the probability distribution.  Proving a given set of ways to perform moves between states obeys balance is usually significantly harder than proving that a set of moves preserves detailed balance.
 However, studies have shown that it is often possible to obtain better sampling through states with algorithms that only obey balance rather than detailed balance~\citep{deem:jcp:1999:balance,Faizi:JCTC:2020}.
 
 \hypertarget{ref:MetropolisMonteCarlo} {\paragraph{Metropolis Monte Carlo}}
@@ -1014,9 +1014,9 @@ In the seminal ``Umbrella Sampling'' paper from 1977 by Torrie and Valleau~\cite
 
 \subsection{Adaptive Biasing Potential Methods}
 \label{sec:ABP}
-In \hyperlink{ref:Adaptive} {Adaptive} Biasing Potential (ABP) methods, an external bias potential in a space of some chosen \hyperlink{ref:CV} {collective variable}s (\hyperlink{ref:CV} {CV}s) is added to bias the dynamics of the system. The purpose of the bias potential is to counteract the free energy \hyperlink{ref:FES} {surface} and lead to more flatter sampling in CV space. In other words, the bias potential leads to sampling of a biased CV-distribution that is easier to sample. As the \hyperlink{ref:FES} {FES} is naturally a priori unknown, the bias potential is generally constructed in an adaptive manner through some kind of iterative scheme. ABP methods  differ in how the bias potential is constructed and which kind of sampling is obtained at convergence.
+In \hyperlink{ref:Adaptive} {Adaptive} Biasing Potential (ABP) methods, an external bias potential in a space of some chosen \hyperlink{ref:CV} {collective variable}s (\hyperlink{ref:CV} {CV}s) is added to bias the dynamics of the system. The purpose of the bias potential is to counteract the free energy \hyperlink{ref:FES} {surface} and lead to more flatter sampling in CV space. In other words, the bias potential leads to sampling of a biased CV-distribution that is easier to sample. As the \hyperlink{ref:FES} {FES} is naturally \textit{a priori} unknown, the bias potential is generally constructed in an adaptive manner through some kind of iterative scheme. ABP methods  differ in how the bias potential is constructed and which kind of sampling is obtained at convergence.
 
-Note that most ABP methods can also be used in conjunction with \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} simulations. In this case, the bias potential needs to be taking into account in the Monte Carlo acceptance probability (Equation~\ref{eq:bal}).
+Note that most ABP methods can also be used in conjunction with \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} simulations. In this case, the bias potential needs to be taken into account in the Monte Carlo acceptance probability (Equation~\ref{eq:bal}).
 
 Most ABP methods are limited in the number of CVs that they can handle and generally we can use no more than three to four CVs. As the performance of ABP methods depends critically on the choice of the CVs, the CVs need to be chosen carefully and they should correspond to essential slow degrees of freedom. However, there are ABP methods that can handle a large number of CVs where the choice of the CVs might be less critical.
 
@@ -1212,7 +1212,7 @@ The accuracy of this estimate will depend on how well the biased \hyperlink{ref:
 In conventional metadynamics simulations, it is a common practise to introduce restraining walls (i.e., bias potential) to avoid exploring unimportant free energy regions. This is generally not needed in well-tempered metadynamics simulations as the bias factor and the well-tempered distribution naturally limits the extend of CV space exploration.
 
 \subsubsection{Multiple Walkers Metadynamics}
-A way to reduces the wall-clock time for convergence and make a better usage of modern parallel HPC resources is to employ multiple walkers or replicas~\cite{Raiteri-JPCB-2006}. The walkers collaboratively sample the free energy \hyperlink{ref:FES} {landscape} and share a bias potential that is constructed by considering the Gaussians deposited by all the walkers.
+A way to reduce the wall-clock time for convergence and make a better usage of modern parallel HPC resources is to employ multiple walkers or replicas~\cite{Raiteri-JPCB-2006}. The walkers collaboratively sample the free energy \hyperlink{ref:FES} {landscape} and share a bias potential that is constructed by considering the Gaussians deposited by all the walkers.
     %
 \subsubsection{Well-Tempered Ensemble}
 \label{sec:wtensemble}
@@ -1256,14 +1256,14 @@ metadynamics with scaled hypersphere search for high-dimensional FES~\cite{Mitsu
 We refer the reader to the references for further details. Metadynamics has also been used in various types of hybrid methods as discussed in Section~\ref{sec:hybrids}.
 
 \subsubsection{Public Implementations of Metadynamics}
-Various variants of metadynamics are implemented in the PLUMED 2 enhanced sampling plug-in~\cite{Bonomi-CPC-2009,Tribello2014,plumed-nest}. PLUMED also includes a numerous practical tutorials showing how to perform and analyze metadynamics simulations~\cite{plumed_masterclass}.
+Various variants of metadynamics are implemented in the PLUMED 2 enhanced sampling plug-in~\cite{Bonomi-CPC-2009,Tribello2014,plumed-nest}. PLUMED also includes numerous practical tutorials showing how to perform and analyze metadynamics simulations~\cite{plumed_masterclass}.
 
 Metadynamics are also available in the external libraries SSAGES and the Colvars module, and also is natively implemented in some MD codes codes such as CP2K and DESMOND, see Table 2 in Ref~\cite{BussiLaio_ReviewMetaD_2020}.
 
 \subsection{Variationally Enhanced Sampling}
 \label{sec:ves}
-A more recently introduced ABP methods is variationally enhanced
-sampling~\cite{Valsson_VES_PRL_2014,Valsson2020Handbook_VES} that is based on variational principle.
+A more recently introduced ABP method is variationally enhanced
+sampling~\cite{Valsson_VES_PRL_2014,Valsson2020Handbook_VES} that is based on a variational principle.
 In variationally enhanced sampling, a bias potential $U^{\mathrm{bias}}(\vz)$ is constructed by minimizing a convex functional given by
 \begin{equation}
 \label{ves_omega}
@@ -1315,7 +1315,7 @@ U^{\mathrm{bias}}(\vz;\boldsymbol{\alpha}) = \sum_{\mathbf{k}} \alpha_{\mathbf{k
 \end{equation}
 This could for example be a tensor product of one-dimensional basis functions like Chebyshev or Legendre polynomials, or wavelets. In particular, localized wavelet basis functions have been shown to perform the best~\cite{ValssonPampel_Wavelets_2022}. A neural network bias potential has also been used~\cite{Bonati2019_NN-VES}. Furthermore, one can use bespoke bias potentials like a model of the free energy \hyperlink{ref:FES} {profile}~\cite{McCarty2016_JCTC,Piaggi2016_Faraday}.
 
-The \hyperlink{ref:targetdist}{target distribution} $p_{\mathrm{tg}}(\vz)$ can be chosen freely by the user. However, one needs to keep in mind that it should be chosen such that the sampling is easier than in the equilibrium distribution. The most straightforward choice would be a uniform \hyperlink{ref:targetdist}{target distribution}, such that the aim to completely cancel out the \hyperlink{ref:FES} {FES} and flatten the sampling in the \hyperlink{ref:CV} {CV} space. However, that is generally not optimal. Instead it is better to only enhance \hyperlink{ref:CV} {CV} fluctuations to a certain degree and thus only partly cancel out the \hyperlink{ref:FES} {FES}~\cite{Valsson-JCTC-2015}. We can achieve this by employing a well-tempered distribution as in Equation~\ref{eq:wtmetad_wtdist} (see Figure~\ref{eq:wtmetad_wtdist}). The bias factor $\gamma$ determines how much we enhance \hyperlink{ref:CV} {CV} fluctuations. The well-tempered distribution is unknown a priori so it needs be determined iteratively~\cite{Valsson-JCTC-2015}.
+The \hyperlink{ref:targetdist}{target distribution} $p_{\mathrm{tg}}(\vz)$ can be chosen freely by the user. However, one needs to keep in mind that it should be chosen such that the sampling is easier than in the equilibrium distribution. The most straightforward choice would be a uniform \hyperlink{ref:targetdist}{target distribution}, such that the aim to completely cancel out the \hyperlink{ref:FES} {FES} and flatten the sampling in the \hyperlink{ref:CV} {CV} space. However, that is generally not optimal. Instead it is better to only enhance \hyperlink{ref:CV} {CV} fluctuations to a certain degree and thus only partly cancel out the \hyperlink{ref:FES} {FES}~\cite{Valsson-JCTC-2015}. We can achieve this by employing a well-tempered distribution as in Equation~\ref{eq:wtmetad_wtdist} (see Figure~\ref{fig:MetaD}). The bias factor $\gamma$ determines how much we enhance \hyperlink{ref:CV} {CV} fluctuations. The well-tempered distribution is unknown \textit{a priori} so it needs be determined iteratively~\cite{Valsson-JCTC-2015}.
 
 The \hyperlink{ref:FES} {FES} can be estimated directly from the bias potential though Equation~\ref{ves_biaspotential}. Furthermore, the \hyperlink{ref:FES} {FES}, both for the biased \hyperlink{ref:CV} {CV}s and for any other \hyperlink{ref:CV} {CV}s, can be obtained through \hyperlink{ref:Reweighting} {reweighting}, where we can also estimate error bars. Note that  in variationally enhanced sampling, we generally do not need to account for time-dependent constants as in metadynamics. It is sufficient to include the bias potential in the weight when performing the reweighting procedure. As for metadynamics, it is a good practise to estimate the \hyperlink{ref:FES} {FES} both from the bias potential and through \hyperlink{ref:Reweighting} {reweighting} and compare the results. Furthermore, in cases where the bias potential might not have sufficient variational flexibility to represent the underlying \hyperlink{ref:FES} {FES}, the reweighted results can be more accurate.
 
@@ -1345,7 +1345,7 @@ Variationally enhanced sampling is implemented in the VES Code module of PLUMED 
 \end{figure}
 
 The \hyperlink{ref:Adaptive} {adaptive} Biasing Force method (ABF) is rooted in free energy estimation by thermodynamic integration (Section~\ref{sec:fe_estimators:TI}).
-In ABF, the gradient of the free energy with respect to selected \hyperlink{ref:CV} {CV}s $\vz = \xi(\vx)$ is estimated, and that estimate is used to apply a time-dependent external force that $\vF^\mathrm{ABF}_t(\vz)$ that counteracts the estimated free energy gradient, enhancing sampling along those coordinates.
+In ABF, the gradient of the free energy with respect to selected \hyperlink{ref:CV} {CV}s $\vz = \xi(\vx)$ is estimated, and that estimate is used to apply a time-dependent external force $\vF^\mathrm{ABF}_t(\vz)$ that counteracts the estimated free energy gradient, enhancing sampling along those coordinates.
 
 The principle is the following:
 \begin{enumerate}
@@ -1456,7 +1456,7 @@ metadynamics using the energy as CV~\cite{Micheletti_MetaE_Energy_2004,Bonomi-PR
 integrated tempering sampling~\cite{Gao_ITS_2008,Gao_ITS_Review_2015}.
 Furthermore, variationally enhanced sampling and on-the-fly probability-enhanced sampling have been extended to perform simulations in the multithermal and the multithermal-multibaric ensembles as described in Refs~\citep{Piaggi_MultiVES_2019,Piaggi_MultiVES+CV_2019} and~\citep{invernizzi2020unified}, respectively.
 
-To achieve the given target potential energy distribution $p_{\mathrm{tg}}(U)$, these methods employ some kind of adaptive or iterative scheme to estimate a priori unknown quantities. For example, this can be the density of states~\cite{wang-landau:prl:2001:wang-landau,Kim2006_PRL_STMD,DePablo_DOS_2012}, factors or weights in sum over Boltzmann factors at different temperatures~\cite{Gao_ITS_2008,invernizzi2020unified}, or a free energy as in the case of the well-tempered metadynamics. As said above, these methods are not necessarily explicitly formulated in terms of a bias potential. Nevertheless, we can still associate an effective bias potential as function of the potential energy to them
+To achieve the given target potential energy distribution $p_{\mathrm{tg}}(U)$, these methods employ some kind of adaptive or iterative scheme to estimate \textit{a priori} unknown quantities. For example, this can be the density of states~\cite{wang-landau:prl:2001:wang-landau,Kim2006_PRL_STMD,DePablo_DOS_2012}, factors or weights in sum over Boltzmann factors at different temperatures~\cite{Gao_ITS_2008,invernizzi2020unified}, or a free energy as in the case of the well-tempered metadynamics. As said above, these methods are not necessarily explicitly formulated in terms of a bias potential. Nevertheless, we can still associate an effective bias potential as function of the potential energy to them
 \begin{equation}
 U_\mathrm{bias}(U) = - A(U) -\frac{1}{\beta} \ln p_{\mathrm{tg}}(U) = - U + \frac{1}{\beta} \ln \Omega(U) -\frac{1}{\beta} \ln p_{\mathrm{tg}}(U),
 \end{equation}
@@ -1567,7 +1567,7 @@ $\mathbf{\lambda}$ as the simulation proceeds, dropping ``dirt'' into the
 wells, thus gradually building up the importance weights.  At the end
 of the simulation, when all states are visited equally, one counts how
 much much ``dirt'' the walker has added to each state's weight to
-achieve equal sampling. The negative logarithm of this weight simply
+achieve equal sampling. The negative logarithm of this weight is simply
 the free energy of the state.  This analogy is illustrated in
 Figure~\ref{fig:EXEanalogy}. The basic principle is similar to metadynamics, though rather than bias being calculated as a function of some collective coordinate, the bias is calculated as a function of the parameter (such as $\lambda$ or temperature) controlling the thermodynamic state.
 
