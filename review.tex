@@ -32,7 +32,7 @@
 \newcommand{\githubrepository}{\url{https://github.com/jhenin/Methods-for-enhanced-sampling-and-free-energy-calculations}}  %this should be the main github repository for this article
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% ARTICLE SETUPhttps://www.overleaf.com/project/5be041ec013b2a2acd0dc620
+%%% ARTICLE SETUP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{Enhanced sampling methods for molecular dynamics simulations [Article v\versionnumber]}
 
@@ -43,7 +43,7 @@
 \author[4*]{Michael R.  Shirts}
 \author[5,6*]{Omar Valsson}
 \author[7*]{Lucie Delemotte}
-\affil[1]{Laboratoire de Biochimie Th\'eorique UPR 9080, CNRS, Universit\'e de Paris, Paris, France}
+\affil[1]{Laboratoire de Biochimie Th\'eorique UPR 9080, CNRS, Paris, France}
 \affil[2]{Institut de Biologie Physico-Chimique--Fondation Edmond de Rothschild, Paris, France}
 \affil[3]{CERMICS, Ecole des Ponts, INRIA, Marne-la-Vall\'ee, France}
 \affil[4]{Department of Chemical and Biological Engineering, University of Colorado Boulder, Boulder, CO, USA, 80309}
@@ -142,7 +142,7 @@ This ``living'' review is intended to be updated to continue to reflect the weal
 \section{Introduction}
 
 Molecular dynamics (MD) simulations are nowadays routinely employed to gain insights into the atomistic-level behavior of molecular systems. They are often used in combination with experiments, usually to provide the atomistic counterpart to a more macroscopic description afforded by other techniques.
-MD simulations rely on the numerical and iterative solution of the equations of motion, using small timsteps for integration, on the order of femtoseconds. While they are useful to monitor the time-evolution of a system, for instance, in response to a perturbation, they are also very often used as an efficient sampling tool to recover statistical ensembles, much in the same way \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} (MC) based methods of configurational sampling are.
+MD simulations rely on the numerical and iterative solution of the equations of motion, using small timesteps for integration, on the order of femtoseconds. While they are useful to monitor the time-evolution of a system, for instance, in response to a perturbation, they are also very often used as an efficient sampling tool to recover statistical ensembles, much in the same way \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} (MC) based methods of configurational sampling are.
 
 In this review, we assume that we have a MD simulation algorithm that samples a single specified ensemble (constant number of particles, constant volume or pressure, constant temperature---NVT or NPT, respectively).\footnote{Many of the methods work for constant chemical potential ($\mu$VT), but as such simulations cannot be carried out in standard MD simulations because of changing particle numbers, we will not explicitly address the application of the methods to these systems.} A large number of algorithms have been proposed to achieve this type of configurational sampling and the algorithm choice does not impact what is covered in this review. Two important criteria remain: that this algorithm samples the distribution of choice, and that the sampling is \hyperlink{ref:ergodic} {ergodic}, i.e. it will eventually cover the entire configuration space. However, the samples are allowed to be, and almost always are, correlated, and the time needed to approach this \hyperlink{ref:ergodic} {ergodic} behavior could effectively be infinite, or at least beyond the time scale of any reasonable computer simulation. We note that many methods described here can also be applied if \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} algorithms are used instead of MD simulations to sample conformation space, except for those that explicitly employ biasing forces to enhance sampling.
 
@@ -159,7 +159,7 @@ This review focuses on describing the numerous methods that have been put forth 
 
 \subsection{Scope}
 
-Some enhanced sampling schemes are purely exploratory, i.e. they enable to discover uncharted regions of the configurational space efficiently but only allow semi-quantitative estimates of probability distributions. In addition, many schemes enable the estimation of probability distributions and free energies from the sampled space. Thus, all methods fall onto a exploration / free energy estimation trade-off continuum, where some methods, such as metadynamics, were initially proposed as exploration schemes but were later refined and demonstrated to enable the calculation of probability densities, while others started off being grounded in the estimation of free energies. An entire class of methods remain exclusively useful to broadly survey the configuration space, and learn to do that in optimal ways using \hyperlink{ref:Adaptive} {adaptive} schemes~\cite{ChiavazzoE5494}. In this review, we focus instead on algorithms that recover original statistical ensembles and free energy \hyperlink{ref:FES} {landscape}s. Exploratory methods can be useful to some of these schemes, since they generate initial configurations to start simulations from.
+Some enhanced sampling schemes are purely exploratory, i.e. they enable to discover uncharted regions of the configurational space efficiently but only allow semi-quantitative estimates of probability distributions. In addition, many schemes enable the estimation of probability distributions and free energies from the sampled space. Thus, all methods fall onto a exploration / free energy estimation tradeoff continuum, where some methods, such as metadynamics, were initially proposed as exploration schemes but were later refined and demonstrated to enable the calculation of probability densities, while others started off being grounded in the estimation of free energies. An entire class of methods remain exclusively useful to broadly survey the configuration space, and learn to do that in optimal ways using \hyperlink{ref:Adaptive} {adaptive} schemes~\cite{ChiavazzoE5494}. In this review, we focus instead on algorithms that recover original statistical ensembles and free energy \hyperlink{ref:FES} {landscape}s. Exploratory methods can be useful to some of these schemes, since they generate initial configurations to start simulations from.
 
 Another type of information that can be valuable to the scientist is the evolution of the system along time, which gives access to the rates of transition between states. We note however that many enhanced sampling schemes do not preserve the kinetics of the system, and are therefore primarily useful to recover equilibrium probability distributions. In fact, the most efficient sampling methods arguably alter the dynamics as much as possible while preserving thermodynamics. Several efforts to estimate kinetics from enhanced sampling schemes have been put forward, see~\cite{BRUCE20181,doi:10.1146/annurev-physchem-042018-052340,Dickson:2017:1568-0266:2626,10.1021/acs.biochem.8b00977,https://doi.org/10.1002/wcms.1455,Kieninger2020} for reviews.
 
@@ -488,7 +488,8 @@ Here again, one may define the reduced version of $W(r)$:
 \end{equation}
 
 \paragraph{Multimodal distribution}
-A probability distribution featuring many disconnected regions of high probability (each local maximum is a \textit{mode}) separated by regions of very low probability. Typically, if the dimension is high, most of the volume of configuration space has a very small probability.
+
+A probability distribution featuring many disconnected regions of high probability (each local maximum is a \textit{mode}) separated by regions of low probability. Typically, if the dimension is high, most of the volume of configuration space has a very small probability.
 
 
 \hypertarget{ref:ensemble_average} {\paragraph{Ensemble average}}
@@ -1033,7 +1034,7 @@ artificial neural network sampling~\cite{Sidky_ANNSampling_2018},
 on-the-fly probability-enhanced sampling (OPES)~\cite{Invernizzi2020opus,invernizzi2020unified},
 reweighted autoencoded variational Bayes for enhanced sampling (RAVE)~\cite{Tiwary_RAVE_2018},
 targeted adversarial learning optimized sampling (TALOS)~\cite{Zhang_TALOS_2019},
-gaussian mixture-based enhanced sampling (GAMBES)~\cite{Debnath_GAMBES_2020},
+Gaussian mixture-based enhanced sampling (GAMBES)~\cite{Debnath_GAMBES_2020},
 adaptive topography of landscapes for accelerated sampling
 (ATLAS)~\cite{giberti2021atlas},
 and reweighted Jarzynski sampling~\cite{Bal_RewieghtedJarzynski_2021}.
@@ -1044,7 +1045,7 @@ For mathematical analysis of the convergence and efficiency of ABP methods, we r
 \subsection{Metadynamics}
 One of the most widely used ABP method is metadynamics~\cite{Laio-PNAS-2002,Barducci-PRL-2008,Valsson2016_ARPC_MetaD}, and a large number of metadynamics variants have been developed and introduced through the years. In metadynamics methods, we enhance the sampling along a few selected \hyperlink{ref:CV} {collective variable}s (\hyperlink{ref:CV} {CV}s) that correspond to slow degrees of freedom. Metadynamics methods are based on adding a time-dependent external bias potential that counteracts the free energy \hyperlink{ref:FES} {surface}. This external adaptive biasing potential is composed as a sum of repulsive Gaussian kernels that are periodically deposited at the current location in the \hyperlink{ref:CV} {CV} space, see Figure~\ref{fig:MetaD}. From the bias potential, one can directly estimate the free energy \hyperlink{ref:FES} {surface} as a function of the selected \hyperlink{ref:CV} {CV}s. Furthermore, it is possible to obtain the \hyperlink{ref:FES} {FES}, both for the biased \hyperlink{ref:CV} {CV}s and for any other set of \hyperlink{ref:CV} {CV}s, via \hyperlink{ref:Reweighting} {reweighting}. Under certain conditions, one can also rescale simulation time to obtain rare-event kinetics from biased metadynamics simulations.
 
-There are two main variants of metadynamics that are in common usage nowadays, well-tempered metadynamics~\cite{Barducci-PRL-2008} and conventional (non-well-tempered) metadynamics~\cite{Laio-PNAS-2002}, that we will discuss below. Metadynamic methods and their applications have been discussed in various reviews~\cite{Barducci-WIREsCMS-2011,10.1080/08927022.2014.923574,10.1107/s2052252514027626,Valsson2016_ARPC_MetaD,10.1007/978-1-4939-9608-7_8,Bussi2020,BussiLaio_ReviewMetaD_2020}.
+There are two main variants of metadynamics that are in common usage nowadays, well-tempered metadynamics~\cite{Barducci-PRL-2008} and conventional (non-well-tempered) metadynamics~\cite{Laio-PNAS-2002}, that we will discuss below. Metadynamics methods and their applications have been discussed in various reviews~\cite{Barducci-WIREsCMS-2011,10.1080/08927022.2014.923574,10.1107/s2052252514027626,Valsson2016_ARPC_MetaD,10.1007/978-1-4939-9608-7_8,Bussi2020,BussiLaio_ReviewMetaD_2020}.
 
 \subsubsection{Well-Tempered Metadynamics}
 
@@ -1325,7 +1326,7 @@ Furthermore, variationally enhanced sampling has been extended in various ways, 
 to obtain parameters for phenomenological coarse-grained model~\cite{Invernizzi-PNAS-2017};
 to perform Monte Carlo renormalization group simulations~\cite{Wu_VES-RGMC_PRL2017,Wu_VES-RGMC_PRE2019,Wu_VES-RGMC_PRL2020};
 to perform multithermal-multibaric simulations~\cite{Piaggi_MultiVES_2019};
-for enhanced sampling targeting transistion states~\cite{Debnath_VES-TS_2019}; and
+for enhanced sampling targeting transition states~\cite{Debnath_VES-TS_2019}; and
 multiscale simulations for sub-optimal CVs~\cite{Invernizzi_VES_DelteF_2019}.
 
 Variationally enhanced sampling is implemented in the VES Code module of PLUMED 2. The VES Code also includes practical tutorials showing how to employ the method.
@@ -1638,7 +1639,7 @@ algorithm \cite{wang-landau:prl:2001:wang-landau}. This was originally proposed 
 
 The approach is described as follows: a histogram of visitations to each thermodynamic state
 during the \hyperlink{ref:ExpEns} {expanded ensemble} simulation, $h(i)$ is maintained
-throuhout the simulation.  When a state is visited, the corresponding
+throughout the simulation.  When a state is visited, the corresponding
 histogram entry is updated by 1.  In addition the weighting factors $g_i$ of that state is updated by $-\delta$, where $\delta$ is reduced by a monotonically decreasing function as the simulation proceeds.  The
 weight of the reference state is zeroed after each step.
 
@@ -1776,7 +1777,7 @@ Arguably the first proposed strategy relied on selecting randomly a fixed number
     \begin{enumerate}
     \item AdaptiveBandit expands on the methods described above by proposing to formulate the \hyperlink{ref:Adaptive} {adaptive} sampling problem in terms of reinforcement learning. This offers the promise and the computational platform needed to increased performance and flexibility of the algorithm across different systems \cite{doi:10.1021/acs.jctc.0c00205}.
     \item Reinforcement Learning Based Adaptive Sampling (REAP) proposes to efficiently explore configuration space by using reinforcement learning to choose new states. It does so by learning the relative importance of candidate \hyperlink{ref:CV} {collective variable}s as it makes progress along the \hyperlink{ref:FES} {landscape}, in a framework that rewards actions that lead to further exploration of the \hyperlink{ref:FES} {landscape}. Here too, states to learn from are selected as the least sample microstates. In that sense, it is a derivative of the counts method \cite{doi:10.1021/acs.jpcb.8b06521}.
-    \item The Fluctuation Amplification of Specific Traits (FAST) method proposes to choose new states based on an objective function that balances trade-offs between exploring novel regions of space (exploration) and focusing on regions that are important to lead to a converged estimate of the target properties (exploitation) \cite{doi:10.1021/acs.jctc.5b00737,doi:10.1021/acs.jctc.8b00500} The parameter that balances these two aspects needs to be tuned, a non-trivial aspect of using this method. This method has been recognized to be a specific case of a multi-armed bandit problem.
+    \item The Fluctuation Amplification of Specific Traits (FAST) method proposes to choose new states based on an objective function that balances tradeoffs between exploring novel regions of space (exploration) and focusing on regions that are important to lead to a converged estimate of the target properties (exploitation) \cite{doi:10.1021/acs.jctc.5b00737,doi:10.1021/acs.jctc.8b00500} The parameter that balances these two aspects needs to be tuned, a non-trivial aspect of using this method. This method has been recognized to be a specific case of a multi-armed bandit problem.
     \item Specifically for protein folding, or conformational changes in biological molecules, a common target property is inter-residue contacts, or its opposite, minimizing non-desirable contacts \cite{doi:10.1063/1.5053582}
     \item In the same vein, it has been suggested to use evolutionary information by deriving inter-residue contacts from a multiple-sequence alignment, in a method called evolutionary couplings-guided \hyperlink{ref:Adaptive} {adaptive} sampling \cite{shamsi_enhanced_2017}
     \end{enumerate}
