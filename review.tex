@@ -144,7 +144,7 @@ This ``living'' review is intended to be updated to continue to reflect the weal
 Molecular dynamics (MD) simulations are nowadays routinely employed to gain insights into the atomistic-level behavior of molecular systems. They are often used in combination with experiments, usually to provide the atomistic counterpart to a more macroscopic description afforded by other techniques.
 MD simulations rely on the numerical and iterative solution of the equations of motion, using small timesteps for integration, on the order of femtoseconds. While they are useful to monitor the time-evolution of a system, for instance, in response to a perturbation, they are also very often used as an efficient sampling tool to recover statistical ensembles, much in the same way \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} (MC) based methods of configurational sampling are.
 
-In this review, we assume that we have a MD simulation algorithm that samples a single specified ensemble (constant number of particles, constant volume or pressure, constant temperature---NVT or NPT, respectively).\footnote{Many of the methods work for constant chemical potential ($\mu$VT), but as such simulations cannot be carried out in standard MD simulations because of changing particle numbers, we will not explicitly address the application of the methods to these systems.} A large number of algorithms have been proposed to achieve this type of configurational sampling and the algorithm choice does not impact what is covered in this review. Two important criteria remain: that this algorithm samples the distribution of choice, and that the sampling is \hyperlink{ref:ergodic} {ergodic}, i.e. it will eventually cover the entire configuration space. However, the samples are allowed to be, and almost always are, correlated, and the time needed to approach this \hyperlink{ref:ergodic} {ergodic} behavior could effectively be infinite, or at least beyond the time scale of any reasonable computer simulation. We note that many methods described here can also be applied if \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} algorithms are used instead of MD simulations to sample conformation space, except for those that explicitly employ biasing forces to enhance sampling.
+In this review, we assume that we have a MD simulation algorithm that samples a single specified ensemble (constant number of particles, constant volume or pressure, constant temperature---NVT or NPT, respectively).\footnote{Many of the methods work for constant chemical potential, but as such simulations cannot be carried out in standard MD simulations because of changing particle numbers, and dedicated simulations are challenging and rare, we will not explicitly address the application of the methods to these systems.} A large number of algorithms have been proposed to achieve this type of configurational sampling and the algorithm choice does not impact what is covered in this review. Two important criteria remain: that this algorithm samples the distribution of choice, and that the sampling is \hyperlink{ref:ergodic} {ergodic}, i.e. it will eventually cover the entire configuration space. However, the samples are allowed to be, and almost always are, correlated, and the time needed to approach this \hyperlink{ref:ergodic} {ergodic} behavior could effectively be infinite, or at least beyond the time scale of any reasonable computer simulation. We note that many methods described here can also be applied if \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} algorithms are used instead of MD simulations to sample conformation space.
 
 MD simulations are generally considered to suffer from three main limitations:
 \begin{itemize}
@@ -189,7 +189,7 @@ From probability theory, several strategies have been borrowed: \hyperlink{ref:I
 Crucially, all methods generally hinge on a relatively small number of statistical or physical ideas, principles, or tricks. Here, we offer one possible way to organize these methods. We  start by explicitly listing these methodological ingredients, and classify the methods according to dichotomies, asking which of the different ingredients is leveraged (diamonds in Figure~\ref{fig:scheme}). The decision tree in the figure presents one of the possible alternatives by answering these different questions in a semi-arbitrary order, but attempting to list the questions from the most fundamental to the most specialized ones. The ordering of the questions inherently contains a level of subjectivity and we recognize that ordering these dichotomies in different ways can be equally reasonable, and that other representations may be useful (See Figure~\ref{fig:VennD} for an early attempt at a Venn Diagram).
 
 There are very certainly other binary methods of classification that could be used which are not immediately obvious in Figure~\ref{fig:scheme}. For example, there are two main ways to impart additional structure to a system that can aid in enhanced sampling. One of these ways is to create partitions of configuration space that are completely nonoverlapping; this can be done by creating sets of coordinates that all have the same value of some function of the coordinates, or \hypertarget{ref:CV} {collective variable}, like all the configurations with the same energy or same distance between two specified particles. The second main way to add structure to a system is to create new ensembles that all share the same configurations, but the probabilities for each ensemble are different. For example, each separate ensemble could be simulated at a different temperature, thus states of different energies will have different probabilities.
-This division into overlapping and nonoverlapping structures can be considered fundamental, as the approaches used to generate free energies, and thus perform  sampling, are very different depending on whether or not microstates have defined probabilities in multiple ensembles or each microstate only belongs to one ensemble~\cite{Escobedo_unified_2005,abreu_framework_2006}. For example, reweighting methods are used to calculate free energies in the overlapping case; in the nonoverlapping case, one usually computes the free energy change between the sets using a derivative (like ABF or TI), or a visited states algorithm which accumulates probability locally in the collective variable. This particular division of methods is one that is not directly used in our classification, but shows up in the descriptions of the algorithm.  Over time, future versions of this review will hopefully also examine and compare other such schemes that can be used to divide and classify in a hopefully optimally pedagogical manner.
+This division into overlapping and nonoverlapping structures can be considered fundamental, as the approaches used to generate free energies, and thus perform  sampling, are very different depending on whether or not microstates have defined probabilities in multiple ensembles or each microstate only belongs to one ensemble~\cite{Escobedo_unified_2005,abreu_framework_2006}. For example, reweighting methods are used to calculate free energies in the overlapping case; in the nonoverlapping case, one usually computes the free energy change between the sets using a derivative, or a visited states algorithm which accumulates probability locally in the collective variable. This particular division of methods is one that is not directly used in our classification, but shows up in the descriptions of the algorithm.  Over time, future versions of this review will hopefully also examine and compare other such schemes that can be used to divide and classify in a hopefully optimally pedagogical manner.
 
 %One can imagine other possible classification decisions, that are not explicitly accounted %for in our scheme.
 
@@ -224,15 +224,15 @@ The next sections provide the background information needed to understand this s
 \section{Useful notions and notations}
 \label{sec:Notion_Notation}
 
-One of the aims of this review is to use consistent notations to enable the reader to compare different methods, find similarities and differences across enhanced sampling
+One of the aims of this review is to use consistent notations to enable the reader to compare different methods and find similarities and differences across enhanced sampling
 schemes. We introduce here the notation we will use throughout the paper. Note that given the existence of different notations in the literature, we have chosen the following one, while recognizing the validity of others. When especially crucial to understand the cited literature, we sometimes explicitly mention an alternative notation in following sections.
 
 \subsection{Basic Notations}
 \label{sec:Notation}
 \begin{itemize}
 \item Cartesian coordinates of atoms (or coarse-grain particles) denoted by $\vx$ and momenta denoted by $\vp$.
-\item Potential energy function denoted by $U(\vx)$, defined by a classical molecular mechanics force field, various levels of electronic structure theory in an \emph{ab initio} dynamics framework, or a QM/MM hybrid and kinetic energy $K(\vp)$
-\item Force on particles $\vF(\vx) = -\nabla_\vx U(\vx)$.
+\item Potential energy function denoted by $U(\vx)$, defined by a classical molecular mechanics force field, various levels of electronic structure theory in an \emph{ab initio} dynamics framework, or a QM/MM hybrid and kinetic energy $K(\vp)$.
+\item Force on particles $\vF(\vx) = -\nabla_\vx U(\vx)$, where $\nabla_\vx$ is the gradient with respect to $\vx$.
 \item Absolute temperature $T$, inverse temperature $\beta = 1/(k_\mathrm{B} T)$.
 \item \hypertarget{ref:AuxVar} {Extended (auxiliary) variable}: $\lambda$. This auxiliary variable can be a thermodynamic parameter, such as the temperature $T$ or the pressure $P$, or a parameter of the energy function $U_\lambda(\vx)$. The auxiliary variable can have a fixed value per simulation, can follow a pre-determined schedule, or can obey some dynamical equation of motion. It can have multiple dimensions, which we represent by the bold-faced vector $\boldsymbol{\lambda}$.
 
@@ -264,7 +264,6 @@ The best-known classical dynamics is Hamiltonian dynamics:
     \label{eq:md}
 \end{equation}
 where $M$ is the diagonal mass matrix.
-Trajectories are often generated numerically using Verlet-style integrators.
 A simplistic, discrete-time version of the above with time step $\delta t$ is:
 \begin{equation}
 \left\{
@@ -275,6 +274,8 @@ A simplistic, discrete-time version of the above with time step $\delta t$ is:
 \end{array}
 \right.
 \end{equation}
+In practice, however, trajectories are often generated numerically using Verlet-style integrators.
+
 
 \hypertarget{ref:Ensemble} {\paragraph{Statistical ensembles from molecular dynamics}}
 \index{ensemble}
@@ -308,9 +309,10 @@ For the sake of intuition, consider a discrete-time version of Langevin dynamics
 where $\mathbf{G}$ is a Gaussian-distributed stochastic 3N-vector of zero mean and variance 1.
 Note that in practice, more sophisticated discrete Langevin integration schemes are used, which bring much better accuracy, stability, and performance~\cite{Skeel2002, Leimkuhler2012}.
 Still, comparing the simple-minded Equations~\ref{eq:md_discrete} and \ref{eq:Langevin_discrete} shows that Langevin dynamics can be interpreted intuitively as similar to Hamiltonian dynamics, but including a modified force with added friction and stochastic collision terms. When $\gamma$ is zero, it reduces exactly to Hamiltonian dynamics.
-Note that there are many other possible thermostats that can replace Hamiltonian dynamics, each with different numerical benefits and pitfalls. Note that some historic algorithms maintain an approximate target temperature, but do not sample from the canonical ensemble.
-Isothermal-isobaric dynamics also includes a barostat, producing volume fluctuations consistent with a given target pressure $P$, and samples the isothermal-isobaric ensemble (NPT).
-Again, there exists a variety of equations of motions with this property, and numerical algorithms implementing them. Langevin dynamics will be used as a basic example in later sections of this review.
+% Note that there are many other possible thermostats that can replace Hamiltonian dynamics, each with different numerical benefits and pitfalls. Note that some historic algorithms maintain an approximate target temperature, but do not sample from the canonical ensemble.
+% Isothermal-isobaric dynamics also includes a barostat, producing volume fluctuations consistent with a given target pressure $P$, and samples the isothermal-isobaric ensemble (NPT).
+% Again, there exists a variety of equations of motions with this property, and numerical algorithms implementing them.
+Langevin dynamics will be used as a basic example in later sections of this review.
 
 \hypertarget{ref:Distribution}{\paragraph{Distribution}}
 
@@ -655,7 +657,7 @@ dp_\lambda &= \left(-\frac{\partial U^\text{ext}(\vx, \lambda)}{\partial \lambda
 
 where $m_\lambda$ is a fictitious mass associated to $\lambda$.
 While the two phrases are essentially synonymous, the term $\lambda$-dynamics is mostly used when a continuous dynamic variable $\lambda$ connects physically meaningful, and sometimes discrete, states, such as in alchemical transformations.
-On the other hand, the term extended Lagrangian is more often used when  the fictitious coordinate $\lambda$ follows a \hyperlink{ref:CV} {collective variable} $\xi(\vx)$, typically coupled through a harmonic potential: $U^\text{ext}(\vx, \lambda) = U(\vx) + \frac{k^\mathrm{ext}}{2}|\xi(\vx)-\lambda|^2$.
+On the other hand, the term extended Lagrangian (or extended Hamiltonian) is more often used when the fictitious coordinate $\lambda$ follows a \hyperlink{ref:CV} {collective variable} $\xi(\vx)$, typically coupled through a harmonic potential: $U^\text{ext}(\vx, \lambda) = U(\vx) + \frac{k^\mathrm{ext}}{2}|\xi(\vx)-\lambda|^2$.
 
 
 \paragraph{Temperature-based sampling} Refers to enhanced-sampling methods relying on an increased temperature $\tilde T$ to reduce metastability. This can be done on some replicas within a set of replicas, on some fraction of the time within a given trajectory, or effectively on some fraction of the system by selective scaling of potential energy terms.
@@ -705,7 +707,7 @@ By extension, the phrase FEP is sometimes used to refer to the free energy estim
 \section{Free energy estimators}
 \label{sec:fe_estimators}
 
-Recovering the original statistical ensemble often requires estimating a free energy. For some methods, the \hyperlink{ref:FEestimator} {free energy estimator} is central to the enhanced sampling scheme, while for others, it is a post-processing tool. This section provides a concise presentation, but extensive reviews can be found elsewhere~\cite{cchipot07:molsim,doi:10.1142/p579,Paliwal_comparison_2011,shirts_comparison_2005,Klimovich_Shirts_Mobley_2015}.
+Recovering the original statistical ensemble often requires estimating a free energy. For some methods, the \hyperlink{ref:FEestimator} {free energy estimator} is central to the enhanced sampling scheme, while for others, it is a post-processing tool. This section provides a concise presentation, but extensive reviews can be found elsewhere~\cite{cchipot07:molsim, Lelievre2010, Paliwal_comparison_2011, shirts_comparison_2005, Klimovich_Shirts_Mobley_2015}.
 
 \hyperlink{ref:FEestimator} {Free energy estimators} are expressions that are used numerically to compute free energy differences or free energy \hyperlink{ref:FES} {surfaces} from quantities that are available in simulations (configurations, energies, and forces).
 The important properties of an estimator are its accuracy (\textit{bias}: how far off the real value it is given infinite, ideal sampling) and precision (\textit{variance}: how much it fluctuates given a finite amount of noisy data).
@@ -907,10 +909,10 @@ $f_j$ thanks to their simultaneous estimation.
 
 A key fact is that the MBAR system of equations in the case of two states, and thus a single free energy difference, reduces exactly to the BAR~\cite{shirts-chodera:jcp:2008:mbar}.
 
-MBAR can also be seen as free energy perturbation/exponential averaging to target distributions described by the reduced potential $u_i(\vx)$ from the mixture distribution $\mu_{mix}(\vx)$~\cite{reweighting_mixture_distribution}, formed by combining all the simulations proportional to the number of samples $N_k$ from each simulation, by rewriting Equation~\ref{eq:MBAR} as:
+MBAR can also be seen as free energy perturbation/exponential averaging to target distributions described by the reduced potential $u_i(\vx)$ from the mixture distribution $\nu_{mix}(\vx)$~\cite{reweighting_mixture_distribution}, formed by combining all the simulations proportional to the number of samples $N_k$ from each simulation, by rewriting Equation~\ref{eq:MBAR} as:
 \begin{eqnarray}
-f_i &=& -\ln \left[\frac{1}{N}\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\mu_{mix}(\vx_n)}\right] \nonumber\\
-\mu_{mix}(\vx) &=& \sum_k \frac{N_k}{N} e^{f_k-u_k(\vx)}
+f_i &=& -\ln \left[\frac{1}{N}\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\nu_{mix}(\vx_n)}\right] \nonumber\\
+\nu_{mix}(\vx) &=& \sum_k \frac{N_k}{N} e^{f_k-u_k(\vx)}
 \end{eqnarray}
 
 
@@ -946,6 +948,25 @@ P_i = \frac{\sum_{k=1}^K n_{k,i}}{\sum_{k=1}^{K}{e^{f-u_{k,i}}}}\qquad
 f_k = \sum_{i=1}^K P_i e^{-{u_{k,i}}}
 \end{eqnarray}
 Where $n_{k,i}$ are the counts in each bin, $P_i$ is the probability distribution with no biasing weights applied,  $u_{k,i}$ is the energy of the system in the $i$th bin and $k$th state. When the bins in WHAM are shrunk to have zero width (i.e. down to $\delta$ functions), then the WHAM equations become equivalent to MBAR. If there are many samples, WHAM can be significantly faster than MBAR. However,  this only gives similar results to MBAR if the bins are narrow enough for the energy $u$ to be approximately constant within a bin.
+
+
+
+\section{Can enhanced sampling methods be compared critically?}
+\label{sec:critical_comparison}
+
+Efficiency of a method depends on:
+\begin{itemize}
+ \item application;
+ \item choice of parameters - and the optimal parameters are themselves application dependent;
+ \item expertise of the user.
+\end{itemize}
+
+Comparing methods requires defining a benchmark for which the results are known to a high accuracy and precision, and then attempting to study this benchmark by using each method ``fairly'', that is, either using the optimal parameters for the particular application, or the parameters that a typical user will be able to set in practice.
+(cite papers that attempt this)
+
+Sometimes a method may be less efficient than another when used optimally, but more robust to non-optimal circumstances.
+A method may lead quickly to an approximate or qualitative result and go no further, whereas another may guarantee a precise result but require much more resources or take an uncertain time to converge.
+
 
 
 
@@ -1013,6 +1034,18 @@ In the seminal ``Umbrella Sampling'' paper from 1977 by Torrie and Valleau~\cite
 \section{Adaptive bias simulations}
 \label{sec:AdaptiveBiasSimulations}
 
+
+\subsection{Adaptation and the adaptation rate}
+
+In adaptive bias simulations, the external forces needed to enhance sampling are learned based on information from the trajectory itself, and updated as the simulation progresses.
+The bias always depends on statistical properties of the trajectory, so that it cannot be adapted instantaneously, but more or less progressively as information becomes available.
+This is controlled by some external parameter, generically called \emph{adaptation rate}, or \emph{learning rate} in the machine learning community.
+For example, in well-tempered metadynamics (\ref{sec:wtmetad}), the adaptation rate results from the deposition rate $N_G$, the height $H_0$ of the Gaussian kernels, and the bias factor $\gamma$, whereas in ABF (\ref{sec:ABF}), it depends on the number of samples collected locally before applying the estimated biasing force.
+
+The choice of adaptation rate is essential to the success of an adaptative bias simulation: if it is too slow, the process will not converge, but setting it too fast will also negatively affect convergence.
+Typically, adaptation should be slow enough that some orthogonal degrees of freedom have time to relax to changes in biased degrees of freedom, or at least, remain wihin a short relaxation time of their equilibrium distribution under the current state of the bias. Details depend on the specific method, and the optimal value of the adaptation rate is system-dependent.
+
+
 \subsection{Adaptive Biasing Potential Methods}
 \label{sec:ABP}
 In \hyperlink{ref:Adaptive} {Adaptive} Biasing Potential (ABP) methods, an external bias potential in a space of some chosen \hyperlink{ref:CV} {collective variable}s (\hyperlink{ref:CV} {CV}s) is added to bias the dynamics of the system. The purpose of the bias potential is to counteract the free energy \hyperlink{ref:FES} {surface} and lead to more flatter sampling in CV space. In other words, the bias potential leads to sampling of a biased CV-distribution that is easier to sample. As the \hyperlink{ref:FES} {FES} is naturally \textit{a priori} unknown, the bias potential is generally constructed in an adaptive manner through some kind of iterative scheme. ABP methods  differ in how the bias potential is constructed and which kind of sampling is obtained at convergence.
@@ -1048,6 +1081,7 @@ One of the most widely used ABP method is metadynamics~\cite{Laio-PNAS-2002,Bard
 There are two main variants of metadynamics that are in common usage nowadays, well-tempered metadynamics~\cite{Barducci-PRL-2008} and conventional (non-well-tempered) metadynamics~\cite{Laio-PNAS-2002}, that we will discuss below. Metadynamics methods and their applications have been discussed in various reviews~\cite{Barducci-WIREsCMS-2011,10.1080/08927022.2014.923574,10.1107/s2052252514027626,Valsson2016_ARPC_MetaD,10.1007/978-1-4939-9608-7_8,Bussi2020,BussiLaio_ReviewMetaD_2020}.
 
 \subsubsection{Well-Tempered Metadynamics}
+\label{sec:wtmetad}
 
 In well-tempered metadynamics~\cite{Barducci-PRL-2008}, the bias potential $U^{\mathrm{bias}}(\vz)$ is updated through the following stochastic iteration scheme where every $N_G$ simulation steps we add a Gaussian biasing kernel $G(\vz,\vz')$ at the current \hyperlink{ref:CV} {CV} value $\vz_n$
 \begin{align}
@@ -1156,7 +1190,7 @@ The most common way to achieve this task is the so-called $c(t)$ reweighting pro
 U^{\mathrm{bias}}(\xi(\vx),t)-c(t)
 \right] \right)
 \end{equation}
-where $c(t)$ is a time-dependent constant given by Equation~\ref{wtmetad_coft}. In practise, $c(t)$ can be estimated using
+where $c(t)$ is a time-dependent constant given by Equation~\ref{wtmetad_coft}. In practice, $c(t)$ can be estimated using
 \begin{equation}
 c(t) = \frac{1}{\beta} \ln
 \frac
@@ -1210,7 +1244,7 @@ A(\vz) = - \frac{1}{n-n_0} \sum^{n}_{k=n_0} U^{\mathrm{bias}}_k(\vz).
 \end{equation}
 The accuracy of this estimate will depend on how well the biased \hyperlink{ref:CV} {CV}s are \hyperlink{ref:AdiabaticDyn} {adiabatically} separated from the dynamics of the other variables~\cite{laio-gervasio-08,jourdain-lelievre-zitt-21}, see Ref~\cite{BussiLaio_ReviewMetaD_2020} for further discussion regarding this point.
 
-In conventional metadynamics simulations, it is a common practise to introduce restraining walls (i.e., bias potential) to avoid exploring unimportant free energy regions. This is generally not needed in well-tempered metadynamics simulations as the bias factor and the well-tempered distribution naturally limits the extent of CV space exploration.
+In conventional metadynamics simulations, it is a common practice to introduce restraining walls (i.e., bias potential) to avoid exploring unimportant free energy regions. This is generally not needed in well-tempered metadynamics simulations as the bias factor and the well-tempered distribution naturally limits the extent of CV space exploration.
 
 \subsubsection{Multiple Walkers Metadynamics}
 A way to reduce the wall-clock time for convergence and make a better usage of modern parallel HPC resources is to employ multiple walkers or replicas~\cite{Raiteri-JPCB-2006}. The walkers collaboratively sample the free energy \hyperlink{ref:FES} {landscape} and share a bias potential that is constructed by considering the Gaussians deposited by all the walkers.
@@ -1318,7 +1352,7 @@ This could for example be a tensor product of one-dimensional basis functions li
 
 The \hyperlink{ref:targetdist}{target distribution} $p_{\mathrm{tg}}(\vz)$ can be chosen freely by the user. However, one needs to keep in mind that it should be chosen such that the sampling is easier than in the equilibrium distribution. The most straightforward choice would be a uniform \hyperlink{ref:targetdist}{target distribution}, such that the aim to completely cancel out the \hyperlink{ref:FES} {FES} and flatten the sampling in the \hyperlink{ref:CV} {CV} space. However, that is generally not optimal. Instead it is better to only enhance \hyperlink{ref:CV} {CV} fluctuations to a certain degree and thus only partly cancel out the \hyperlink{ref:FES} {FES}~\cite{Valsson-JCTC-2015}. We can achieve this by employing a well-tempered distribution as in Equation~\ref{eq:wtmetad_wtdist} (see Figure~\ref{fig:MetaD}). The bias factor $\gamma$ determines how much we enhance \hyperlink{ref:CV} {CV} fluctuations. The well-tempered distribution is unknown \textit{a priori} so it needs be determined iteratively~\cite{Valsson-JCTC-2015}.
 
-The \hyperlink{ref:FES} {FES} can be estimated directly from the bias potential though Equation~\ref{ves_biaspotential}. Furthermore, the \hyperlink{ref:FES} {FES}, both for the biased \hyperlink{ref:CV} {CV}s and for any other \hyperlink{ref:CV} {CV}s, can be obtained through \hyperlink{ref:Reweighting} {reweighting}, where we can also estimate error bars. Note that  in variationally enhanced sampling, we generally do not need to account for time-dependent constants as in metadynamics. It is sufficient to include the bias potential in the weight when performing the reweighting procedure. As for metadynamics, it is a good practise to estimate the \hyperlink{ref:FES} {FES} both from the bias potential and through \hyperlink{ref:Reweighting} {reweighting} and compare the results. Furthermore, in cases where the bias potential might not have sufficient variational flexibility to represent the underlying \hyperlink{ref:FES} {FES}, the reweighted results can be more accurate.
+The \hyperlink{ref:FES} {FES} can be estimated directly from the bias potential though Equation~\ref{ves_biaspotential}. Furthermore, the \hyperlink{ref:FES} {FES}, both for the biased \hyperlink{ref:CV} {CV}s and for any other \hyperlink{ref:CV} {CV}s, can be obtained through \hyperlink{ref:Reweighting} {reweighting}, where we can also estimate error bars. Note that  in variationally enhanced sampling, we generally do not need to account for time-dependent constants as in metadynamics. It is sufficient to include the bias potential in the weight when performing the reweighting procedure. As for metadynamics, it is a good practice to estimate the \hyperlink{ref:FES} {FES} both from the bias potential and through \hyperlink{ref:Reweighting} {reweighting} and compare the results. Furthermore, in cases where the bias potential might not have sufficient variational flexibility to represent the underlying \hyperlink{ref:FES} {FES}, the reweighted results can be more accurate.
 
 Variationally enhanced sampling has been extended to obtaining kinetics of rare events~\cite{McCarty-PRL-2015}, using the same principles as used in infrequent metadynamics. The idea is to use variationally enhanced sampling to construct a bias potential that only floods the \hyperlink{ref:FES} {FES} up to some given cutoff value. If the flooding bias potential does not touch the transition state, we can rescale the biased simulation times using Equation~\ref{wtmetad_hyperdynamics} as in infrequent metadynamics. It is convenient and useful to combine the flooding bias potential with infrequent metadynamics as done in Ref~\cite{Palazzesi2017_JPCL}.
 
@@ -1355,8 +1389,8 @@ The principle is the following:
 \begin{equation}
     \nabla_\vz A(\vz) = - \left\langle \vF_\xi(\vx)  \right\rangle_{\xi(\vx) = \vz}
 \end{equation}
-That is, as the conditional ensemble average of a collective force $\vF_\xi(\vx)$ at a given value of $\xi(\vx)$ .
- \item When sufficient sampling is collected to have a reliable estimate of the average force at the current value of $\vz$, a biasing force $\vF^\mathrm{ABF}_t(\vz)$ equal to the opposite of this average is applied.
+That is, as the conditional ensemble average of a collective force $\vF_\xi(\vx)$ at a given value of $\xi(\vx)$.
+ \item When sufficient sampling (determined by the adaptation rate) is collected to have a reliable estimate of the average force at the current value of $\vz$, a biasing force $\vF^\mathrm{ABF}_t(\vz)$ equal to the opposite of this average is applied.
  \item This force cancels out, on average, the forces acting along $\vz$, leveling the free energy barriers and accelerating diffusion in \hyperlink{ref:CV} {collective variable} space.
  \item At convergence, the biasing force is the negative of the gradient of the free energy, and $\vz$ experiences a flat effective free energy \hyperlink{ref:FES} {landscape}. The gradient can be integrated numerically to estimate the free energy \hyperlink{ref:FES} {landscape} itself.
 \end{enumerate}
@@ -1412,7 +1446,7 @@ In the selection variant,\cite{Minoukadeh2010, Comer2014mwABF} walkers are repli
 \subsubsection{Extended-system ABF}
 \label{sec:eABF}
 
-In extended-system ABF (eABF),\cite{Lelievre2010eABF, Zheng2012} the coordinate is not a \hyperlink{ref:CV} {collective variable} $z = \xi(\vx)$, but an additional variable $\lambda$, separate from Cartesian coordinates, so that the dynamics is now propagated in the extended space $(\vx, \lambda)$.
+In extended-system ABF (eABF, \cite{Lelievre2010} p. 368, \cite{Zheng2012}) the coordinate is not a \hyperlink{ref:CV} {collective variable} $z = \xi(\vx)$, but an additional variable $\lambda$, separate from Cartesian coordinates, so that the dynamics is now propagated in the extended space $(\vx, \lambda)$.
 $\lambda$ is coupled to the \hyperlink{ref:CV} {collective variable} by a harmonic restraint: $U^\mathrm{ext}(\vx, \lambda) = 1/2 k (\lambda - \xi(\vx))^2$.
 The main benefit of eABF is that the biasing coordinate $\lambda$ is not a function of Cartesian coordinates, so all geometric considerations raised by the projected force formalism become moot. This makes eABF easy to implement for any combination of \hyperlink{ref:CV} {collective variable}s, as long as their gradients can be calculated.
 One limitation is that the free energy associated to $\lambda$ is close to, but not identical to that associated to $z$, which is the quantity of interest.
@@ -1492,7 +1526,7 @@ In a replica exchange simulation, we consider $K$ simulations, with one simulati
 
 The current state of the replica exchange simulation is given by $(X,S)$, where $X$ is a vector of the configurations of \emph{all} of the replicas, $X \equiv \{\vx_1, \vx_2, \ldots, \vx_K\}$, and $S \equiv\{s_1,\ldots,s_K\} \in \mathcal{S}_K$ is a permutation of the state indices $\{1, \ldots, K\}$ associated with each of the replica configurations $\{\vx_1, \ldots, \vx_K\}$. Then the joint probability density of the entire set of all simulations $\mathcal{Q}$ is defined by
 \begin{eqnarray}
-\mathcal{Q}(X, S) &\propto& \prod_{i=1}^{K} \mu_{s_i}(\vx_i) \propto \exp\left[-\sum_{i=1}^K u_{s_i}(\vx_i)\right]
+\mathcal{Q}(X, S) &\propto& \prod_{i=1}^{K} \nu_{s_i}(\vx_i) \propto \exp\left[-\sum_{i=1}^K u_{s_i}(\vx_i)\right]
 \label{eq:parallereplica}
 \end{eqnarray}
 with the conditional densities given by
@@ -1825,8 +1859,8 @@ d\lambda = - \frac{1}{\overline{\gamma}} \nabla F (\lambda) \, dt + \sqrt{ \frac
 \end{equation}
 so that the probability distribution sampled by $\lambda$ is (in this limiting regime) proportional to $\exp(- \overline{\beta} A(\lambda))$. The artificial inverse temperature $\overline{\beta}$ is then chosen so that the effective dynamics~\eqref{eq:eff_dyn_z_bar} is less metastable.
 The practical difficulty of such a method is to choose the numerical parameters $(\gamma,\overline{\gamma},k^\mathrm{ext},\overline{\beta})$ for the algorithm to be efficient while keeping the adiabatic separation between the extended coordinate and the physical system -- failure to do so introduces a bias in the simulation.
-In the ``single sweep" method, TAMD is used to estimate local free energy gradients, followed by estimation of the free energy surface.\cite{Maragliano2008}
 
+In the ``single sweep" method, TAMD is used to estimate local free energy gradients, followed by estimation of the free energy surface.\cite{Maragliano2008}
 Driven-AFED (d-AFED)~\cite{doi:10.1021/jp805039u}, unified free energy dynamics (UFED)~\cite{doi:10.1063/1.4733389}, canonical adiabatic free energy sampling (CAFES)~\cite{doi:10.1021/jp013346k} and on-the-fly free energy parameterization (OTFP)~\cite{ABRAMS2012114} are all related to this scheme.
 
 Note also that conventional (non well-tempered) metadynamics (see Section~\ref{sec:meta-classic}) implicitly makes such an adiabatic hypothesis to get an unbiased \hyperlink{ref:FEestimator} {free energy estimator}~\cite{laio-gervasio-08, jourdain-lelievre-zitt-21}.
