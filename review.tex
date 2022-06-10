@@ -221,6 +221,26 @@ This division into overlapping and nonoverlapping structures can be considered f
 
 The next sections provide the background information needed to understand this scheme, starting with the notation used throughout the paper and a glossary in Section~\ref{sec:Notion_Notation}, a description of the free energy estimators that are used in various enhanced sampling schemes and will be referred to later in the text in Section~\ref{sec:fe_estimators}, and followed by the more detailed description of the various families of enhanced sampling methods that emerge from our classification. We then list a selection of hybrid schemes that combine different principles. Finally, we summarize the software packages (MD simulation codes and libraries) that are publicly and openly available to run these different types of enhanced sampling simulations.
 
+
+\subsection{Can enhanced sampling methods be compared critically?}
+\label{sec:critical_comparison}
+
+Efficiency of a method depends on:
+\begin{itemize}
+ \item application;
+ \item choice of parameters - and the optimal parameters are themselves application dependent;
+ \item expertise of the user.
+\end{itemize}
+
+Comparing methods requires defining a benchmark for which the results are known to a high accuracy and precision, and then attempting to study this benchmark by using each method ``fairly'', that is, either using the optimal parameters for the particular application, or the parameters that a typical user will be able to set in practice.
+(cite papers that attempt this)
+
+Sometimes a method may be less efficient than another when used optimally, but more robust to non-optimal circumstances.
+A method may lead quickly to an approximate or qualitative result and go no further, whereas another may guarantee a precise result but require much more resources or take an uncertain time to converge.
+
+
+
+
 \section{Useful notions and notations}
 \label{sec:Notion_Notation}
 
@@ -948,25 +968,6 @@ P_i = \frac{\sum_{k=1}^K n_{k,i}}{\sum_{k=1}^{K}{e^{f-u_{k,i}}}}\qquad
 f_k = \sum_{i=1}^K P_i e^{-{u_{k,i}}}
 \end{eqnarray}
 Where $n_{k,i}$ are the counts in each bin, $P_i$ is the probability distribution with no biasing weights applied,  $u_{k,i}$ is the energy of the system in the $i$th bin and $k$th state. When the bins in WHAM are shrunk to have zero width (i.e. down to $\delta$ functions), then the WHAM equations become equivalent to MBAR. If there are many samples, WHAM can be significantly faster than MBAR. However,  this only gives similar results to MBAR if the bins are narrow enough for the energy $u$ to be approximately constant within a bin.
-
-
-
-\section{Can enhanced sampling methods be compared critically?}
-\label{sec:critical_comparison}
-
-Efficiency of a method depends on:
-\begin{itemize}
- \item application;
- \item choice of parameters - and the optimal parameters are themselves application dependent;
- \item expertise of the user.
-\end{itemize}
-
-Comparing methods requires defining a benchmark for which the results are known to a high accuracy and precision, and then attempting to study this benchmark by using each method ``fairly'', that is, either using the optimal parameters for the particular application, or the parameters that a typical user will be able to set in practice.
-(cite papers that attempt this)
-
-Sometimes a method may be less efficient than another when used optimally, but more robust to non-optimal circumstances.
-A method may lead quickly to an approximate or qualitative result and go no further, whereas another may guarantee a precise result but require much more resources or take an uncertain time to converge.
-
 
 
 
