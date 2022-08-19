@@ -105,7 +105,6 @@
 \usepackage{hyperref}
 \usepackage{caption}
 \usepackage{subcaption}
-\usepackage{comment}
 
 \newcommand{\vx}{\mathbf{x}}
 \newcommand{\vp}{\mathbf{p}}
@@ -980,22 +979,8 @@ of $c$. However, one can prove that the lowest variance estimate of free energy 
 \end{equation}
 This can be solved by a number of numerical techniques as implemented in many codes, such as $\texttt{pymbar}$~\cite{shirts-chodera:jcp:2008:mbar} and $\texttt{gmx bar}$~\cite{lindahl_2021}.
 
-\begin{comment}
-So in the case of fixed $c$, this is not an iterative
-equation.
-Bennett and others~\cite{fenwick-escobedo:jcp:2003:replica-exchange-expanded-ensembles,Paliwal_comparison_2011} have
-shown that when $c_k$ is relatively close to $f_k$ (within 1-2 $k_\mathrm{B} T$)
-it is still an excellent estimate of the free energy.  Thus, one can
-maintain the averages in the numerator and the denominator for a range
-of possible $c_k$, and whichever gives the free energy closest to
-$c_k$, that answer is used, essentially precalculating the
-self-consistent iteration.
-\end{comment}
 Several variants, which can be useful in specific cases, use fixed $c$~\cite{fenwick-escobedo:jcp:2003:replica-exchange-expanded-ensembles,Paliwal_comparison_2011}, but for almost all standard uses, the optimized, lowest variance version is best.
 
-%\begin{comment}
-%Note that BAR can be seen as the free energy obtained by transition probability matrix with $P_{ij} = \frac{e^{-u_i}}{e^{-u_i}+e^{-u_j}}$
-%\end{comment}
 
 \subsection{Multistate Bennett acceptance ratio (MBAR)}
 
@@ -1019,26 +1004,6 @@ f_i &=& -\ln \left[\frac{1}{N}\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\nu_{mix}(\vx_
                &=& \sum_k \frac{N_k}{N} \nu_k(\vx)
 \end{eqnarray}
 
-\begin{comment}
-% There may be a couple of ideas that I pull out of this to put in the main text, but this will be mostly removed.
-{\em Unoptimized MBAR} We can construct asymptotically unbiased
-estimators for MBAR that are not self-consistent, functions of
-constants $c_k$ that give correct free energy estimates, and which
-converge to the MBAR estimate when the input $c_k=f_k$.  For example, we can use:
-\[
-f_i = -\ln \left[\sum_{n=1}^N \frac{\exp(-u_i(x_n))}{\sum_k N_k \exp(c_k-u_k(x_n))}\right]
-\label{eq:unoptimizedMBAR}
-\]
-Which clearly converges to MBAR in the case that $c_k=f_k$, and can be
-shown using the methods of Ref~\cite{shirts-chodera:jcp:2008:mbar} to be a valid
-estimator of the free energy~\footnote{To derive from MBAR, take
-  $\alpha_{ij}(x)=\frac{N_j e^{f_i}}{\sum_{k=1}^K N_k
-    e^{c_i-u_i(x)}}$}. The properties of this estimator have not been
-explored extensively, though anecdotally, it is harder to work with
-than the unoptimized BAR variant, as one needs ALL $c_k$ to be close
-to $f_k$, which is a more difficult condition than having only one
-$c_k$ close to a single $f_k$.
-\end{comment}
 
 \subsection{Weighted histogram analysis method (WHAM)}
 
@@ -1808,19 +1773,6 @@ the free energy of the state. The basic principle is similar to metadynamics, so
 \caption{The expanded ensemble hole analogy. (\ref{fig:emptywell}) At the beginning the biasing weights as a function of thermodynamic state are unknown. (\ref{fig:halfwell}) As the simulation proceeds, a random walker samples the states and deposits ``dirt'' (probability of visitation) in each location.  The short arrow over the random walker signifies uneven sampling of the states as the the biases are built adaptively.  (\ref{fig:fullwell}) At the end of the simulation, the weights, given by the height of ``dirt'', in each well are equal to the free energy.  The random walker now samples all states equally, as illustrated by the long bar over the walker which now extends over all of state space.} \label{fig:EXEanalogy}
 \end{figure*}
 
-\begin{comment}
-We consider a set of $K$ thermodynamic states defined
-by their thermodynamic parameter vectors, $\lambda_k \equiv \{\beta_k,
-\mathcal{H}_k, p_k, \vec{\mu}_k, \ldots\}$, with $k = 1,\ldots,K$, where $H_k$
-denotes any modifications of the Hamiltonian $H$ as a function of $k$,
-including \hyperlink{ref:biasingE} {biasing} potentials.  Each new choice of $k$ gives rise to a
-\hyperlink{ref:reduced} {reduced} potential $u_k$, unnormalized and normalized probability
-\hyperlink{ref:Distribution} {distribution} s $q_k(\vx)$ and $\nu(\vx,k)$, and a partition function $Z_k$.
-To ensure that any configuration $x$ has finite, nonzero density in
-all $K$ thermodynamic states, we additionally require that the same
-thermodynamic parameters be specified for all thermodynamic states,
-though their values may of course differ.
-\end{comment}
 
 Transitions between the subensembles labeled by indices $k$ or equivalently discrete values of a vector $\mathbf{\lambda}$ can most simply be performed by \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo}~\footnote{Molecular dynamics is also possible, but we will restrict our discussion of transitions
 between states to Monte Carlo for now, as dynamics in a continuous $\mathbf{\lambda}$ has a number of additional subtleties and is much less common.}.  We can use any proposal/acceptance scheme that ensures this conditional distribution is sampled in the long run for any fixed $\vx$. At each step, we can choose to sample in either $k$ or $\vx$ according to some fixed probability $p$.  We can also alternate $N_k$ and $N_x$ steps of $k$ and $\vx$ sampling, respectively.  Although this Gibbs sampling algorithm does not satisfy detailed \hyperlink{ref:Balance} {balance}, it does satisfy the weaker condition of \hyperlink{ref:Balance} {balance}~\cite{deem:jcp:1999:balance} which is sufficient to preserve sampling from the joint stationary probability \hyperlink{ref:Distribution} {distribution}  $\nu(\vx,k)$.  When proposal probabilities are based on past history, however, the algorithm will not preserve the equilibrium distribution~\cite{reinhardt:cpl:2000:step-size-adjustment}, though in some cases the deviations caused by the history dependence can be mitigated with proper choices of parameters (as shown in the parallel case of metadynamics)~\cite{bussi.equilibriummetadynamics}.
@@ -1926,36 +1878,6 @@ g_{i,\mathrm{new}} = g_{i,\mathrm{old}} - \ln{\frac{h_{\mathrm{new}}(i)K}{N}}
 \end{equation}
 where $N$ is the total number of samples collected up to that point and $K$ is the number of states.
 
-\begin{comment}
-
-which states:
-\begin{equation}
-\xi^{(t-\frac{1}{2})} = \xi^{(t-1)} + t^{-1}\left\{w_i(X_t);\xi^{(t-1)})/\pi_i,...,w_m(X_t;\xi^{(t-1)})/\pi_m\right\}^T
-\end{equation}
-Translating from Tan's
-terminology, $t$ is the current step of \hyperlink{ref:MetropolisMonteCarlo} {MC}/MD sampling, the $\xi^{(t-\frac{1}{2})}$ is the vector of $g_{i,new}$ and $\xi^{(t-1)}$ is the vector of $g_{i,old}$. Tan's $X_t$ is the same as $\vx$ in the current terminology, and and $\pi_i$ are the \hyperlink{ref:targetdist}{target probability distributions} of each state; if we assume we are looking for equal sampling of the states, they are all simply equal to 1; we will look at other variations later. $w_j(X;\xi)$ is the expectation of the \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} transition probability to state $j$ states when the current configuration is $X$, and the current weights are $\xi$.
-
-\end{comment}
-
-\begin{comment}
-\paragraph{Self-adjusted mixture sampling as linearized MBAR}
-
-We can also update weights by starting from a multistate \hyperlink{ref:Reweighting} {reweighting} perspective. We start with \hyperlink{ref:MBAR} {MBAR}, the provably minimum variance \hyperlink{ref:FEestimator} {free energy estimator} given $N_{i}$ samples from each of $i=1 \ldots K$ states \cite{shirts-chodera:jcp:2008:mbar}.  The formula for the \hyperlink{ref:reduced} {reduced} free energy for each state $f_{i}$ is given by:
-\begin{eqnarray}
-\exp(-f_i) = \sum_{n=1}^N \frac{\exp(-u_i(\vx_n))}{\sum_k N_k \exp(f_k-u_k(\vx_n))}
-\label{eq:MBARwl}
-\end{eqnarray}
-Assuming that after $n$ steps of simulation, we have a decent estimate of the free energies $\hat{f}_{i}$ and that we wish to add one more sample without recalculating the free energies explicitly. In the limit that this change is small, we can expand the exponential $e^{-f+\delta f}$ in a Taylor series, .We obtain:
-\begin{eqnarray}
-\hat{f}_{i}^{(N+1)} &\approx& \hat{f}_{i}^{(N)}- \frac{\exp(\hat{f}_{i}^{(N)}-u_i(\vx_{N+1}))}{\sum_k N_k \exp(\hat{f}_{k}^{(N)}-u_k(\vx_{N+1}))}
-&=& \hat{f}_{i}^{(N)}- \frac{1}{N}\frac{\exp(\hat{f}_{i}^{(N)}-u_i(\vx_{N+1}))}{\sum_k \frac{N_k}{N} \exp(\hat{f}_{k}^{(N)}-u_k(\vx_{N+1}))}
-
-\label{eq:WWL}
-\end{eqnarray}
-
-Although not immediately obvious, AWH is an approximation to for to self-adjusted mixture sampling, and equivalent to that method, we can then use the free energies $f_k$ as our weights $g_k$
-
-\end{comment}
 
 Although we do not prove it here, AWH is actually an close approximation to SAMS. The difference is that in AWH, the free energies are only updated every $N_I$ steps instead of every step. The $1/t$ dependence in SAMS shows up as a $1/N$ dependence in AWH.
 
