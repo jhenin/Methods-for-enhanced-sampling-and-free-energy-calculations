@@ -14,9 +14,6 @@
 % Omit the bestpractices option to remove the marking as a LiveCoMS paper.
 % Please note that these options may affect formatting.
 
-% TODO remove this before submitting
-% \hypersetup{draft}
-
 \usepackage{lipsum} % Required to insert dummy text
 \usepackage[version=4]{mhchem}
 \usepackage{siunitx}
@@ -126,7 +123,7 @@
 
 \maketitle
 \begin{abstract}
-Enhanced sampling algorithms have emerged as powerful methods to extend the utility of molecular dynamics simulations and allow the sampling of larger portions of the configuration space of complex systems in a given amount of simulation time. This review aims to present the unifying principles and differences of many of the  computational methods currenly used for enhanced sampling in molecular simulations of biomolecules, soft matter and molecular crystals. Indeed, despite the apparent abundance and divergence of such methods, the principles at their core can be boiled down to a relatively limited number of statistical and physical principles.
+Enhanced sampling algorithms have emerged as powerful methods to extend the utility of molecular dynamics simulations and allow the sampling of larger portions of the configuration space of complex systems in a given amount of simulation time. This review aims to present the unifying principles and differences of many of the  computational methods currently used for enhanced sampling in molecular simulations of biomolecules, soft matter and molecular crystals. Indeed, despite the apparent abundance and divergence of such methods, the principles at their core can be boiled down to a relatively limited number of statistical and physical principles.
 To enable comparisons, the various methods are introduced using similar terminology and notation. We then illustrate in which ways many different methods combine principles from a smaller class of enhanced sampling concepts.
 This review is intended for scientists with an understanding of the basics of molecular dynamics simulations and statistical physics who want a deeper understanding of the ideas that underlie various enhanced sampling methods and the relationships between them.
 This living review is intended to be updated to continue to reflect the wealth of sampling methods as they continue to emerge in the literature.
@@ -161,7 +158,7 @@ If the process of interest is a transition between two states, then the ideal CV
 
 \subsection{Scope}
 The concept of accelerated sampling is so broad that we must make some decisions as to what scope of approaches to cover in a coherent review. 
-Some enhanced sampling schemes are purely exploratory, i.e. they enable to discover uncharted regions of the configuration space efficiently but only allow semi-quantitative estimates of probability distributions. Many schemes, in addition, enable the estimation of probability \hyperlink{ref:Distribution} {distribution}s and free energies from the sampled space. Thus, all methods fall onto a exploration / free energy estimation tradeoff continuum. Some methods, such as metadynamics, were initially proposed as simply exploration schemes for configuration space, but were later refined and shown to be useful to calculate probability densities as well.  Others started off from their derivation being grounded in the estimation of free energies. An entire class of methods remains exclusively useful to broadly survey the configuration space, and learn to do that in optimal ways using \hyperlink{ref:Adaptive} {adaptive} schemes~\cite{ChiavazzoE5494}. In this review, we focus instead on algorithms that recover original statistical \hyperlink{ref:Ensemble} {ensembles} and free energy \hyperlink{ref:FES} {landscape}s. Note that exploratory methods can nevertheless be useful to some of these schemes, as they offer initial configurations to start simulations from.
+Some enhanced sampling schemes are purely exploratory, i.e. they enable to discover uncharted regions of the configuration space efficiently but only allow semi-quantitative estimates of probability distributions. Many schemes, in addition, enable the estimation of probability \hyperlink{ref:Distribution} {distribution}s and free energies from the sampled space. Thus, all methods fall onto a exploration / free energy estimation trade-off continuum. Some methods, such as metadynamics, were initially proposed as simply exploration schemes for configuration space, but were later refined and shown to be useful to calculate probability densities as well.  Others started off from their derivation being grounded in the estimation of free energies. An entire class of methods remains exclusively useful to broadly survey the configuration space, and learn to do that in optimal ways using \hyperlink{ref:Adaptive} {adaptive} schemes~\cite{ChiavazzoE5494}. In this review, we focus instead on algorithms that recover original statistical \hyperlink{ref:Ensemble} {ensembles} and free energy \hyperlink{ref:FES} {landscape}s. Note that exploratory methods can nevertheless be useful to some of these schemes, as they offer initial configurations to start simulations from.
 
 Another type of information that can be valuable to the scientist is the evolution of the system along time, which gives access to the rates of transition between states. It is therefore important to note that many enhanced sampling schemes do not preserve the kinetics of the system, and are therefore primarily useful to recover equilibrium probability \hyperlink{ref:Distribution} {distribution}s. In fact, the most efficient sampling methods arguably alter the dynamics as much as possible while preserving thermodynamics. Some methods do preserve kinetic information, or at least allow kinetic information to be recovered, and we will generally note which methods which have this property.
 
@@ -336,9 +333,6 @@ To make the difference between Hamiltonian dynamics and Langevin dynamics more i
 where $\mathbf{G}$ is a Gaussian-distributed stochastic 3N-vector of zero mean and variance 1.
 Note that in practice, more sophisticated discrete Langevin integration schemes are used, which bring much better accuracy, stability, and performance~\cite{Skeel2002, Leimkuhler2012}.
 Still, comparing the relatively simple Equations~\ref{eq:md_discrete} and \ref{eq:Langevin_discrete} shows that Langevin dynamics can be interpreted intuitively as similar to Hamiltonian dynamics, but including a modified force with added friction and stochastic collision terms. When $\gamma$ is zero, it reduces exactly to Hamiltonian dynamics.
-% Note that there are many other possible thermostats that can replace Hamiltonian dynamics, each with different numerical benefits and pitfalls. Note that some historic algorithms maintain an approximate target temperature, but do not sample from the canonical ensemble.
-% Isothermal-isobaric dynamics also includes a barostat, producing volume fluctuations consistent with a given target pressure $P$, and samples the isothermal-isobaric ensemble (NPT).
-% Again, there exists a variety of equations of motions with this property, and numerical algorithms implementing them.
 Langevin dynamics will be used as a basic example in later sections of this review.
 
 \hypertarget{ref:Distribution}{\paragraph{Distribution}}
@@ -869,15 +863,6 @@ If $i$ and $j$ are neighboring states along $\lambda$ with a sufficiently small 
 
 Other numerical integration formulas can of course be used, although usually there has not been found to be much advantage over the straightforward trapezoidal rule~\cite{Paliwal_comparison_2011}. 
 
-% The total free energy of state $k$
-% will again be the sum over all states $i<k$.
-% Note that this integral
-% does not include the weights $g_i$ and $g_j$; it's a bit subtle, but
-% the derivatives are the same regardless of what the weight values are,
-% as the subensemble stays the same. We will not consider TI this
-% further in the case of discrete states, though it will become more
-% useful in the case of continuously varying states (though it's only
-% occasionally used even there).
 
 \subsubsection{TI along a collective variable}
 
@@ -1825,7 +1810,6 @@ number of attempted state transitions.  Belardinelli and Pereyra
 suggest starting with a standard Wang-Landau algorithm, and then
 switching to using weights of $1/t$ when $\delta \leq 1/t$~\cite{Belardinelli2008, Belardinelli2007}. This need to have the increments decrease by $1/t$ has also been noted by statisticians~\cite{wl_convergence}, and most improved versions of updating schemes also have this feature, even if it is not clear in the formulation.
 
-% \subsection{\label{sec:multiplestatemethods}Multiple State \hyperlink{ref:Reweighting} {Reweighting} Methods}
 \subsubsection{\label{sec:multiplestatemethods}Multiple state reweighting methods}
 
 The Wang-Landau approach and its $1/t$ variant only update the free energy of one state at one time, i.e. when it is visited during the random walk in the \hyperlink{ref:ExpEns} {expanded ensemble}.  However, in theory, it should be possible to update the weights of multiple states at the same time, based on information obtained at any given state.
@@ -2303,16 +2287,7 @@ We would also like to thank the people who have commented on GitHub to help make
 \end{itemize}
 
 
-
-% \section{References}
-%\bibliographystyle{unsrt}
 \bibliography{refs}
-
-%\clearpage
-%
-%\subsection*{TOC Graphic}
-%
-%\includegraphics[width=3.25in]{Figures/toc}
 
 
 \end{document}
