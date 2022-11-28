@@ -14,7 +14,6 @@
 % Omit the bestpractices option to remove the marking as a LiveCoMS paper.
 % Please note that these options may affect formatting.
 
-\usepackage{lipsum} % Required to insert dummy text
 \usepackage[version=4]{mhchem}
 \usepackage{siunitx}
 \usepackage[italic]{mathastext}
@@ -62,9 +61,6 @@
 \orcid{Lucie Delemotte}{0000-0002-0828-3899}
 
 
-%\contrib[\authfn{1}]{These authors contributed equally to this work}
-%\contrib[\authfn{2}]{These authors also contributed equally to this work}
-
 %\presentadd[\authfn{3}]{Department, Institute, Country}
 %\presentadd[\authfn{4}]{Department, Institute, Country}
 
@@ -88,12 +84,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%\documentclass{article}
-
-% \documentclass{article}
-%\usepackage{times}
 \usepackage{graphicx}
-% \usepackage[width=16cm,height=23cm]{geometry}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{bbm} % for double-stroke numeral 1
@@ -151,14 +142,14 @@ MD simulations are generally considered to suffer from three main limitations:
 
 This review focuses on describing the numerous methods that have been put forth to address the third issue, broadly referred to as ``enhanced sampling MD simulation'' techniques (see also~\cite{10.1016/j.bbagen.2014.10.019,10.1063/1.5109531,10.1039/d1cp04809k} for earlier reviews surveying the field). 
 
-We do note note that the second issue, of finding a low-dimensional projection for the interpretation of MD simulations, is directly related to several of the algorithms presented in this review, grouped under the umbrella term ``collective variable (\hyperlink{ref:CV} {CV})-based methods''. Indeed, the configurational ensemble of systems of interest is generally very peaked, featuring several \hyperlink{ref:metastab} {metastable} and well-defined states with high probability, while the regions between these states have probabilities close to zero in the full high-dimensional Cartesian space. This explains why schemes that reduce the \hyperlink{ref:DimRed} {dimensionality} of the space sampled by projecting it onto a lower-dimensional surface can be successful if they accelerate sampling along the CV.
+We do note that the second issue, of finding a low-dimensional projection for the interpretation of MD simulations, is directly related to several of the algorithms presented in this review, grouped under the umbrella term ``collective variable (\hyperlink{ref:CV} {CV})-based methods.'' Indeed, the configurational ensemble of systems of interest is generally very peaked, featuring several \hyperlink{ref:metastab} {metastable} and well-defined states with high probability, while the regions between these states have probabilities close to zero in the full high-dimensional Cartesian space. This explains why schemes that reduce the \hyperlink{ref:DimRed} {dimensionality} of the space sampled by projecting it onto a lower-dimensional surface can be successful if they accelerate sampling along the CV.
 If the process of interest is a transition between two states, then the ideal CV accelerating transitions between these states is the committor function, which describes the progress of the transition between the two states, and the transition state between the two endpoints is the region where the committor value is around $\frac{1}{2}$~\cite{doi:10.1146/annurev.physchem.53.082301.113146,LiMa_2014,BaronPeters_RC_ARPC_2015,BanushkinaKrivov_2016,Tuckerman2010}. In such cases, CV is synonymous with reaction coordinate. However, finding CVs that approximate the committor function is a very challenging task and rarely done in practice, though several recent methods show promise in achieving this~\cite{LiLinRen_2019,MoriMatubayasi_2020,PalacioRodriguez_Pietrucci_2022,JungHummer_2021,FrassekBolhuis_2021,WuMa_2022}. Instead, CVs are generally chosen using chemical and physical intuition, or by using methods that aim to automatically extract CVs from simulations. While finding these ``good'' \hyperlink{ref:CV} {CV}s is crucial for the success of CV-based methods, we will only briefly touch on the various methods that exist for identifying such CVs. The reader is referred to~\cite{WANG2020139, doi:10.1080/00268976.2020.1737742, doi:10.1021/acs.jctc.0c00355} for a more extensive discussion of this issue.
 
 
 
 \subsection{Scope}
 The concept of accelerated sampling is so broad that we must make some decisions as to what scope of approaches to cover in a coherent review.
-Some enhanced sampling schemes are purely exploratory, i.e. they enable to discover uncharted regions of the configuration space efficiently but only allow semi-quantitative estimates of probability distributions. Many schemes, in addition, enable the estimation of probability \hyperlink{ref:Distribution} {distribution}s and free energies from the sampled space. Thus, all methods fall onto a exploration / free energy estimation trade-off continuum. Some methods, such as metadynamics, were initially proposed as simply exploration schemes for configuration space, but were later refined and shown to be useful to calculate probability densities as well.  Others started off from their derivation being grounded in the estimation of free energies. An entire class of methods remains exclusively useful to broadly survey the configuration space, and learn to do that in optimal ways using \hyperlink{ref:Adaptive} {adaptive} schemes~\cite{ChiavazzoE5494}. In this review, we focus instead on algorithms that recover original statistical \hyperlink{ref:Ensemble} {ensembles} and free energy \hyperlink{ref:FES} {landscape}s. Note that exploratory methods can nevertheless be useful to some of these schemes, as they offer initial configurations to start simulations from.
+Some enhanced sampling schemes are purely exploratory, i.e. their aim is to discover uncharted regions of the configuration space efficiently but they only produce semi-quantitative estimates of probability distributions. Many schemes, in addition, enable the estimation of probability \hyperlink{ref:Distribution} {distribution}s and free energies from the sampled space. Thus, all methods fall onto an exploration / free energy estimation trade-off continuum. Some methods, such as metadynamics, were initially proposed as simply exploration schemes for configuration space, but were later refined and shown to be useful to calculate probability densities as well.  Others started off from their derivation being grounded in the estimation of free energies. An entire class of methods remains exclusively useful to broadly survey the configuration space, and learn to do that in optimal ways using \hyperlink{ref:Adaptive} {adaptive} schemes~\cite{ChiavazzoE5494}. In this review, we focus instead on algorithms that recover original statistical \hyperlink{ref:Ensemble} {ensembles} and free energy \hyperlink{ref:FES} {landscape}s. Note that exploratory methods can nevertheless be useful to some of these schemes, as they offer initial configurations from which to start simulations.
 
 Another type of information that can be valuable to the scientist is the evolution of the system along time, which gives access to the rates of transition between states. It is therefore important to note that many enhanced sampling schemes do not preserve the kinetics of the system, and are therefore primarily useful to recover equilibrium probability \hyperlink{ref:Distribution} {distribution}s. In fact, the most efficient sampling methods arguably alter the dynamics as much as possible while preserving thermodynamics. Some methods do preserve kinetic information, or at least allow kinetic information to be recovered, and we will generally note which methods have this property.
 
@@ -196,21 +187,6 @@ This division into non-overlapping (partitioning) and overlapping structure is a
 
 Another complementary classification might to be consider the probability \hyperlink{ref:Distribution} {distribution} sampled at convergence by the enhanced sampling methods (sometimes called \hyperlink{ref:targetdist}{target distribution}), instead of the specifics of how the enhanced sampling methods achieve this in practice~\cite{invernizzi2020unified}.
 
-%One can imagine other possible classification decisions, that are not explicitly accounted %for in our scheme.
-
-%Extended system dynamics
-%Importance sampling
-%Replacing (parts of) the algorithm with "Machine Learning" approaches
-
-%Free energy estimation can involve
-%\begin{itemize}
-%    \item Interpreting a derivative as an expectation value
-%    \item Assuming distributions are Gaussian
-%    \item Expressing the problem as a maximum likelihood one
-%    \item Accumulating the partition function in some degree of freedom adaptively
-%    \item Integrating out degrees of freedom
-%\end{itemize}
-
 
 \begin{figure*}[!htb]
 \includegraphics[scale=0.85]{Figures/Enhanced_sampling_sorting_revised.pdf}
@@ -237,7 +213,7 @@ The efficiency of an enhanced sampling method depends on:
  \item the expertise of the user.
 \end{itemize}
 
-Comparing methods requires defining a benchmark for which the results are known to a high accuracy and precision, and then attempting to study this benchmark by using each method ``fairly'', that is, either using the optimal parameters for the particular application, or the best parameters that a typical user will be able to set in practice. Such studies~\cite{Rizzi:JCAMD:2020a,Hrustak:JCP:2018} are challenging to carry about, and usually can only cover a few methods at a time.  A fundamental issue is that the ground truth is seldom known beyond simple systems such as alanine dipeptide or a few fast-folding miniproteins, and there is no guarantee that methods that work well for those systems will work well on more complex systems. In fact, the features of the conformational landscape might be very different and make methods that work well on model systems perform particularly badly on "real" systems. In addition, sometimes, a method may be less efficient than another when used optimally, but more robust to non-optimal circumstances.
+Comparing the efficiency of these methods requires defining a benchmark for which the results are known to a high accuracy and precision, and then attempting to study this benchmark by using each method ``fairly,'' that is, either using the optimal parameters for the particular application, or the best parameters that a typical user will be able to set in practice. Such studies~\cite{Rizzi:JCAMD:2020a,Hrustak:JCP:2018} are challenging to carry about, and usually can only cover a few methods at a time.  A fundamental issue is that the ground truth is seldom known beyond simple systems such as alanine dipeptide or a few fast-folding miniproteins, and there is no guarantee that methods that work well for those systems will work well on more complex systems. In fact, the features of the conformational landscape might be very different and make methods that work well on model systems perform particularly badly on ``real'' systems. In addition, sometimes, a method may be less efficient than another when used optimally, but more robust to non-optimal circumstances.
 A method may lead quickly to an approximate or qualitative result and go no further, whereas another may guarantee a precise result but require much more resources or take an uncertain time to converge.
 
 For the current time, we have found that it would not be feasible to identify optimal methods for all applications within this review, as optimality indeed depends on the type of problem. Instead, we hope that presenting methods in a unified way can help guide the practitioner in their choice of enhanced sampling scheme when tackling their problem of interest.
@@ -254,11 +230,11 @@ schemes. We introduce here the notation we will use throughout the paper. Note t
 \subsection{Basic notations}
 \label{sec:Notation}
 \begin{itemize}
-\item Cartesian coordinates of atoms (or coarse-grain particles) denoted by $\vx \in \mathbb{R}^{3N}$ and momenta denoted by $\vp \in \mathbb{R}^{3N}$, where $N$ is the number of particles.
-\item Hamiltonian $H(\vx,\vp)=U(\vx)+K(\vp)$ that is a sum of the potential energy function denoted by $U(\vx)$, defined by a classical molecular mechanics force field, various levels of electronic structure theory in an \emph{ab initio} dynamics framework, or a QM/MM hybrid and the kinetic energy $K(\vp)$.
+\item Cartesian coordinates of atoms (or coarse-grain particles) $\vx \in \mathbb{R}^{3N}$ and momenta $\vp \in \mathbb{R}^{3N}$, where $N$ is the number of particles.
+\item Hamiltonian $H(\vx,\vp)=U(\vx)+K(\vp)$, which is a sum of the potential energy function denoted by $U(\vx)$, defined by a classical molecular mechanics force field, various levels of electronic structure theory in an \emph{ab initio} dynamics framework, or a QM/MM hybrid and the kinetic energy $K(\vp)$.
 \item Force on particles $\vF(\vx) = -\nabla_\vx U(\vx)$, where $\nabla_\vx$ is the gradient with respect to $\vx$.
-\item Absolute temperature $T$, inverse temperature $\beta = (k_\mathrm{B} T)^{-1}$.
-\item \hypertarget{ref:AuxVar} {Extended (auxiliary) variable}: $\lambda$. This auxiliary variable can be a thermodynamic parameter, such as the temperature $T$ or the pressure $P$, or a parameter of the energy function $U_\lambda(\vx)$. The auxiliary variable can have a fixed value per simulation, can follow a pre-determined schedule, or can obey some dynamical equation of motion. It can have multiple dimensions, which we represent by the bold-faced vector $\boldsymbol{\lambda}$.
+\item Absolute temperature $T$ and inverse temperature $\beta = (k_\mathrm{B} T)^{-1}$.
+\item \hypertarget{ref:AuxVar} {Extended (auxiliary) variable} $\lambda$. This auxiliary variable can be a thermodynamic parameter, such as the temperature $T$ or the pressure $P$, or a parameter of the energy function $U_\lambda(\vx)$. The auxiliary variable can have a fixed value per simulation, can follow a pre-determined schedule, or can obey some dynamical equation of motion. It can have multiple dimensions, which we represent by the bold-faced vector $\boldsymbol{\lambda}$.
 
 \end{itemize}
 
@@ -363,7 +339,7 @@ Note that there are other notation conventions: in some texts and papers, $Q$ de
 \hypertarget{ref:Macrostate} {\paragraph{Macrostate}}
 
 Macrostates are experimentally distinguishable or measurable states of a system.
-They can be described formally either in terms of the thermodynamic state variables ($E$, $T$, $P$, $V$, or parameters of the Hamiltonian) or by specifying specific regions of configuration space (that is, disjoint sets of \hyperlink{ref:Microstate} {microstates}). A macrostate, besides being just a collection of microstates, also specifies a probability associated with each microstate that is contained in the microstate. The term ``thermodynamic state" is often used synonymously with macrostate, as the macrostates that we are most generally interested in studying with molecular simulation are macrostates that are completely defined by the specification of the macroscopic thermodynamic variables.
+They can be described formally either in terms of the thermodynamic state variables ($E$, $T$, $P$, $V$, or parameters of the Hamiltonian) or by specifying specific regions of configuration space (that is, disjoint sets of \hyperlink{ref:Microstate} {microstates}). A macrostate, besides being just a collection of microstates, also specifies a probability associated with each microstate that is contained in the microstate. The term ``thermodynamic state'' is often used synonymously with macrostate, as the macrostates that we are most generally interested in studying with molecular simulation are macrostates that are completely defined by the specification of the macroscopic thermodynamic variables.
 
 \hypertarget{ref:density_of_states}{\paragraph{Density of states}}
 The density of states $\Omega(E)$ is defined as the number of states in a system that have a specific total energy $E$.  It can be mathematically expressed as $\Omega(E) = \int \delta(E-H(\vx,\vp))\, d\vx d\vp$, where $\delta$ is a Dirac delta function that is zero everywhere except where $E=H(\vx,\vp)$. The entropy $S$ as a function of $E$ is then simply $S(E)=k_\mathrm{B} \ln \Omega(E)$. Additionally, the configurational density of states is defined as the number of states that have a specific potential energy $U$ and is computed as $\Omega(U) = \int \delta(U-U(\vx))\, d\vx$, and the configurational entropy $S$ as a function of $U$ is $S(U)=k_\mathrm{B} \ln \Omega(U)$.
@@ -377,14 +353,14 @@ where the integration is done over a subset $\Sigma$ of configuration space corr
 
 When using a classical energy function, $F$ is only defined up to an arbitrary additive constant.
 In practice, this is not a limitation, as quantities of measurable physical interest involve only free energy \textit{differences} between two \hyperlink{ref:Macrostate} {macrostate}s, rather than absolute free energies.
-If two macrostates $\A$ and $\B$ can be distinguished experimentally, the ratio of the time they spend in each system ($P_A = Z_A/Z$ and $P_B = Z_B/Z$) is an experimental observable, and is the free energy difference between the two states:
+If two macrostates $\A$ and $\B$ can be distinguished experimentally, the ratio of the time they spend in each system ($P_A = Z_A/Z$ and $P_B = Z_B/Z$) is an experimental observable, and the free energy difference between the two states is:
 \begin{align}
   \Delta F_{\A,\B} &= F_{\A} - F_{\B} \nonumber\\
     & = -\beta^{-1} \ln \frac{Z_{\A}}{Z_{\B}} \nonumber\\
-  & = -\beta^{-1} \ln \frac{P_{\A}}{P_{\B}}
+  & = -\beta^{-1} \ln \frac{P_{\A}}{P_{\B}}.
 \end{align}
 
-The Helmholtz free energy is sometimes notated $A$ in the literature. In this review, we will use $F$ for Helmholtz free energy, and the the symbol $A$ will be used for the \hyperlink{ref:FES} {free energy surface}. Gibbs free energy $G$ is the equivalent quantity in the isothermal-isobaric \hyperlink{ref:Ensemble} {ensemble}.
+The Helmholtz free energy is sometimes notated $A$ in the literature. In this review, we will use $F$ for Helmholtz free energy, and the symbol $A$ will be used for the \hyperlink{ref:FES} {free energy surface}. Gibbs free energy $G$ is the equivalent quantity in the isothermal-isobaric \hyperlink{ref:Ensemble} {ensemble}.
 
 \hypertarget{ref:FEestimator} {\paragraph{Free energy estimator}}
 An expression or algorithm that takes simulation data and estimates a numerical value for free energies or their differences. See Section~\ref{sec:fe_estimators} for a list and description of useful free energy estimators.
@@ -409,9 +385,9 @@ Then all \hyperlink{ref:Distribution} {Boltzmann-like distributions} for the the
   $\nu(\vx) = e^{f-u(\vx)}$.
 
 
-\hypertarget{ref:CV}{\paragraph{Collective variable (CV)}} A function $\xi$ mapping the full $n$ dimensions configurations $\vx$ to a lower-dimensional representation $\vz$ (sometimes denoted as $\mathbf{s}$ in the literature):
+\hypertarget{ref:CV}{\paragraph{Collective variable (CV)}} A function $\xi$ mapping the full $3N$-dimension configurations $\vx$ to a lower-dimensional representation $\vz$ (sometimes denoted as $\mathbf{s}$ in the literature):
 \begin{equation}
-\vz = \xi(\vx)
+\vz = \xi(\vx).
 \end{equation}
 In the literature, the letter $\xi$ is sometimes used for both the function and the variable. The same goes for $\vz$ (and $\mathbf{s}$).
 
@@ -426,7 +402,7 @@ where $d$ is the number of scalar collective variables (i.e., the dimension of t
 The process of finding functions $\xi$ mapping high-dimensional $\vx$ to low-dimensional $\vz$.
 
 \hypertarget{ref:Alchemical} {\paragraph{Alchemical transformation}}
-Non-physical parameters are characterized as ``alchemical'', and describe transition between Hamiltonians representing different molecular systems. Typically the change consists in either transforming a molecule into another one, or decoupling a molecule from its environment. Alchemical transformations are often used to estimate free energies of binding or solvation, as they create a continuous pathway of intermediate ensembles between two end states of physical interest.
+Non-physical transition between Hamiltonians representing different molecular systems are characterized as ``alchemical.'' Typically the change consists in either transforming a molecule into another one, or decoupling a molecule from its environment. Alchemical transformations are often used to estimate free energies of binding or solvation, as they create a continuous pathway of intermediate ensembles between two end states of physical interest.
 
 \hypertarget{ref:FES} {\paragraph{Free energy profile / landscape / surface (FES)}}
 \label{sec:FES}
@@ -438,7 +414,7 @@ Given a chosen set of collective variables $\vz = \xi(\vx)$, this partially inte
     \delta\left(\vz-\xi(\vx)\right) \, \nu(\vx)\, d\vx
     = -\beta^{-1} \ln \rho(\vz) ,
 \end{equation}
-where $\delta$ indicates the multivariate Dirac delta distribution defined by $\delta\left(\vz-\xi(\vx)\right)= \prod_{i=1}^{d} \delta\left(z_i-\xi_i(\vx)\right)$ with the single variable Dirac delta distribution defined by $\int f(x) \, \delta(x-y) \,  dx = f(y)$, for any function $f$. Intuitively, $\delta$ behaves like a function that is zero everywhere but in 0, and whose integral is 1.
+where $\delta$ indicates the multivariate Dirac delta distribution defined by $\delta\left(\vz-\xi(\vx)\right)= \prod_{i=1}^{d} \delta\left(z_i-\xi_i(\vx)\right)$ with the single variable Dirac delta distribution defined by $\int f(x) \, \delta(x-y) \,  dx = f(y)$, for any function $f$. Intuitively, $\delta$ behaves like a function that is zero everywhere but at 0, and whose integral is 1.
 
 In practice, most free energy surface calculations concern a Helmholtz free energy, but Gibbs free energy surfaces could be computed as well. The difference is small, unless the transformation of interest entails a measurable change in overall density.
 
@@ -453,7 +429,7 @@ If two \hyperlink{ref:Macrostate} {macrostate}s $\A$ and $\B$ correspond to doma
 
 Similarly to other \hyperlink{ref:reduced} {reduced} quantities, one may define the reduced free energy surface
 \begin{equation}
-    a(\vz) = \beta A(\vz)
+    a(\vz) = \beta A(\vz).
 \end{equation}
 
 Note that in \hyperlink{ref:ExpEns} {expanded ensemble} approaches, a free energy as a function of the extended variable $\lambda$ can be defined as:
@@ -461,7 +437,7 @@ Note that in \hyperlink{ref:ExpEns} {expanded ensemble} approaches, a free energ
     A(\lambda) &= -\beta^{-1} \ln Z_\lambda
     \nonumber \\
     &= -\beta^{-1} \ln \int
-    \nu(\vx, \lambda)\, d\vx
+    \nu(\vx, \lambda)\, d\vx.
 \end{align}
 Note the difference between this definition and that of a free energy surface as a function of a collective variable (Equation~\ref{eq:fes_definition}).
 Here there is no Dirac distribution $\delta$ because $\vx$ and $\lambda$ are separate variables, so we obtain the marginal distribution by integrating over $\vx$, which preserves the dependence on $\lambda$. In other words, a slice of configuration space at constant $\lambda$ is the complete space of $\vx$ coordinates, whereas a slice of configuration space at constant $\vz = \xi(\vx)$ is only  a slice or subset of this coordinate space.
@@ -498,14 +474,14 @@ probability (measure) $P(\Sigma)$  & free energy  $F(\Sigma)$\\
 The free energy surface can be interpreted as an effective potential energy surface defined on collective variables.
 The free energy surface is related to a probability density in the same way a free energy is related to the probability of a state (Table~\ref{tab:quantities}).
 Beware, however, that a probability density is not a probability measure: a value of the density is not the probability of any particular event.
-Probability values are unitless and between 0 and 1; in contrast a probability density has units inverse volume, and can take values greater than 1. The probability of a state is obtained from a probability density by integrating over the relevant region of configuration space. In a continuous configuration space, the probability of each individual configuration is zero.
+Probability values are unitless and between 0 and 1; in contrast a probability density has units of inverse volume, and can take values greater than 1. The probability of a state is obtained from a probability density by integrating over the relevant region of configuration space. In a continuous configuration space, the probability of each individual configuration is zero.
 A density is normalized: its integral over the whole space is 1, which is the probability of the whole space.
 Similarly, a free energy surface is not directly interpretable as a macroscopic free energy. Unlike a free energy, it is not an experimental observable.
 Very importantly, free energy surfaces do not generally have a simple interpretation in terms of dynamics (e.g. free energy maxima may not be kinetic barriers), because of distortions due to the nonlinear geometry of the variables~\cite{10.1063/5.0020240,Dietschreit2022}.
 
 
 \hypertarget{ref:PMF} {\paragraph{Potential of mean force (PMF)}}
-Beware that this phrase is used in the literature in two different, incompatible meanings. The colloquial meaning today is the \hyperlink{ref:FES} {free energy surface} as defined above.  However, this can sometimes be misleading. The historic notion of PMF is used to describe the structure of simple liquids.
+Beware that this phrase is used in the literature in two different, incompatible meanings. The current colloquial meaning is the \hyperlink{ref:FES} {free energy surface} as defined above.  However, this can sometimes be misleading. The historic notion of PMF is used to describe the structure of simple liquids.
 The potential of mean force $W(r)$ between two particles was defined based on its radial distribution function $g(r)$. The RDF is calculated from the probability density for the interparticle distance $r$, $\rho(r)$, divided by a normalization term (proportional to $r^2$) that makes it constant, conventionally equal to 1, at large distances in a homogeneous fluid.
 \begin{align}
     W(r) &= -\beta^{-1} \ln g(r) \nonumber \\
@@ -521,7 +497,7 @@ For details, refer to Section~\ref{sec:fe_estimators:TI}.
 
 Here again, one may define the \hyperlink{ref:reduced} {reduced} version of $W(r)$:
 \begin{equation}
-    w(r) = \beta W(r)
+    w(r) = \beta W(r).
 \end{equation}
 
 \hypertarget{ref:multimodal} {\paragraph{Multimodal distribution}}
@@ -533,19 +509,18 @@ A probability \hyperlink{ref:Distribution} {distribution} featuring many disconn
 
 The ensemble average of an observable $O(\vx,\vp)$, which is a function of the phase space, is defined as:
 \begin{align}
-\langle O(\vx,\vp) \rangle &= \int O(\vx, \vp) \mu(\vx, \vp) \, d\vx d\vp
+\langle O(\vx,\vp) \rangle &= \int O(\vx, \vp) \mu(\vx, \vp) \, d\vx d\vp,
 \end{align}
-
-Or if $O(\vx)$ is only a function of configurations, then
+or if $O(\vx)$ is only a function of configurations, then
 \begin{align}
-\langle O(\vx) \rangle &= \int O(\vx) \nu(\vx) \, d\vx
+\langle O(\vx) \rangle &= \int O(\vx) \nu(\vx) \, d\vx.
 \end{align}
 
-All measurable thermodynamic quantities of interest are equal to ensemble averages of some observable. For example, the total energy $E$ of a system is the expectation value of the Hamiltonian $\langle H \rangle$. Furthermore, the marginal probability density $\rho(\vz)$ is an ensemble average of a Dirac $\delta$ ``function'', $\rho(\vz)=\langle \delta\left(\vz-\xi(\vx)\right) \rangle$ (see Equation~\ref{eq:fes_definition}).  With finite sampling, expectation values have a measurable uncertainty. However, in the thermodynamic limit (when the number of samples approaches Avogadro's number), these can be assumed to be exact, as any uncertainties are on the order of $10^{-10}$ or smaller.  
+All measurable thermodynamic quantities of interest are equal to ensemble averages of some observable. For example, the total energy $E$ of a system is the expectation value of the Hamiltonian $\langle H \rangle$. Furthermore, the marginal probability density $\rho(\vz)$ is an ensemble average of a Dirac $\delta$ ``function,'' $\rho(\vz)=\langle \delta\left(\vz-\xi(\vx)\right) \rangle$ (see Equation~\ref{eq:fes_definition}).  With finite sampling, expectation values have a measurable uncertainty. However, in the thermodynamic limit (when the number of samples approaches Avogadro's number), these can be assumed to be exact, as any uncertainties are on the order of $10^{-10}$ or smaller.  
 
 \hypertarget{ref:ergodic} {\paragraph{Ergodic dynamics}}
 The dynamics of a system is said to be ergodic if samples taken from any single, infinitely long trajectory describe the complete statistical properties of the dynamics.
-This allows the estimation of \hyperlink{ref:ensemble_average} {ensemble averages} by the time average or (\textit{ergodic average}).
+This allows the estimation of \hyperlink{ref:ensemble_average} {ensemble averages} by the time average or \textit{ergodic average}.
 If we want to compute the average of observable $O(\vx, \vp)$ according to \hyperlink{ref:Distribution} {distribution} $\mu(\vx, \vp)$, and we can generate a discrete dynamics $(\vx_t, \vp_t)$ that is ergodic with respect to distribution $\mu$, then the \hyperlink{ref:ensemble_average} {ensemble average} $\langle O \rangle$ can be estimated as a time average:
 \begin{align}
 \langle O \rangle &= \int O(\vx, \vp) \mu(\vx, \vp) \, d\vx d\vp
@@ -554,18 +529,18 @@ If we want to compute the average of observable $O(\vx, \vp)$ according to \hype
 \end{align}
 where $M$ is the number of samples. More precisely:
 \begin{equation}
-   \langle O \rangle = \lim_{M \to \infty} \frac{1}{M} \sum_{t=1}^M O(\vx_t, \vp_t)
+   \langle O \rangle = \lim_{M \to \infty} \frac{1}{M} \sum_{t=1}^M O(\vx_t, \vp_t).
     \label{eq:ergodic}
 \end{equation}
 
 Solution-phase molecular dynamics of small molecules is nearly always ergodic in practice (i.e in simulations of more than 10 ns), and many biological and soft materials problems are ergodic in the limit of sufficient samples: from here on, we generally assume the existence of ergodic dynamics in the systems to which the accelerated methods are applied, as long as enough sampling is performed.
 However, ergodicity is a theoretical notion that characterizes asymptotic behavior over infinitely long times (the limit in Equation~\ref{eq:ergodic}).
 In practice, molecular dynamics simulations are often very short compared to the longest relaxations times, so that trajectories do not explore the full configuration space.
-This situation is described as ``quasi-nonergodicity''.
+This situation is described as ``quasi-nonergodicity.''
 Enhanced sampling methods target precisely this case, and aim to recover the statistical properties of ergodic dynamics from trajectories of limited duration.
 
 \hypertarget{ref:metastab} {\paragraph{Metastability and metastable states}}
-When a system resides in some some regions of configuration space for long times, with rare transitions between those regions, those regions are called metastable regions or metastable states. Metastable regions are typically modes of a \hyperlink{ref:multimodal} {multimodal distributions}.
+When a system resides in some regions of configuration space for long times, with rare transitions between those regions, those regions are called metastable regions or metastable states. Metastable regions are typically modes of a \hyperlink{ref:multimodal} {multimodal distributions}.
 
 \hypertarget{ref:biasingE} {\paragraph{Biasing and biased energy}}
 A biasing energy, also called bias energy, is an extra energetic term $U^\mathrm{bias}$ added to obtain a potential energy $\tilde{U}(\vx)$ biased to behave a certain way:
@@ -585,7 +560,7 @@ The resulting biasing force on atoms is calculated using the chain rule:
 \begin{align}
 \tilde{\vF}(\vx) &= -\nabla_{\vx} \tilde U(\vx) \\
 &= \vF(\vx) -\nabla_{\vx} [ U^\mathrm{bias}(\xi(\vx))]\\
-\tilde{\vF}(\vx)&= \vF(\vx) - \left . \frac{dU^\mathrm{bias}}{dz}\right |_{z=\xi(\vx)} \; \nabla_{\vx}\xi(\vx)
+\tilde{\vF}(\vx)&= \vF(\vx) - \left . \frac{dU^\mathrm{bias}}{dz}\right |_{z=\xi(\vx)} \; \nabla_{\vx}\xi(\vx).
 \end{align}
 This requires the computation of the gradient $\nabla_{\vx}\xi(\vx)$ of the collective variable with respect to atomic Cartesian coordinates.
 
@@ -593,7 +568,7 @@ This requires the computation of the gradient $\nabla_{\vx}\xi(\vx)$ of the coll
 Under the influence of a biased potential energy $\tilde{U}(\vx) =  U(\vx) + U^\mathrm{bias}(\vx)$, the simulations will sample a biased configurational \hyperlink{ref:Distribution} {distribution} $\tilde{\nu}(\vx)$ given by
 \begin{equation}
 \label{eq:biased_configurational distribution}
-\tilde{\nu}(\vx) = \frac{1}{\tilde{Z}} \, e^{-\beta \tilde{U}(\vx)}
+\tilde{\nu}(\vx) = \frac{1}{\tilde{Z}} \, e^{-\beta \tilde{U}(\vx)},
 \end{equation}
 where $\tilde{Z} = \int e^{-\beta \tilde{U}(\vx)} \, d\vx = \int e^{-\beta\left [ U(\vx) + U^\mathrm{bias}(\vx) \right]} \, d\vx$ is the biased partition function. 
 This can be re-written as 
@@ -669,7 +644,7 @@ where $\tilde{Z} = \int e^{-\beta\left [ U(\vx) + U^\mathrm{bias}(\xi(\vx)) \rig
 Common in some enhanced sampling methods is the concept of a target distribution. This represents a desired probability \hyperlink{ref:Distribution} {distribution} that an enhanced sampling simulation is trying to achieve. The target distribution can be in the space of some collective variables (normally, the ones being biased) or another space such as the state space in $T$ or along an auxiliary variable $\lambda$. In some methods, the target distribution is set by the user. In others, the target distribution can be inferred from experimental observations. A common choice is to set the target distribution to be uniform over the variables or states of interest, with all values sampled equally. However, most methods theoretically support the usage of any given non-uniform target distributions if the user desires.
 
 \hypertarget{ref:Replica} {\paragraph{Replicas}}
-A replica is a copy of a molecular system. Replicas might simply be independent copies started from different random number seeds for velocities or different initial configurations, or they might each have a different value of some thermodynamic parameter like temperature or $\lambda$, or have a different biasing distribution. In many types of accelerated simulations, replicas can exchange information with each other, and this exchange is key to the success of the method.  In most methods, however, they do have the sane chemical composition and number of atoms. 
+A replica is a copy of a molecular system. Replicas might simply be independent copies started from different random number seeds for velocities or different initial configurations, or they might each have a different value of some thermodynamic parameter like temperature or $\lambda$, or have a different biasing distribution. In many types of accelerated simulations, replicas can exchange information with each other, and this exchange is key to the success of the method.  In most methods, however, they do have the same chemical composition and number of atoms. 
 
 \hypertarget{ref:GenEns} {\paragraph{Generalized ensemble}}
 Generalized ensemble methods encompass \hyperlink{ref:ExpEns} {expanded ensemble methods} and \hyperlink{ref:ReplEx} {replica exchange} methods (Section~\ref{sec:generalized-ensemble}).
@@ -698,20 +673,20 @@ dp_\lambda &= \left(-\frac{\partial U^\text{ext}(\vx, \lambda)}{\partial \lambda
 where $m_\lambda$ is a fictitious mass associated to $\lambda$.
 While the two phrases are essentially synonymous, the term $\lambda$-dynamics is mostly used when a continuous dynamic variable $\lambda$ connects physically meaningful, and sometimes discrete, states, such as in \hyperlink{ref:Alchemical} {alchemical} transformations.
 On the other hand, the term extended Lagrangian (or extended Hamiltonian) is more often used when the fictitious coordinate $\lambda$ follows a \hyperlink{ref:CV} {collective variable} $\xi(\vx)$, typically coupled through a harmonic potential: $U^\text{ext}(\vx, \lambda) = U(\vx) + \frac{k^\mathrm{ext}}{2}|\xi(\vx)-\lambda|^2$.
-These methods are also referred to as ``extended-system dynamics''.  Note that much of this additional baggage can be avoided by making moves in $\lambda$ space using \hyperlink{ref:MetropolisMonteCarlo}{Monte Carlo} approaches.
+These methods are also referred to as ``extended-system dynamics.''  Note that much of this additional baggage can be avoided by making moves in $\lambda$ space using \hyperlink{ref:MetropolisMonteCarlo}{Monte Carlo} approaches.
 
 \hypertarget{ref:MetropolisMonteCarlo} {\paragraph{Metropolis Monte Carlo}}
-A Metropolis Monte Carlo step makes some change in the system in a way that preserves the underlying probability \hyperlink{ref:Distribution} {distribution} (usually the Boltzmann distribution).  Taking the canonical \hyperlink{ref:Ensemble} {ensemble} for specificity, the simplest rule is to propose some new coordinate $\vx^\prime$, and change from $\vx$ to $\vx^\prime$ with probability:
+A Metropolis Monte Carlo step makes some change in the system in a way that preserves the underlying probability \hyperlink{ref:Distribution} {distribution} (usually the Boltzmann distribution).  Taking the canonical \hyperlink{ref:Ensemble} {ensemble} for specificity, the simplest rule is to propose some new coordinate $\vx^\prime$, and change from $\vx$ to $\vx^\prime$ with probability
 \begin{eqnarray}
-P(\vx\rightarrow \vx^\prime) = \min\left\{1, e^{-\left[\beta U(\vx^\prime)-\beta U(\vx)\right]}\right\}
+P(\vx\rightarrow \vx^\prime) = \min\left\{1, e^{-\left[\beta U(\vx^\prime)-\beta U(\vx)\right]}\right\}.
 \label{eq:bal}
 \end{eqnarray}
 This means that the move always occurs if the energy is lowered (probability is increased), and sometimes occurs if the energy is higher, with the probability given in Equation~\ref{eq:bal}.
 In order for this to preserve the underlying Boltzmann distribution, proposals must be made in a symmetric way, such that the probability of being at $\vx^\prime$ and proposing $\vx$ is the same as being in $\vx$ and proposing $\vx^\prime$. This is satisfied by simple rules like translating or rotating particles a symmetric amount from the current position, but care must be taken for more complex coordinate transformations like torsional displacement volume changes, or polymer chain moves~\cite{Siepmann_mp_1992}.  It is in fact possible to choose new states with asymmetric or biased probabilities if those biases and asymmetries are properly accounted for; this generalization is called a \emph{Metropolis-Hastings} step~\cite{Hastings_biometrika_1970}.
 
-In addition, the Metropolis (or Metropolis-Hastings algorithms), can also be used to propose new parameters, such as a change in the temperature of the system, or a change in the potential energy of the system governed by an auxiliary paramter $\lambda$:
+In addition, the Metropolis (or Metropolis-Hastings algorithms), can also be used to propose new parameters, such as a change in the temperature of the system, or a change in the potential energy of the system governed by an auxiliary parameter $\lambda$:
 \begin{equation}
-    P(i\rightarrow i^{\prime}) = \min\left\{1,e^{-\left[\beta U(\lambda_i,\vx)-\beta U(\lambda_{i^{\prime}},\vx)\right]}\right\}
+    P(i\rightarrow j) = \min\left\{1,e^{-\left[\beta_i U(\lambda_i,\vx)-\beta_j U(\lambda_j,\vx)\right]}\right\}
 \end{equation}
 
 \hypertarget{ref:GibbsSampler} {\paragraph{Gibbs sampler}}
@@ -737,15 +712,15 @@ Balance is a weaker requirement~\cite{deem:jcp:1999:balance}, and is merely the 
 
 
 \paragraph{Temperature-based sampling} Refers to enhanced-sampling methods relying on an increased effective temperature $\tilde T$ to reduce \hyperlink{ref:metastab} {metastability}. This can be done on only some replicas within a set of replicas, on some fraction of the time within a given trajectory, or on some fraction of the system by selective scaling of potential energy terms.
-In the latter case, if $U = U^\mathrm{unscaled} + U^\mathrm{scaled}$, scaling $U^\mathrm{scaled}$ to reach effective inverse temperature $\tilde  T$ means that the modified potential $\tilde U$:
+In the latter case, if $U = U^\mathrm{unscaled} + U^\mathrm{scaled}$, scaling $U^\mathrm{scaled}$ to reach effective inverse temperature $\tilde T$ means using the modified potential $\tilde U$:
 \begin{equation}
 \tilde U = U^\mathrm{unscaled} + \frac{T}{\tilde T} U^\mathrm{scaled}.
 \end{equation}
-As then the Boltzmann factor is:
+Then the Boltzmann factor is
 \begin{equation}
 e^{\frac{U^\mathrm{unscaled}}{k_BT} + \frac{U^{scaled}}{K_B \tilde T}} 
 \end{equation}
-And the scaled degrees of freedom have probabilities consistent with the different $\tilde T$
+and the scaled degrees of freedom have probabilities consistent with the different $\tilde T$.
 
 \hypertarget{ref:ReplEx} {\paragraph{Replica exchange}} \hyperlink{ref:GenEns} {Generalized ensemble} methods that allow for exchanging configurations between replicas, usually according to criteria that guarantee that each replica samples from a well-defined \hyperlink{ref:Distribution} {distribution}. 
 
@@ -755,7 +730,7 @@ This can be achieved if these degrees of freedom are decoupled from the rest of 
 
 \hypertarget{ref:Driven} {\paragraph{Driven simulations}} Refers to simulations with a time-dependent bias potential $U^{\mathrm{bias}}_t(\vx)$ or force $\vF^\mathrm{bias}_t(\vx)$ following a pre-determined schedule.
 
-\paragraph{Out-of-equilibrium system} A system that has not reached its steady state, either because it is considered on a time-scale smaller than its relaxation time-scales, or because it is driven by time dependent forces which maintain it out of equilibrium.
+\paragraph{Out-of-equilibrium system} A system that has not reached its steady state, either because it is considered on a time-scale smaller than its relaxation time-scales, or because it is driven by time-dependent forces which maintain out-of-equilibrium behavior.
 
 \hypertarget{ref:OutOfEq} {\paragraph{Out-of-equilibrium method}}
 A simulation protocol that does not generate trajectories that sample from the canonical \hyperlink{ref:Ensemble} {ensemble} associated with a given potential energy function.
@@ -778,7 +753,7 @@ Many methods can be used with fixed parameters, but also have iterative and adap
 \hypertarget{ref:FEP} {\paragraph{Free energy perturbation (FEP)}}
 \label{FEP}
 
-Free energy perturbation is the process of calculating the free energy differences due to small changes in the potential energy using reweighting or exponential averaging, hence the term ``pertubation''.  It is performed using the \hyperref[sec:fe_estimators:EXP]{exponential averaging} formula.  Alternatively, and somewhat confusingly, it can also refer to calculating a free energy difference using any sort of \hyperlink{ref:Alchemical} pathway, using any sort of \hyperlink{ref:FEestimator}{free energy estimator}. 
+Free energy perturbation is the process of calculating the free energy differences due to small changes in the potential energy using reweighting or exponential averaging, hence the term ``pertubation.''  It is performed using the \hyperref[sec:fe_estimators:EXP]{exponential averaging} formula.  Alternatively, and somewhat confusingly, it can also refer to calculating a free energy difference using any sort of \hyperlink{ref:Alchemical} pathway, using any sort of \hyperlink{ref:FEestimator}{free energy estimator}. 
 
 
 \section{Free energy estimators}
@@ -799,21 +774,20 @@ For generality and cleanness of presentation, \hyperlink{ref:reduced} {reduced} 
 
 \subsection{Directly measured ratios}
 
-Given a set of sampled configurations that visits two states $i$ and $j$, their reduced \hyperlink{ref:FE} {free energy} difference $f_{ij}$ can be estimated by estimating free energies between states by taking the ratio of time in each states, a process called Boltzmann inversion, by approximating Equation~\eqref{eq:BoltzmannDistr}:
+Given a set of sampled configurations that visits two states $i$ and $j$, their reduced \hyperlink{ref:FE} {free energy} difference $f_{ij}$ can be estimated by estimating free energies between states by taking the ratio of the time spent in each state, a process called Boltzmann inversion, by approximating Equation~\eqref{eq:BoltzmannDistr}:
 \begin{equation}
-% f_ij = f_j-f_i = -ln Q_j + ln Q_i = -ln Q_j/Q_i = -ln N_j/N_i 
 \Delta f_{ij} = -\ln \frac{N_j}{N_i}
 \label{eq:boltzmann_inversion}
 \end{equation}
-where $f_{ij}$ is the \hyperlink{ref:reduced} {reduced} free energy, and $N_i$ and $N_j$ are the numbers of observed configurations in states $i$ and $j$.  This equation holds for whatever division into states one uses. However, this is only true if the simulation samples the equilibrium between states $i$ and $j$, or equivalently, if it is long enough such that many transitions between those states have been observed~\cite{No2009}. If a list of several states is defined, for example 1,2, \ldots,$K$, then then estimates from neighboring states can be chained to compute relative free energies for the entire list of states, by estimating $f_{12} + f_{23} = -\ln \frac{N_2}{N_1} + -\ln \frac{N_3}{N_2} =   -\ln \frac{N_3}{N_1} = f_{13}$, and so forth. If the states are defined as bins along \hyperlink{ref:CV} {collective variable}s, this yields a (discretized) free energy \hyperlink{ref:FES} {profile} along those variables. This idea extends to the calculation of continuous probability \hyperlink{ref:Distribution} {distributions} and \hyperlink{ref:FES} {free energy surfaces}. In that case, the probability distribution can be estimated using a kernel density estimator (KDE) or a Gaussian Mixture Model (GMM)~\cite{Westerlund2017}.
+where $f_{ij}$ is the \hyperlink{ref:reduced} {reduced} free energy, and $N_i$ and $N_j$ are the numbers of observed configurations in states $i$ and $j$.  This equation holds for whatever division into states one uses. However, this is only true if the simulation samples the equilibrium between states $i$ and $j$, or equivalently, if it is long enough such that many transitions between those states have been observed~\cite{No2009}. If a list of several states is defined, for example 1,2, \ldots,$K$, then estimates from neighboring states can be chained to compute relative free energies for the entire list of states, by estimating $f_{12} + f_{23} = -\ln \frac{N_2}{N_1} + -\ln \frac{N_3}{N_2} =   -\ln \frac{N_3}{N_1} = f_{13}$, and so forth. If the states are defined as bins along \hyperlink{ref:CV} {collective variable}s, this yields a (discretized) free energy \hyperlink{ref:FES} {profile} along those variables. This idea extends to the calculation of continuous probability \hyperlink{ref:Distribution} {distributions} and \hyperlink{ref:FES} {free energy surfaces}. In that case, the probability distribution can be estimated using a kernel density estimator (KDE) or a Gaussian Mixture Model (GMM)~\cite{Westerlund2017}.
 
 Convergence of this ratio can be accelerated by \hyperlink{ref:IS} {importance sampling}: adding \hyperlink{ref:biasingE} {biasing} potentials $u^{bias}_i$ and $u^{bias}_j$, with $\Delta u^{bias}_{ij}=u^{bias}_j - u^{bias}_i$.
 If the bias $u^{bias}_i$ depends only on the state $i$, and is constant over $\vx$ within a state, the free energy can be estimated by simply subtracting the bias from the free energy estimate of the histogram in Eq.~\ref{eq:boltzmann_inversion}: \begin{equation}
-\Delta f_{ij} = -\ln \frac{N_j}{N_i} - \Delta u^{bias}_{ij}
+\Delta f_{ij} = -\ln \frac{N_j}{N_i} - \Delta u^{bias}_{ij}.
 \label{eq:boltzmann_inversion_biased}
 \end{equation}
 
-\subsection{Estimating free energies from the transition count matrix\label{sec:transtion_matrix}}
+\subsection{Estimating free energies from the transition count matrix\label{sec:transition_matrix}}
 
 The transition probabilities between states, which could be along one or more discretized \hyperlink{ref:CV} {CVs} or between different states in an \hyperlink{ref:ExpEns}{expanded ensemble}, can be used to build a \textit{transition probability matrix}. This matrix containing equivalently either the number of transitions from a state $i$ to a state $j$, or the probabilities $P_{i\rightarrow j}$ of performing the transition.
 
@@ -823,16 +797,16 @@ e^{f_j-f_i} = \frac{Z_i}{Z_j} = \frac{\left \langle  P_{i\rightarrow j}(x)\right
 \end{equation}
 where $P_{i\rightarrow j}(x)$ is the probability of accepting a move from state $i$ to state $j$ proposed from configuration $\vx$. For simplicity we assume that the probability of moves proposed from $i$ to $j$ is equal to the probability of transition from $j$ to $i$; more general transitions can also be included~\cite{escobedo_transition_2006}. We can construct a matrix of all possible transitions between any pair of states; hence we can call this a transition count matrix or \textit{transition matrix}.
 
-Typically, this averaging is carried out over the transitions that were actually observed. However, this average can be calculations over transitions \emph{that were not actually performed}. If one counts only whether a move is made or not, one averages a number of either 0's or 1's. However, in any method that that makes transitions between states, we need to calculate the probability that the transition would occur to decide whether we move or not, as in the \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo} algorithm (Eq.~\ref{eq:bal}).  This probability can be calculated and used in averaging even if the moves are not made. 
+Typically, this averaging is carried out over the transitions that were actually observed. However, this average can be calculations over transitions \emph{that were not actually performed}. If one counts only whether a move is made or not, one averages a number of either 0's or 1's. However, in any method that makes transitions between states, we need to calculate the probability that the transition would occur to decide whether we move or not, as in the \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo} algorithm (Eq.~\ref{eq:bal}).  This probability can be calculated and used in averaging even if the moves are not made. 
 
-Interestingly, one can even compute this average of transition probability \hyperlink{ref:Distribution} {distributions} using a different transition probability formula than the one actually uses to carry out jumps between states. For example, one can show that the \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo} criterion $(\mathrm{min} \{1,e^{-u_j+u_i})\})$ is more efficient to use to decide whether or not to move between two states, but the Barker criterion $\left(\frac{e^{-u_j}}{e^{u_j}+e^{u_i}}\right)$ is more efficient to average in order to calculate free energies~\citep{Liu:Biometrika:1996}.
+Interestingly, one can even compute this average of transition probability \hyperlink{ref:Distribution} {distributions} using a different transition probability formula than the one actually used to carry out jumps between states. For example, one can show that the \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo} criterion $(\mathrm{min} \{1,e^{-u_j+u_i})\})$ is more efficient to use to decide whether or not to move between two states, but the Barker criterion $\left(\frac{e^{-u_j}}{e^{u_j}+e^{u_i}}\right)$ is more efficient to average in order to calculate free energies~\citep{Liu:Biometrika:1996}.
 
 Note that free energy estimated directly from population ratios will of course be inaccurate if too few transitions have been observed between states~\cite{No2009}.  More generally, the discretized master equation expresses the probability \hyperlink{ref:Distribution} {distribution} $\nu_i$ of each state $i$ over time as the sum of all of the probabilities of states moving into and out of that state, as:
 \begin{equation}
    \nu_i(t + \delta t) = \nu_i(t) + \sum_{j \neq i} (\nu_j(t) P_{j\rightarrow i} - \nu_i(t) P_{i\rightarrow j}).
    \label{eq:master_equation}
 \end{equation}
-This is a time-dependent equation, but can be show to have an equilibrium stationary probability \hyperlink{ref:Distribution} {distribution} $\nu_i(\vx)$. Convergence of probability distributions is slow because the samples extracted from molecular dynamics simulations are correlated. However, by taking into account the conditional probability distribution (probability of an event happening given previous history), the statistical dependency of the MD trajectory is taken into account~\cite{Wu:JCP:2014,Wu:MMS:2014,Rosta2014,Wu:PNAS:2016a}. 
+This is a time-dependent equation, but can be shown to have an equilibrium stationary probability \hyperlink{ref:Distribution} {distribution} $\nu_i(\vx)$. Convergence of probability distributions is slow because the samples extracted from molecular dynamics simulations are correlated. However, by taking into account the conditional probability distribution (probability of an event happening given previous history), the statistical dependency of the MD trajectory is taken into account~\cite{Wu:JCP:2014,Wu:MMS:2014,Rosta2014,Wu:PNAS:2016a}. 
 An even more accurate estimation of the free energies can therefore be achieved by building a Markov State Model from the transition count matrix, whereby the probability of each state is computed as the leading eigenvector of the transition matrix. In this case, it may not be necessary for single simulations to sample the entire state space, as long as each of the individual transitions is estimated accurately.  This is the basis for such methods as DHAM~\cite{Rosta2014}, dTRAM~\cite{Wu:JCP:2014,Wu:MMS:2014}, and TRAM~\cite{Wu:PNAS:2016a}, which are somewhat beyond the scope of this review, as they are advanced analysis methods, but not technically by themselves accelerated sampling methods.
 
 \subsection{Thermodynamic integration (TI)}
@@ -945,7 +919,7 @@ This average can be estimated numerically as:
 where the $N_i$ samples are from the $i$th state.
 While this expression is formally exact, convergence of the exponential average is critically dependent on the tail of the distribution of $\Delta u_{ij}$, and as a result, on the overlap between states $i$ and $j$.
 This can be alleviated by collecting energy differences going both ways ($\Delta u_{ij}$ sampled in state $i$, and $\Delta u_{ji}$ sampled in state $j$), and combine them using the BAR estimator.
-This general strategy is sometimes also referred to as ``Overlap Sampling"~\cite{Lu2003}.
+This general strategy is sometimes also referred to as ``Overlap Sampling''~\cite{Lu2003}.
 
 \subsection{Bennett's acceptance ratio (BAR)}
 
@@ -1011,7 +985,7 @@ These two methods can be considered to have converged, as moving harmonic restra
 
 \hyperlink{ref:OutOfEq} {Out-of-equilibrium} pulling behaves differently depending on the rate of the transformation.
 In the limit of infinitely slow (quasistatic) switching, all orthogonal degrees of freedom are fully relaxed at all times, so that equilibrium properties are recovered.
-This is the case of the ``slow growth" approach \cite{Postma1982}, which uses very slow switching from energy $U_A$ to $U_B$. The work $W$ performed along the way is an approximation of the reversible work, that is, the free energy difference from $A$ to $B$.
+This is the case of the ``slow growth'' approach \cite{Postma1982}, which uses very slow switching from energy $U_A$ to $U_B$. The work $W$ performed along the way is an approximation of the reversible work, that is, the free energy difference from $A$ to $B$.
 
 At the other end of the spectrum, infinitely fast switching amounts to comparing the energy of a given configuration (in absence of any relaxation) for two different Hamiltonians, using a \hyperlink{ref:FEP} {FEP} approach~\cite{Kirkwood1935,Zwanzig1954}.
 
@@ -1038,15 +1012,15 @@ As a result, most simulations that aim to recover free energies resort to equili
 
 In the broad sense, localization refers to sampling only in a small, well-defined volume of configuration space. In this class of methods, the original configurational \hyperlink{ref:Distribution}{distribution} is modified, the simulation converges to an equilibrium ensemble, and sampling is enhanced by specifying the starting and ending coordinates of the simulation, and localizing them to a well-defined region of space (Figure~\ref{fig:scheme}). Localized sampling within region $i$ can be achieved by either imposing constraints around $\vz_i$ (constraining strategy) or a confining potential $U^{\mathrm{bias}}_i(\vx)$ (restraining strategy), which can result in sampling from overlapping regions.
 
-Note that this strategy is also sometimes referred to as ``stratification''. In statistics, stratification strictly means partitioning configuration space along one or more \hyperlink{ref:CV} {collective variable}, and collecting samples separately in each discrete section (\textit{stratum}). This approach can be used in conjunction with ABF (\ref{sec:abf_hybrids}).
-In contrast, the most common restraining strategies mentioned in this section yield overlapping samples, which is why we prefer the term ``localization''.
+Note that this strategy is also sometimes referred to as ``stratification.'' In statistics, stratification strictly means partitioning configuration space along one or more \hyperlink{ref:CV} {collective variable}, and collecting samples separately in each discrete section (\textit{stratum}). This approach can be used in conjunction with ABF (\ref{sec:abf_hybrids}).
+In contrast, the most common restraining strategies mentioned in this section yield overlapping samples, which is why we prefer the term ``localization.''
 
 Restraining or constraining a simulation is equivalent
 to convolving the original probability density with a localizing function: a Dirac distribution $\delta(\vz)$ (constrained case),
 a Gaussian kernel, or a (possibly smoothed) indicator function of an interval (exponential of a flat-bottom potential) in the restrained case.
 The most used restraining strategy involves \hyperlink{ref:biasingE} {biasing} the distribution by imposing harmonic potential restraints $U^{\mathrm{bias}}_i(\vx) = \frac{k}{2} |\xi(\vx)-\vz_i|^2$, and is equivalent to convolving the original probability distribution with a Gaussian kernel.
-Nowadays this is generally referred to as ``umbrella sampling", although it is quite different from the historic umbrella sampling method~\cite{TORRIE1977187} which was not localized (see Section~\ref{sec:biasing_potential} for a further description of this approach and how it relates to other methods described in this review).
-Based on umbrella sampling trajectories, the free energy \hyperlink{ref:FES} {landscape} can be estimated using the WHAM, BAR, or MBAR estimators (see Section~\ref{sec:fe_estimators}). The constraining strategy was introduced as ``Blue Moon" sampling~\cite{doi:10.1080/0892702042000270214}. In that case, the free energy can be reconstructed by thermodynamic integration (Section~\ref{sec:fe_estimators:TI}). Using flat-bottom potentials, equivalent to convolving the probability distribution with an indicator function, is referred to as, for example, ``boxed MD"~\cite{doi:10.1021/jp9074898}, and is frequently used in combination with ABF (Section~\ref{sec:ABF}).
+Nowadays this is generally referred to as ``umbrella sampling,'' although it is quite different from the historic umbrella sampling method~\cite{TORRIE1977187} which was not localized (see Section~\ref{sec:biasing_potential} for a further description of this approach and how it relates to other methods described in this review).
+Based on umbrella sampling trajectories, the free energy \hyperlink{ref:FES} {landscape} can be estimated using the WHAM, BAR, or MBAR estimators (see Section~\ref{sec:fe_estimators}). The constraining strategy was introduced as ``Blue Moon'' sampling~\cite{doi:10.1080/0892702042000270214}. In that case, the free energy can be reconstructed by thermodynamic integration (Section~\ref{sec:fe_estimators:TI}). Using flat-bottom potentials, equivalent to convolving the probability distribution with an indicator function, is referred to as, for example, ``boxed MD''~\cite{doi:10.1021/jp9074898}, and is frequently used in combination with ABF (Section~\ref{sec:ABF}).
 
 These methods have been improved upon by slightly more complicated variants that include transitions between the restrained or constrained windows can improve sampling by avoiding kinetic traps. Successful (and thus popular) approaches involve introducing transitions between the restraining potentials, in which case the methods fall under \hyperlink{ref:ExpEns} {expanded ensemble} or \hyperlink{ref:ReplEx} {replica exchange} (see Sections~\ref{sec:generalized-ensemble}).
 
@@ -1381,7 +1355,7 @@ We refer the reader to the references for further details. Metadynamics has also
 Various variants of metadynamics are implemented in the PLUMED 2 enhanced sampling plug-in~\cite{Bonomi-CPC-2009,Tribello2014,plumed-nest}. PLUMED also includes numerous practical tutorials showing how to perform and analyze metadynamics simulations~\cite{plumed_masterclass}. Furthermore, a large number of example input files are
 available in the PLUMED-NEST~\cite{plumed-nest,plumed_nest_url}
 
-Metadynamics are also available in the external libraries SSAGES and the Colvars module (see Table~\ref{Table:Libraries})., and also is natively implemented in some MD codes codes such as CP2K and DESMOND, see Table~\ref{Table:Codes} and and also Table 2 in Ref~\cite{BussiLaio_ReviewMetaD_2020}. 
+Metadynamics are also available in the external libraries SSAGES and the Colvars module (see Table~\ref{Table:Libraries})., and also is natively implemented in some MD codes such as CP2K and DESMOND, see Table~\ref{Table:Codes} and also Table 2 in Ref~\cite{BussiLaio_ReviewMetaD_2020}. 
 
 \subsubsection{Variationally enhanced sampling}
 \label{sec:ves}
@@ -1482,7 +1456,7 @@ What unites many of these methods is that they aim to sample a potential energy 
 the multicanonical ensemble~\cite{Berg1992_Multicanonical},
 statistical temperature MD~\cite{Kim2006_PRL_STMD},
 metadynamics using the energy as CV~\cite{Micheletti_MetaE_Energy_2004,Bonomi-PRL-2010}
-(which is the the well-tempered ensemble discussed in Section~\ref{sec:wtensemble} when using well-tempered metadynamics, see also Ref~\cite{Valsson-JCTC-2013}),
+(which is the well-tempered ensemble discussed in Section~\ref{sec:wtensemble} when using well-tempered metadynamics, see also Ref~\cite{Valsson-JCTC-2013}),
 integrated tempering sampling~\cite{Gao_ITS_2008,Gao_ITS_Review_2015}.
 Furthermore, variationally enhanced sampling and on-the-fly probability-enhanced sampling have been extended to perform simulations in the multithermal and the multithermal-multibaric ensembles as described in Refs~\citep{Piaggi_MultiVES_2019,Piaggi_MultiVES+CV_2019} and~\citep{invernizzi2020unified}, respectively.
 
@@ -1579,7 +1553,7 @@ For pointers on choosing parameters for eABF, refer to \cite{Fu2016, Lesage2017}
 
 Besides the classic ways mentioned above (constraint force, force projection, time derivatives, eABF), other estimators have been proposed:
 \begin{enumerate}
-\item by projection of the (noisy) gradient estimate on the space of ``true gradients" to reduce their variance: projected ABF (pABF)~\cite{lelievre-rousset-stoltz-07-a,Alrachid2015}, which proved to lead to slower exploration in practice~\cite{Henin2021integration};
+\item by projection of the (noisy) gradient estimate on the space of ``true gradients'' to reduce their variance: projected ABF (pABF)~\cite{lelievre-rousset-stoltz-07-a,Alrachid2015}, which proved to lead to slower exploration in practice~\cite{Henin2021integration};
 \item by ABF with Gaussian Process Regression~\cite{Mones2016} to reconstruct the free energy in a smoother, less local way (currently no accessible, high-performance implementation);
 \item by a neural network (ABF-FUNN)~\cite{Guo2018}, which is implemented only in SSAGES (\ref{sec:software});
 \item using an implicit, \hyperlink{ref:AdiabaticDyn} {adiabatic} extended coordinate: ABF with adiabatic \hyperlink{ref:Reweighting} {reweighting} (ABF-AR)~\cite{Cao2014} to bypass constraints of the extended dynamics and minimize variance (no public high-performance implementation yet);
@@ -1614,11 +1588,11 @@ ABF-FUNN is part of SSAGES~\cite{Sidky2018}.
 A broad category of simulation methodologies known as \hyperlink{ref:GenEns} {generalized ensemble}~\cite{okamoto:biopolymers:2001:generalized-ensemble} (also sometimes referred to \emph{extended ensemble}~\cite{iba:intl-j-mod-phys-c:2001:extended-ensemble}) algorithms have become popular over the last two decades. These methods follow a strategy that is orthogonal to the methods presented so far: in this class of methods, the original configurational \hyperlink{ref:Distribution} {distribution}  is preserved, and the sampling is enhanced by exploiting transitions to other ensembles (Figure~\ref{fig:scheme}). 
 The main  algorithmic classes in this category are \hyperlink{ref:ReplEx} {replica exchange},~\cite{geyer:conference-proceedings:1991:replica-exchange} which includes parallel tempering~\cite{hukushima-nemoto:j-phys-soc-jpn:1996:parallel-tempering,hansmann:chem-phys-lett:1997:parallel-tempering-monte-carlo,sugita-okamoto:chem-phys-lett:1999:parallel-tempering-md} and Hamiltonian exchange~\cite{sugita-kitao-okamoto:jcp:2000:hamiltonian-exchange,fukunishi-watanabe-takada:jcp:2002:hamiltonian-exchange,jang-shin-pak:prl:2003:hamiltonian-exchange,kwak-hansmann:prl:2005:hamiltonian-exchange}, among others, and the serial equivalent, the method of \hyperlink{ref:ExpEns} {expanded ensemble}s~\cite{lyubartsev:jcp:1992:expanded-ensembles}, which includes simulated tempering~\cite{marinari-parisi:europhys-lett:1992:simulated-tempering,geyer-thompson:j-am-stat-assoc:1995:expanded-ensembles} and simulated scaling~\cite{li-fajer-yang:jcp:2007:simulated-scaling}.
 
-In both \hyperlink{ref:ReplEx} {replica exchange} and \hyperlink{ref:ExpEns} {expanded ensemble} algorithms, a mixture of thermodynamic states are sampled within the same simulation framework. Simulations are able to access all of the  thermodynamic states through a stochastic hopping process between these thermodynamic states.  In the rest of the discussion of both \hyperlink{ref:ReplEx} {replica exchange} and expanded ensembles, we will often use ``states" as shorthand for thermodynamically defined \hyperlink{ref:Macrostate} {macrostate}s, which all share the same configuration space $\Sigma$, but each of which have different probabilities due to the differences in $T$, $P$, or Hamiltonian parameters.
+In both \hyperlink{ref:ReplEx} {replica exchange} and \hyperlink{ref:ExpEns} {expanded ensemble} algorithms, a mixture of thermodynamic states are sampled within the same simulation framework. Simulations are able to access all of the  thermodynamic states through a stochastic hopping process between these thermodynamic states.  In the rest of the discussion of both \hyperlink{ref:ReplEx} {replica exchange} and expanded ensembles, we will often use ``states'' as shorthand for thermodynamically defined \hyperlink{ref:Macrostate} {macrostate}s, which all share the same configuration space $\Sigma$, but each of which have different probabilities due to the differences in $T$, $P$, or Hamiltonian parameters.
 
 In \hyperlink{ref:ExpEns} {expanded ensemble} simulations, the states are explored in a single simulation via a biased random walk in state space; in \hyperlink{ref:ReplEx} {replica exchange} simulations, multiple coupled simulations are carried out in parallel, and periodically the simulations exchange thermodynamic states with each other, keeping the same number of simulations at each state. Both methods, if implemented correctly, and potentially after an initial equilibration stage, allow estimation of equilibrium expectations at each state as well as free energy differences between states.
 
-The primary reason for introducing switching between thermodynamic states is that the transitions between these different thermodynamic states can reduce correlation times in configurational sampling at any given thermodynamic state and increase sampling efficiency relative to straightforward sampling of a single state. This acceleration is because the simulations can ``go around"  kinetic barriers within any of these single states. This is done by escaping to a neighboring state where, by chance or better yet, by design, the free energy barriers are lower.  For this switching between states to work, each thermodynamic state must have neighbors which have a moderate overlap (perhaps 5-20\%, depending on the method) in the configuration space each samples. Overall state space must be connected, which means that there must exist pathways between all the states. 
+The primary reason for introducing switching between thermodynamic states is that the transitions between these different thermodynamic states can reduce correlation times in configurational sampling at any given thermodynamic state and increase sampling efficiency relative to straightforward sampling of a single state. This acceleration is because the simulations can ``go around''  kinetic barriers within any of these single states. This is done by escaping to a neighboring state where, by chance or better yet, by design, the free energy barriers are lower.  For this switching between states to work, each thermodynamic state must have neighbors which have a moderate overlap (perhaps 5-20\%, depending on the method) in the configuration space each samples. Overall state space must be connected, which means that there must exist pathways between all the states. 
 
 This class of methods therefore only works when the states are designed to have overlap, such as \hyperlink{ref:Alchemical} {alchemical} intermediates, temperatures, or harmonic \hyperlink{ref:biasingE} {biasing} potentials, and not when the states are defined by values of a collective variable. One can however approximate the computation of a collective variable while still using an overlapping states method.  One can use series of harmonic \hyperlink{ref:biasingE} {biasing} functions with that are closely spaced enough to still overlap in sampled configurations. For example, if one was interested in the free energy as a function of the center of mass of two molecules, one could put a series of harmonic biases on these distance, with spring constants that allowed the distances to fluctuate by enough that neighboring simulations would share some visited distances with each other. Unlike the methods use partitioning of the collective variable, one is not guaranteed to get good sampling at each value of the collective variable if the harmonic potentials are too spread apart, or the spring constants are too strong. But because the states have overlap, all of the methods of analysis and simulation used for such simulations are the ones used for overlapping state methods.  This parallel between methods demonstrates again how many ways the different ``ingredients`` in free energy calculations can be combined.   
 
@@ -1668,7 +1642,7 @@ The most straightforward versions are parallel implementations of algorithms tha
 
 However, even if one is only interested in a single state, one can add higher $T$ replicas just to escape energy barriers, or add \hyperlink{ref:Alchemical} {alchemical} states to allow parts of the system to move. The possibilities are virtually endless to create different states where configuration sampling happens faster.
 
-For example, in the Replica Exchange Solute Tempering~\cite{REST1_Liu_2007} (REST) and REST2~\cite{REST2_Wang_2011} variants, the ``temperature" is adjusted for only a part of the system. This is a misnomer, as temperature is only rigorously defined for an entire system. What this means in practice is that the the potential energy of a select part of the system is scaled by  $T_m/T_0$ in replica $m$, where $T_0$ is the temperature of the system. In the case of REST2, the terms of the energy function corresponding interactions between this designated part of the system and the rest of the system is additionally scaled by the $T_m/T_0$, which can be shown to sample better than the original REST~\citep{REST2_Wang_2011} by keeping the subsystem $m$ better coupled to the rest of the simulation. A combination of different approaches can be used in the same set of simulations; one of the popular protocols that the computational chemistry software company Schr\"{o}dinger has implemented for relative free energy binding is to simultaneously perform \hyperlink{ref:Alchemical} {alchemical} ligand transformations, apply REST2 to the area around the ligand, and reduce the torsional potentials of side chains in the binding site~\cite{Wang:JCTC:2013}.
+For example, in the Replica Exchange Solute Tempering~\cite{REST1_Liu_2007} (REST) and REST2~\cite{REST2_Wang_2011} variants, the ``temperature'' is adjusted for only a part of the system. This is a misnomer, as temperature is only rigorously defined for an entire system. What this means in practice is that the potential energy of a select part of the system is scaled by  $T_m/T_0$ in replica $m$, where $T_0$ is the temperature of the system. In the case of REST2, the terms of the energy function corresponding interactions between this designated part of the system and the rest of the system is additionally scaled by the $T_m/T_0$, which can be shown to sample better than the original REST~\citep{REST2_Wang_2011} by keeping the subsystem $m$ better coupled to the rest of the simulation. A combination of different approaches can be used in the same set of simulations; one of the popular protocols that the computational chemistry software company Schr\"{o}dinger has implemented for relative free energy binding is to simultaneously perform \hyperlink{ref:Alchemical} {alchemical} ligand transformations, apply REST2 to the area around the ligand, and reduce the torsional potentials of side chains in the binding site~\cite{Wang:JCTC:2013}.
 
 
 Various \hyperlink{ref:ReplEx} {replica exchange} techniques have a long history of investigation over the last 20 years. For other analyses of the issues, subtleties, and variants of \hyperlink{ref:ReplEx} {replica exchange}, see a number of reviews such as~\cite{Abrams:E:2014,Gallicchio:CPC:2015,Itoh:JCTC:2013,kofke:2002:jcp:acceptance-probability,Liu:CPL:2018,nadler-hansmann:pre:2007:optimized-replica-exchange-moves,Qi:PSMaP:2018,shenfeld-xu:pre:2009:thermodynamic-length,sindhikara-emerson-roitberg:jctc:2010:exchange-often-and-properly}.
@@ -1689,10 +1663,10 @@ One of the main limitations of \hyperlink{ref:ReplEx} {replica exchange} is the 
 
 If one is using temperature replica simulations, then the width of the energy distribution of each state will scale as roughly $N^{-1/2}$, where $N$ is the number of particles. Because the overlap in energy decreases as systems get larger, a tighter spacing is required for large systems and \hyperlink{ref:ReplEx} {replica exchange} becomes increasingly less efficient. Indeed, not only does each individual simulation become more expensive, but more simulations are needed to span the same range of $T$s. For the other types of \hyperlink{ref:ReplEx} {replica exchange} described here, such as those in Hamiltonian variables, the changes in $u_i$ affect a smaller portion of the simulation or smaller number of atoms, and thus this scaling problem is not as severe, but this limitation must be kept in mind when deciding how different the differences in are $u_i$ are between systems.
 
-A common problem, even when the average overlap between simulations is reasonable, is to have a "bottleneck" where the set of simulations separates into two essentially independent set of simulations that only exchange between themselves. This usually defeats the purpose of the \hyperlink{ref:ReplEx} {replica exchange} simulation, since the simulations cannot move between all of the states, especially since the system of interest is often at one end of the chain of replicas, and the ``fastest" system at the other. Plotting the state index of each of the replicas versus time can help reveal these sorts of issues.
+A common problem, even when the average overlap between simulations is reasonable, is to have a ``bottleneck'' where the set of simulations separates into two essentially independent set of simulations that only exchange between themselves. This usually defeats the purpose of the \hyperlink{ref:ReplEx} {replica exchange} simulation, since the simulations cannot move between all of the states, especially since the system of interest is often at one end of the chain of replicas, and the ``fastest'' system at the other. Plotting the state index of each of the replicas versus time can help reveal these sorts of issues.
 
 
-A related diagnostic quantity to look at is the matrix of transitions between states, where each entry correspond to the transitions from state $i$ to state $j$ (which ones are the rows and which ones are columns is a matter of convention).  One generally wants each replica to transition to another state at least 30\% of the time that exchanges are proposed; if replicas are transitioning at a slower rate, then sampling can be improved by increasing the spacing; or if some transitions are occurring more frequently that that, reallocating the spacing. However, if the spacing is \textit{too} small, then it will take too long for each replica visit all of the states, so there is a delicate balance. 
+A related diagnostic quantity to look at is the matrix of transitions between states, where each entry correspond to the transitions from state $i$ to state $j$ (which ones are the rows and which ones are columns is a matter of convention).  One generally wants each replica to transition to another state at least 30\% of the time that exchanges are proposed; if replicas are transitioning at a slower rate, then sampling can be improved by increasing the spacing; or if some transitions are occurring more frequently than that, reallocating the spacing. However, if the spacing is \textit{too} small, then it will take too long for each replica visit all of the states, so there is a delicate balance. 
 
 
 One important note is that in the development of many \hyperlink{ref:ReplEx} {replica exchange} methods, there is frequently an assumption that the states contain some natural ordering, so that one can definitively say the configurations that result from simulations at $i$ are more similar to the configurations generated in state $i-1$ and $i+1$ than they are similar to any other states.  A number of methods of choosing how to exchange therefore assume this ordering, but a natural ordering may not exist in the general case.  Such an ordering is straightforward when states are selected points along a single \hyperlink{ref:Alchemical} {alchemical} variable $\lambda$ or temperature $T$, but when instead thermodynamic states are defined in a multidimensional space, say \emph{both} $T$ and $\lambda$, no such ordering may exist, and some of the schemes for exchange in replica exchange may not apply.
@@ -1732,7 +1706,7 @@ fictitious random walker visits the different states labeled by
 $k$ as the simulation proceeds, dropping ``dirt'' into the
 wells, thus gradually building up the importance weights.  At the end
 of the simulation, when all states are visited equally, one counts how
-much much ``dirt'' the walker has added to each state's weight to
+much ``dirt'' the walker has added to each state's weight to
 achieve equal sampling. The negative logarithm of this weight is simply
 the free energy of the state. The basic principle is similar to metadynamics, so expanded ensemble, unlike \hyperlink{ref:ReplEx} {replica exchange}, can be considered in some ways an ``adaptive bias'' method, though rather than bias being calculated as a function of some collective coordinate, the bias is calculated as a function of the parameter that $k$ labels (such as $\lambda$ or temperature) that controls the thermodynamic state.
 
@@ -1755,7 +1729,7 @@ the free energy of the state. The basic principle is similar to metadynamics, so
 \caption{End of Simulation}
 \label{fig:fullwell}
 \end{subfigure}
-\caption{The expanded ensemble hole analogy. (\ref{fig:emptywell}) At the beginning the biasing weights as a function of thermodynamic state are unknown. (\ref{fig:halfwell}) As the simulation proceeds, a random walker samples the states and deposits ``dirt'' (probability of visitation) in each location.  The short arrow over the random walker signifies uneven sampling of the states as the the biases are built adaptively.  (\ref{fig:fullwell}) At the end of the simulation, the weights, given by the height of ``dirt'', in each well are equal to the free energy.  The random walker now samples all states equally, as illustrated by the long bar over the walker which now extends over all of state space.} \label{fig:EXEanalogy}
+\caption{The expanded ensemble hole analogy. (\ref{fig:emptywell}) At the beginning the biasing weights as a function of thermodynamic state are unknown. (\ref{fig:halfwell}) As the simulation proceeds, a random walker samples the states and deposits ``dirt'' (probability of visitation) in each location.  The short arrow over the random walker signifies uneven sampling of the states as the biases are built adaptively.  (\ref{fig:fullwell}) At the end of the simulation, the weights, given by the height of ``dirt,'' in each well are equal to the free energy.  The random walker now samples all states equally, as illustrated by the long bar over the walker which now extends over all of state space.} \label{fig:EXEanalogy}
 \end{figure*}
 
 
@@ -1814,7 +1788,7 @@ switching to using weights of $1/t$ when $\delta \leq 1/t$~\cite{Belardinelli200
 
 The Wang-Landau approach and its $1/t$ variant only update the free energy of one state at one time, i.e. when it is visited during the random walk in the \hyperlink{ref:ExpEns} {expanded ensemble}.  However, in theory, it should be possible to update the weights of multiple states at the same time, based on information obtained at any given state.
 
-A number of closely related methods have been developed that update multiple states simultaneously. The key to these approaches is recognizing that the same information needed to correctly calculate the probability of  transitions between states (i.e. the transition matrix) is the same information that is needed to calculate the free energy differences between the same states~\cite{escobedo_transition_2006,Wang:JoSP:2002} (see Section~\ref{sec:transtion_matrix}).
+A number of closely related methods have been developed that update multiple states simultaneously. The key to these approaches is recognizing that the same information needed to correctly calculate the probability of  transitions between states (i.e. the transition matrix) is the same information that is needed to calculate the free energy differences between the same states~\cite{escobedo_transition_2006,Wang:JoSP:2002} (see Section~\ref{sec:transition_matrix}).
 
 \paragraph{Transition matrix approaches}
 %JH \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} Approaches}
@@ -1910,8 +1884,8 @@ These methods are related to localization techniques in that the sampling is enh
 MSM building involves discretizing the configuration space into states (usually called microstates in the MSM literature, at odds with \hyperlink{ref:Microstate} {the definition} used in this review) and estimating their probability distribution as well as the probability of transitions between these states for a given time lag $\tau$. Discretization of the space can in principle be done based on geometric criteria. However, since the focus of MSM building has been to extract kinetic properties, discretization is often performed based on kinetic proximity, using time-lagged independent component analysis (TICA). The transition probabilities are gathered in a transition matrix $T_{ij}$ which records the probabilities of transitions from state $i$ to $j$ given a time lag $\tau$. Estimating the probability density directly from counting the number of configurations falling in a state would be incorrect for a strategically seeded ensemble. However, the fact that the transition probabilities are taken into account enables to reconstruct the probability density, see Section~\ref{sec:fe_estimators}. These microstates are generally then clustered into \hyperlink{ref:Macrostate} {macrostate}s using a distance metric.
 
 
-Different \hyperlink{ref:Adaptive} {adaptive} \hyperlink{ref:Seeding} {seeding} strategies have been put forward. They all follow the same basic algorithm: a single or a set of relatively short MD simulations are launched. Configurations from these simulations are grouped into ``states". New simulations are then started from selected states. The different strategies then differ according to the principle they follow to select which states to seed new simulations from.
-Arguably the first proposed strategy relied on selecting randomly a fixed number of structures from each \hyperlink{ref:Macrostate} {macrostate}~\cite{doi:10.1063/1.2740261,Huang19765,doi:10.1021/ct900620b}. This method was coined \emph{\hyperlink{ref:Adaptive} {adaptive} seeding}. In contrast, all the more refined methods derived therefrom and listed below are referred to as \emph{adaptive sampling}. Another natural proposal has been to seed simulation from states that contribute the most to the statistical uncertainty of MSMs built after each iteration \cite{doi:10.1021/ct500827g}. Several variants have proposed to seed from low-population microstates, and have been called ``counts" methods. This strategy is well-suited to enhance the exploration of space, but not necessarily to accurately estimate the probability distribution of low free energy states \cite{doi:10.1021/ct2004484,doi:10.1021/ct400919u,lecina_adaptive_2017,shamsi_enhanced_2017,6114444}. \hyperlink{ref:Seeding} {Seeding} from low-population \hyperlink{ref:Macrostate} {macrostate}s has also been suggested. This is better suited to converge the free energy calculation but will not lead to as an extensive space exploration \cite{doi:10.1021/acs.jctc.6b00762,doi:10.1063/1.5053582}. There are also methods that do not rely on MSM analysis. iMapD relies on clustering in a low-dimensional manifold inferred by \hyperlink{ref:DimRed} {dimensionality reduction} and selecting states to seed from the boundaries of a diffusion map in diffusion coordinates \cite{ChiavazzoE5494}~\footnote{iMapD does not enable the direct estimation of probability distributions.}. Following a similar approach, it has been suggested to pick configurations to reseed from using \hyperlink{ref:DimRed} {dimensionality reduction} algorithms such as sketch-map \cite{doi:10.1021/acs.jctc.6b00503}. PIGS, for Progress Index Guided Sampling, uses an unsupervised heuristic to avoid re-sampling the same region of space by organizing simulation frames along a progress index that connects configuration to existing configuration by finding the one to which a chosen distance is minimal. Weakly connected snapshots that have a large distance to other configurations are used to start \hyperlink{ref:Seeding} {seeding} new trajectories \cite{BACCI2015889}. Methods introducing directionality into the sampling have also been suggested and are particulary interesting when the target state (or set of states) is known. Broadly speaking, those suggest \hyperlink{ref:Seeding} {seeding} from states that are close to the end state in terms of a target property:
+Different \hyperlink{ref:Adaptive} {adaptive} \hyperlink{ref:Seeding} {seeding} strategies have been put forward. They all follow the same basic algorithm: a single or a set of relatively short MD simulations are launched. Configurations from these simulations are grouped into ``states.'' New simulations are then started from selected states. The different strategies then differ according to the principle they follow to select which states to seed new simulations from.
+Arguably the first proposed strategy relied on selecting randomly a fixed number of structures from each \hyperlink{ref:Macrostate} {macrostate}~\cite{doi:10.1063/1.2740261,Huang19765,doi:10.1021/ct900620b}. This method was coined \emph{\hyperlink{ref:Adaptive} {adaptive} seeding}. In contrast, all the more refined methods derived therefrom and listed below are referred to as \emph{adaptive sampling}. Another natural proposal has been to seed simulation from states that contribute the most to the statistical uncertainty of MSMs built after each iteration \cite{doi:10.1021/ct500827g}. Several variants have proposed to seed from low-population microstates, and have been called ``counts'' methods. This strategy is well-suited to enhance the exploration of space, but not necessarily to accurately estimate the probability distribution of low free energy states \cite{doi:10.1021/ct2004484,doi:10.1021/ct400919u,lecina_adaptive_2017,shamsi_enhanced_2017,6114444}. \hyperlink{ref:Seeding} {Seeding} from low-population \hyperlink{ref:Macrostate} {macrostate}s has also been suggested. This is better suited to converge the free energy calculation but will not lead to as an extensive space exploration \cite{doi:10.1021/acs.jctc.6b00762,doi:10.1063/1.5053582}. There are also methods that do not rely on MSM analysis. iMapD relies on clustering in a low-dimensional manifold inferred by \hyperlink{ref:DimRed} {dimensionality reduction} and selecting states to seed from the boundaries of a diffusion map in diffusion coordinates \cite{ChiavazzoE5494}~\footnote{iMapD does not enable the direct estimation of probability distributions.}. Following a similar approach, it has been suggested to pick configurations to reseed from using \hyperlink{ref:DimRed} {dimensionality reduction} algorithms such as sketch-map \cite{doi:10.1021/acs.jctc.6b00503}. PIGS, for Progress Index Guided Sampling, uses an unsupervised heuristic to avoid re-sampling the same region of space by organizing simulation frames along a progress index that connects configuration to existing configuration by finding the one to which a chosen distance is minimal. Weakly connected snapshots that have a large distance to other configurations are used to start \hyperlink{ref:Seeding} {seeding} new trajectories \cite{BACCI2015889}. Methods introducing directionality into the sampling have also been suggested and are particulary interesting when the target state (or set of states) is known. Broadly speaking, those suggest \hyperlink{ref:Seeding} {seeding} from states that are close to the end state in terms of a target property:
     \begin{enumerate}
     \item AdaptiveBandit expands on the methods described above by proposing to formulate the \hyperlink{ref:Adaptive} {adaptive} sampling problem in terms of reinforcement learning. This offers the promise and the computational platform needed to increased performance and flexibility of the algorithm across different systems \cite{doi:10.1021/acs.jctc.0c00205}.
     \item Reinforcement Learning Based Adaptive Sampling (REAP) proposes to efficiently explore configuration space by using reinforcement learning to choose new states. It does so by learning the relative importance of candidate \hyperlink{ref:CV} {collective variable}s as it makes progress along the \hyperlink{ref:FES} {landscape}, in a framework that rewards actions that lead to further exploration of the \hyperlink{ref:FES} {landscape}. Here too, states to learn from are selected as the least sample microstates. In that sense, it is a derivative of the counts method \cite{doi:10.1021/acs.jpcb.8b06521}.
@@ -1968,7 +1942,7 @@ d\lambda = - \frac{1}{ m_\lambda \overline{\gamma}} \nabla A(\lambda) \, dt + \s
 so that the probability distribution sampled by $\lambda$ is proportional to $\exp(- \overline{\beta} A(\lambda))$. The artificial inverse temperature $\overline{\beta}$ is then chosen so that the effective dynamics~\eqref{eq:eff_dyn_z_bar} is less \hyperlink{ref:metastab} {metastable}.
 The practical difficulty of such a method lies in  choosing the numerical parameters $(\gamma,\overline{\gamma},k^\mathrm{ext},\overline{\beta})$ for the algorithm to be efficient while keeping the \hyperlink{ref:AdiabaticDyn} {adiabatic} separation between the extended coordinate and the physical system -- failure to do so introduces a bias in the simulation.
 
-In the ``single sweep" method, TAMD is used to estimate local free energy gradients, followed by estimation of the \hyperlink{ref:FES} {free energy surface}~\cite{Maragliano2008}.
+In the ``single sweep'' method, TAMD is used to estimate local free energy gradients, followed by estimation of the \hyperlink{ref:FES} {free energy surface}~\cite{Maragliano2008}.
 Driven-AFED (d-AFED)~\cite{doi:10.1021/jp805039u}, unified free energy dynamics (UFED)~\cite{doi:10.1063/1.4733389}, canonical adiabatic free energy sampling (CAFES)~\cite{doi:10.1021/jp013346k} and on-the-fly free energy parameterization (OTFP)~\cite{ABRAMS2012114} are all related to this scheme.
 
 The family of methods known as self-guided Molecular/Langevin Dynamics (SGMD~\cite{Wu1999SGMD} and SGLD~\cite{Wu2003_SGLD}) shares with these ``adiabatic'' methods the idea of selectively enhancing the dynamics while preserving (at least approximately) the statistical distribution sampled by the trajectory.
@@ -1995,7 +1969,7 @@ There are so many possible combinations of enhanced sampling methods that it is 
 
 \subsection{Combination of replica exchange and external biasing potential methods}
 
-Many hybrid enhanced sampling methods are a combination of Hamiltonian replica exchange and methods incorporating an external bias potential, which can be static or \hyperlink{ref:Adaptive} {adaptively} updated (e.g., umbrella sampling and metadynamics). Each replica $i$ includes its own bias potential $U^{\mathrm{bias}}_{i}(\vz)$, which depends on a \hyperlink{ref:CV} {collective variable} set $\vz_{i} = \xi_{i}(\vx)$ that can differ between replicas. Within each replica, the bias potential is kept static or evolved according to the \hyperlink{ref:Adaptive} {adaptive} \hyperlink{ref:biasingE} {biasing} potential method. When calculating the acceptance probability $P_\mathrm{accept}(\vx_i, i, \vx_j, j)$ for an exchange of configurations $\vx_{i}$ and $\vx_{j}$ between two replicas $i$ and $j$ given in in Equation~\ref{eq:re_exchange_prob}, we need to take the bias potentials into account. We limit ourselves to the, still rather general, case that all replicas have same potential energy function $U(\vx)$ but can have different temperatures.
+Many hybrid enhanced sampling methods are a combination of Hamiltonian replica exchange and methods incorporating an external bias potential, which can be static or \hyperlink{ref:Adaptive} {adaptively} updated (e.g., umbrella sampling and metadynamics). Each replica $i$ includes its own bias potential $U^{\mathrm{bias}}_{i}(\vz)$, which depends on a \hyperlink{ref:CV} {collective variable} set $\vz_{i} = \xi_{i}(\vx)$ that can differ between replicas. Within each replica, the bias potential is kept static or evolved according to the \hyperlink{ref:Adaptive} {adaptive} \hyperlink{ref:biasingE} {biasing} potential method. When calculating the acceptance probability $P_\mathrm{accept}(\vx_i, i, \vx_j, j)$ for an exchange of configurations $\vx_{i}$ and $\vx_{j}$ between two replicas $i$ and $j$ given in Equation~\ref{eq:re_exchange_prob}, we need to take the bias potentials into account. We limit ourselves to the, still rather general, case that all replicas have same potential energy function $U(\vx)$ but can have different temperatures.
 
 We start by rewriting the exchange acceptance probability given in Equation~\ref{eq:re_exchange_prob}
 as~\footnote{Note that we use here full quantities rather than \hyperlink{ref:reduced} {reduced} quantities as in Section~\ref{sec:generalized-ensemble}. However, the discussion is also valid for canonical and isothermal-isobaric \hyperlink{ref:Ensemble} {ensembles}.}
