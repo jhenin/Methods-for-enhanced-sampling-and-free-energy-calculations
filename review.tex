@@ -2053,7 +2053,7 @@ Combining parallel-tempering with the well-tempered ensemble~\cite{Bonomi-PRL-20
 \Delta_{i,j} = &
 \gamma^{-1}
 \left(\beta_{i} - \beta_{j}\right)
-\left[U(\vx_{i}) - U(\vx_{j})\right]
+\left[U(\vx_{i}) - U(\vx_{j})\right],
 \end{align}
 and thus reduced by a factor of $\gamma$ as compered to conventional \hyperlink{ref:ReplEx} {replica exchange} (Equation~\ref{eq:replexc_acceptance probability}),  which leads to higher exchange probability (if $\Delta_{i,j}<0$, otherwise if $\Delta_{i,j}>0$ the exchange acceptance probability is unity). Due to these two effect, one can use a larger temperature difference between replicas and thus require fewer replicas overall~\cite{Deighan2012_ptwte_efficient}. Parallel-tempering in the well-tempered ensemble can also be combined with metadynamics where other \hyperlink{ref:CV} {CV}s are biased separately~\cite{10.1073/pnas.1320077110}.
 
