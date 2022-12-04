@@ -140,7 +140,7 @@ MD simulations are generally considered to suffer from three main limitations:
     \item given the limitation on the timestep, which needs to be small enough for integration to be stable and accurate, the timescales that can be sampled are often shorter than the process of interest to the researcher.
 \end{itemize}
 
-This review focuses on describing the numerous methods that have been put forth to address the third issue, broadly referred to as ``enhanced sampling MD simulation'' techniques (see also~\cite{10.1016/j.bbagen.2014.10.019,10.1063/1.5109531,10.1039/d1cp04809k} for earlier reviews surveying the field). 
+This review focuses on describing the numerous methods that have been put forth to address the third issue, broadly referred to as ``enhanced sampling MD simulation'' techniques (see also~\cite{10.1016/j.bbagen.2014.10.019,10.1063/1.5109531,10.1039/d1cp04809k} for earlier reviews surveying the field).
 
 We do note that the second issue, of finding a low-dimensional projection for the interpretation of MD simulations, is directly related to several of the algorithms presented in this review, grouped under the umbrella term ``collective variable (\hyperlink{ref:CV} {CV})-based methods.'' Indeed, the configurational ensemble of systems of interest is generally very peaked, featuring several \hyperlink{ref:metastab} {metastable} and well-defined states with high probability, while the regions between these states have probabilities close to zero in the full high-dimensional Cartesian space. This explains why schemes that reduce the \hyperlink{ref:DimRed} {dimensionality} of the space sampled by projecting it onto a lower-dimensional surface can be successful if they accelerate sampling along the CV.
 If the process of interest is a transition between two states, then the ideal CV accelerating transitions between these states is the committor function, which describes the progress of the transition between the two states, and the transition state between the two endpoints is the region where the committor value is around $\frac{1}{2}$~\cite{doi:10.1146/annurev.physchem.53.082301.113146,LiMa_2014,BaronPeters_RC_ARPC_2015,BanushkinaKrivov_2016,Tuckerman2010}. In such cases, CV is synonymous with reaction coordinate. However, finding CVs that approximate the committor function is a very challenging task and rarely done in practice, though several recent methods show promise in achieving this~\cite{LiLinRen_2019,MoriMatubayasi_2020,PalacioRodriguez_Pietrucci_2022,JungHummer_2021,FrassekBolhuis_2021,WuMa_2022}. Instead, CVs are generally chosen using chemical and physical intuition, or by using methods that aim to automatically extract CVs from simulations. While finding these ``good'' \hyperlink{ref:CV} {CV}s is crucial for the success of CV-based methods, we will only briefly touch on the various methods that exist for identifying such CVs. The reader is referred to~\cite{WANG2020139, doi:10.1080/00268976.2020.1737742, doi:10.1021/acs.jctc.0c00355} for a more extensive discussion of this issue.
@@ -178,10 +178,10 @@ From probability theory, several strategies have been borrowed: \hyperlink{ref:I
 
 Crucially, most methods hinge on a relatively small number of statistical or physical ideas or principles. Here, we offer one possible way to organize these methods. We  start by explicitly listing these methodological ingredients, and classify the methods according to dichotomies, asking which of the different ingredients is leveraged (diamonds in Figure~\ref{fig:scheme}). The decision tree in the figure presents one of the possible alternatives by answering these different questions in a semi-arbitrary order, but attempting to list the questions from the most fundamental to the most specialized ones. The ordering of the questions inherently contains a level of subjectivity and we recognize that ordering these dichotomies in different ways can be equally reasonable, and that other representations may be useful (See Figure~\ref{fig:VennD} for an early attempt at a Venn Diagram).
 
-There are certainly other binary methods of classification that could be used which are not immediately obvious in the decisions tree in Figure~\ref{fig:scheme}. For example, there are two main ways to impart additional structure to a system in a way that can that can aid in enhanced sampling: 
+There are certainly other binary methods of classification that could be used which are not immediately obvious in the decisions tree in Figure~\ref{fig:scheme}. For example, there are two main ways to impart additional structure to a system in a way that can that can aid in enhanced sampling:
 \begin{itemize}
-\item One of these ways is to create partitions of configuration space that are completely non-overlapping; this can be done by creating ''level sets'' of a \hyperlink{ref:CV} {collective variable}, which all have the same value of some function of the coordinates, such as all the configurations with the same energy, or same distance between two specified particles, or same dihedral torsion between four particles. Collective variables generally should be defined on a contiguous region so that all values of interest can be visited. 
-\item The second main way to add structure to a system is to create new ensembles that all share the same configurations, but for which their probabilities in each ensemble are different. For example, each separate ensemble could have a different temperature, meaning that configurations of different energies will have different probabilities in each ensemble. Alternatively, different ensembles could have a harmonic bias centered around a different point in \hyperlink{ref:CV} {CV} space for each ensemble, creating ensembles that are centered around different values of the CV. Generally, to be useful, the different ensembles must be interconnected by sharing at least some configurations that have non-negligible probabilities in multiple ensembles.  Each ensemble need not overlap with \emph{all} other ensembles, but there must be a interconnected network such that one can move stepwise between all the ensembles. 
+\item One of these ways is to create partitions of configuration space that are completely non-overlapping; this can be done by creating ''level sets'' of a \hyperlink{ref:CV} {collective variable}, which all have the same value of some function of the coordinates, such as all the configurations with the same energy, or same distance between two specified particles, or same dihedral torsion between four particles. Collective variables generally should be defined on a contiguous region so that all values of interest can be visited.
+\item The second main way to add structure to a system is to create new ensembles that all share the same configurations, but for which their probabilities in each ensemble are different. For example, each separate ensemble could have a different temperature, meaning that configurations of different energies will have different probabilities in each ensemble. Alternatively, different ensembles could have a harmonic bias centered around a different point in \hyperlink{ref:CV} {CV} space for each ensemble, creating ensembles that are centered around different values of the CV. Generally, to be useful, the different ensembles must be interconnected by sharing at least some configurations that have non-negligible probabilities in multiple ensembles.  Each ensemble need not overlap with \emph{all} other ensembles, but there must be a interconnected network such that one can move stepwise between all the ensembles.
 \end{itemize}
 This division into non-overlapping (partitioning) and overlapping structure is a fundamental one, because the algorithms used to calculate free energies and perform sampling, are different in the two cases. This is because different algorithms are needed depending on whether or not \hyperlink{ref:Microstate} {microstates} have defined probabilities in multiple ensembles or each microstate only belongs to one ensemble~\cite{Escobedo_unified_2005,abreu_framework_2006}. For example, when moving between ensemble members in the overlapping case, one generally uses Monte Carlo methods to generate moves to neighboring states. In the non-overlapping case, one usually uses standard dynamics to change between values of collective variables, but with the effect of any biases as a function of collective variables back-calculated to determine the resulting forces on the system. This particular division of methods is one that is not directly used in our classification, but shows up repeatedly in the descriptions of the algorithm. We have thus indicated this division using a green (partitioning) and purple (overlapping) coloring scheme in Figure~\ref{fig:scheme}.
 
@@ -516,7 +516,7 @@ or if $O(\vx)$ is only a function of configurations, then
 \langle O(\vx) \rangle &= \int O(\vx) \nu(\vx) \, d\vx.
 \end{align}
 
-All measurable thermodynamic quantities of interest are equal to ensemble averages of some observable. For example, the total energy $E$ of a system is the expectation value of the Hamiltonian $\langle H \rangle$. Furthermore, the marginal probability density $\rho(\vz)$ is an ensemble average of a Dirac $\delta$ ``function,'' $\rho(\vz)=\langle \delta\left(\vz-\xi(\vx)\right) \rangle$ (see Equation~\ref{eq:fes_definition}).  With finite sampling, expectation values have a measurable uncertainty. However, in the thermodynamic limit (when the number of samples approaches Avogadro's number), these can be assumed to be exact, as any uncertainties are on the order of $10^{-10}$ or smaller.  
+All measurable thermodynamic quantities of interest are equal to ensemble averages of some observable. For example, the total energy $E$ of a system is the expectation value of the Hamiltonian $\langle H \rangle$. Furthermore, the marginal probability density $\rho(\vz)$ is an ensemble average of a Dirac $\delta$ ``function,'' $\rho(\vz)=\langle \delta\left(\vz-\xi(\vx)\right) \rangle$ (see Equation~\ref{eq:fes_definition}).  With finite sampling, expectation values have a measurable uncertainty. However, in the thermodynamic limit (when the number of samples approaches Avogadro's number), these can be assumed to be exact, as any uncertainties are on the order of $10^{-10}$ or smaller.
 
 \hypertarget{ref:ergodic} {\paragraph{Ergodic dynamics}}
 The dynamics of a system is said to be ergodic if samples taken from any single, infinitely long trajectory describe the complete statistical properties of the dynamics.
@@ -570,29 +570,29 @@ Under the influence of a biased potential energy $\tilde{U}(\vx) =  U(\vx) + U^\
 \label{eq:biased_configurational distribution}
 \tilde{\nu}(\vx) = \frac{1}{\tilde{Z}} \, e^{-\beta \tilde{U}(\vx)},
 \end{equation}
-where $\tilde{Z} = \int e^{-\beta \tilde{U}(\vx)} \, d\vx = \int e^{-\beta\left [ U(\vx) + U^\mathrm{bias}(\vx) \right]} \, d\vx$ is the biased partition function. 
-This can be re-written as 
+where $\tilde{Z} = \int e^{-\beta \tilde{U}(\vx)} \, d\vx = \int e^{-\beta\left [ U(\vx) + U^\mathrm{bias}(\vx) \right]} \, d\vx$ is the biased partition function.
+This can be re-written as
 \begin{align}
 \label{eq:biased_x_distribtion_rewritten}
-\tilde{\nu}(\vx) & = 
-\frac{1}{\tilde{Z}} \, e^{-\beta\left [ U(\vx) + U^\mathrm{bias}(\vx) \right]} 
-\nonumber \\ 
+\tilde{\nu}(\vx) & =
+\frac{1}{\tilde{Z}} \, e^{-\beta\left [ U(\vx) + U^\mathrm{bias}(\vx) \right]}
+\nonumber \\
 & =
 \frac{1}{Z} \, e^{-\beta U(\vx)} \, \frac{Z}{\tilde{Z}} \, e^{-\beta U^\mathrm{bias}(\vx)} =
-\nu(\vx) \, \frac{Z}{\tilde{Z}} \, e^{-\beta U^\mathrm{bias}(\vx)}, 
+\nu(\vx) \, \frac{Z}{\tilde{Z}} \, e^{-\beta U^\mathrm{bias}(\vx)},
 \end{align}
-where 
+where
 \begin{align}
 \label{eq:fraction_of_partition_functions}
-\frac{Z}{\tilde{Z}} & = 
-\frac{\int e^{-\beta U(\vx)} \, d\vx} {\int e^{-\beta \tilde{U}(\vx)} \, d\vx} = 
-\frac{\int  e^{\beta U^\mathrm{bias}(\vx)} \, e^{-\beta \tilde{U}(\vx)} \, d\vx} {\int e^{-\beta \tilde{U}(\vx)} \, d\vx} = 
-\nonumber \\ 
+\frac{Z}{\tilde{Z}} & =
+\frac{\int e^{-\beta U(\vx)} \, d\vx} {\int e^{-\beta \tilde{U}(\vx)} \, d\vx} =
+\frac{\int  e^{\beta U^\mathrm{bias}(\vx)} \, e^{-\beta \tilde{U}(\vx)} \, d\vx} {\int e^{-\beta \tilde{U}(\vx)} \, d\vx} =
+\nonumber \\
 & =
-\int  e^{\beta U^\mathrm{bias}(\vx)} \, \tilde{\nu}(\vx) \, d\vx =  
+\int  e^{\beta U^\mathrm{bias}(\vx)} \, \tilde{\nu}(\vx) \, d\vx =
 \langle e^{\beta U^\mathrm{bias}(\vx)} \rangle_{\tilde U},
 \end{align}
-where $\langle \cdots \rangle_{\tilde U}$ indicates an \hyperlink{ref:ensemble_average} {ensemble average} under the biased \hyperlink{ref:Distribution} {distribution} $\tilde{\nu}(\vx)$. 
+where $\langle \cdots \rangle_{\tilde U}$ indicates an \hyperlink{ref:ensemble_average} {ensemble average} under the biased \hyperlink{ref:Distribution} {distribution} $\tilde{\nu}(\vx)$.
 
 
 \hypertarget{ref:IS} {\paragraph{Importance sampling}}
@@ -610,15 +610,15 @@ In practice, the  sampled distribution is chosen to emphasize samples that contr
 
 
 \hypertarget{ref:Reweighting} {\paragraph{Reweighting}}
-Reweighting involves calculating averages and free energies of one \hyperlink{ref:Distribution} {distribution} using samples from another one, as occurs in \hyperlink{ref:IS} {importance sampling}, though it can be used in other situations as well. The distribution that one samples from  may be one explicitly generated by a biased simulation or performed at a different temperature, or one that is a mixture of several sampled distributions~\cite{reweighting_mixture_distribution}. 
+Reweighting involves calculating averages and free energies of one \hyperlink{ref:Distribution} {distribution} using samples from another one, as occurs in \hyperlink{ref:IS} {importance sampling}, though it can be used in other situations as well. The distribution that one samples from  may be one explicitly generated by a biased simulation or performed at a different temperature, or one that is a mixture of several sampled distributions~\cite{reweighting_mixture_distribution}.
 
-If the sampled distribution is $\tilde \nu(x)$ and the original, unmodified distribution is $\nu(\vx)$, then the average of some observable $O(\vx)$ is calculated as 
+If the sampled distribution is $\tilde \nu(x)$ and the original, unmodified distribution is $\nu(\vx)$, then the average of some observable $O(\vx)$ is calculated as
 \begin{eqnarray}
 \langle O(\vx) \rangle &=& \int  O(\vx) \nu(\vx) d\vx \nonumber \\
 &=& \int O(\vx) \frac{\nu(\vx)}{\tilde \nu(\vx)} \tilde \nu(\vx) d\vx\nonumber \\
 &=& \left \langle O(\vx)  \frac{\nu(\vx)}{\tilde{\nu}(\vx)} \right \rangle_{\tilde \nu}
 \end{eqnarray}
-where the final average is taken from samples obtained from the modified distribution $\tilde \nu$, but the expectation is in the original distribution $\nu$.  This reweighting can be done effectively whenever the ratio $\frac{\nu(\vx)}{\tilde \nu(\vx)}$ doesn't vary much over the $\vx$ sampled. 
+where the final average is taken from samples obtained from the modified distribution $\tilde \nu$, but the expectation is in the original distribution $\nu$.  This reweighting can be done effectively whenever the ratio $\frac{\nu(\vx)}{\tilde \nu(\vx)}$ doesn't vary much over the $\vx$ sampled.
 
 In the specific example of where $\tilde \nu(\vx)$ corresponds to a simulation with an added bias potential $U^{bias}$ (see Equation~\ref{eq:biased_x_distribtion_rewritten}), then the average of an observable $O(\vx)$ over the distribution $\nu(\vx)$ can be estimated by:
 \begin{eqnarray}
@@ -633,7 +633,7 @@ where the \hyperlink{ref:ensemble_average} {ensemble average}s are taken accordi
 Under the influence of a bias potential acting in \hyperlink{ref:CV} {CV} space $U^\mathrm{bias}(\vz)=U^\mathrm{bias}(\xi(\vx))$, the \hyperlink{ref:CV} {CV} will follow a biased \hyperlink{ref:CV} {CV} \hyperlink{ref:Distribution} {distribution} given by
 \begin{equation}
 \label{eq:BiasedCVDistrib}
-\tilde \rho(\vz) = \frac{1}{\tilde{Z}} 
+\tilde \rho(\vz) = \frac{1}{\tilde{Z}}
 e^{-\beta \left[
 A(\vz) + U^\mathrm{bias}(\vz)
 \right]},
@@ -644,7 +644,7 @@ where $\tilde{Z} = \int e^{-\beta\left [ U(\vx) + U^\mathrm{bias}(\xi(\vx)) \rig
 Common in some enhanced sampling methods is the concept of a target distribution. This represents a desired probability \hyperlink{ref:Distribution} {distribution} that an enhanced sampling simulation is trying to achieve. The target distribution can be in the space of some collective variables (normally, the ones being biased) or another space such as the state space in $T$ or along an auxiliary variable $\lambda$. In some methods, the target distribution is set by the user. In others, the target distribution can be inferred from experimental observations. A common choice is to set the target distribution to be uniform over the variables or states of interest, with all values sampled equally. However, most methods theoretically support the usage of any given non-uniform target distributions if the user desires.
 
 \hypertarget{ref:Replica} {\paragraph{Replicas}}
-A replica is a copy of a molecular system. Replicas might simply be independent copies started from different random number seeds for velocities or different initial configurations, or they might each have a different value of some thermodynamic parameter like temperature or $\lambda$, or have a different biasing distribution. In many types of accelerated simulations, replicas can exchange information with each other, and this exchange is key to the success of the method.  In most methods, however, they do have the same chemical composition and number of atoms. 
+A replica is a copy of a molecular system. Replicas might simply be independent copies started from different random number seeds for velocities or different initial configurations, or they might each have a different value of some thermodynamic parameter like temperature or $\lambda$, or have a different biasing distribution. In many types of accelerated simulations, replicas can exchange information with each other, and this exchange is key to the success of the method.  In most methods, however, they do have the same chemical composition and number of atoms.
 
 \hypertarget{ref:GenEns} {\paragraph{Generalized ensemble}}
 Generalized ensemble methods encompass \hyperlink{ref:ExpEns} {expanded ensemble methods} and \hyperlink{ref:ReplEx} {replica exchange} methods (Section~\ref{sec:generalized-ensemble}).
@@ -718,11 +718,11 @@ In the latter case, if $U = U^\mathrm{unscaled} + U^\mathrm{scaled}$, scaling $U
 \end{equation}
 Then the Boltzmann factor is
 \begin{equation}
-e^{\frac{U^\mathrm{unscaled}}{k_BT} + \frac{U^{scaled}}{K_B \tilde T}} 
+e^{\frac{U^\mathrm{unscaled}}{k_BT} + \frac{U^{scaled}}{K_B \tilde T}}
 \end{equation}
 and the scaled degrees of freedom have probabilities consistent with the different $\tilde T$.
 
-\hypertarget{ref:ReplEx} {\paragraph{Replica exchange}} \hyperlink{ref:GenEns} {Generalized ensemble} methods that allow for exchanging configurations between replicas, usually according to criteria that guarantee that each replica samples from a well-defined \hyperlink{ref:Distribution} {distribution}. 
+\hypertarget{ref:ReplEx} {\paragraph{Replica exchange}} \hyperlink{ref:GenEns} {Generalized ensemble} methods that allow for exchanging configurations between replicas, usually according to criteria that guarantee that each replica samples from a well-defined \hyperlink{ref:Distribution} {distribution}.
 
 \hypertarget{ref:AdiabaticDyn} {\paragraph{Adiabatic dynamics}}
 A dynamics where selected degrees of freedom are assumed to not exchange energy with the rest of the system.
@@ -753,7 +753,7 @@ Many methods can be used with fixed parameters, but also have iterative and adap
 \hypertarget{ref:FEP} {\paragraph{Free energy perturbation (FEP)}}
 \label{FEP}
 
-Free energy perturbation is the process of calculating the free energy differences due to small changes in the potential energy using reweighting or exponential averaging, hence the term ``pertubation.''  It is performed using the \hyperref[sec:fe_estimators:EXP]{exponential averaging} formula.  Alternatively, and somewhat confusingly, it can also refer to calculating a free energy difference using any sort of \hyperlink{ref:Alchemical} pathway, using any sort of \hyperlink{ref:FEestimator}{free energy estimator}. 
+Free energy perturbation is the process of calculating the free energy differences due to small changes in the potential energy using reweighting or exponential averaging, hence the term ``pertubation.''  It is performed using the \hyperref[sec:fe_estimators:EXP]{exponential averaging} formula.  Alternatively, and somewhat confusingly, it can also refer to calculating a free energy difference using any sort of \hyperlink{ref:Alchemical} pathway, using any sort of \hyperlink{ref:FEestimator}{free energy estimator}.
 
 
 \section{Free energy estimators}
@@ -762,7 +762,7 @@ Free energy perturbation is the process of calculating the free energy differenc
 Recovering the original statistical ensemble often requires estimating a \hyperlink{ref:FE} {free energy}. For some enhanced sampling methods, the \hyperlink{ref:FEestimator} {free energy estimator} is central to the enhanced sampling scheme, while for others, it is a post-processing tool. This section provides a concise presentation, but extensive reviews can be found elsewhere~\cite{cchipot07:molsim, Lelievre2010, Paliwal_comparison_2011, shirts_comparison_2005, Klimovich_Shirts_Mobley_2015}.
 
 \hyperlink{ref:FEestimator} {Free energy estimators} are expressions that are used numerically to compute free energy differences or free energy \hyperlink{ref:FES} {surfaces} from quantities that are available in simulations (configurations, energies, and forces).
-The important properties of an estimator are its accuracy or  \textit{bias}, how far off the real value it is given infinite, ideal sampling, and precision or \textit{variance}, how much the result fluctuates given a finite amount of noisy data.  Note that the \textit{bias} of the estimator is a different concept than the bias that is intentionally added to a system via a potential. 
+The important properties of an estimator are its accuracy or  \textit{bias}, how far off the real value it is given infinite, ideal sampling, and precision or \textit{variance}, how much the result fluctuates given a finite amount of noisy data.  Note that the \textit{bias} of the estimator is a different concept than the bias that is intentionally added to a system via a potential.
 
 In this section we consider estimators for:
 \begin{itemize}
@@ -797,7 +797,7 @@ e^{f_j-f_i} = \frac{Z_i}{Z_j} = \frac{\left \langle  P_{i\rightarrow j}(x)\right
 \end{equation}
 where $P_{i\rightarrow j}(x)$ is the probability of accepting a move from state $i$ to state $j$ proposed from configuration $\vx$. For simplicity we assume that the probability of moves proposed from $i$ to $j$ is equal to the probability of transition from $j$ to $i$; more general transitions can also be included~\cite{escobedo_transition_2006}. We can construct a matrix of all possible transitions between any pair of states; hence we can call this a transition count matrix or \textit{transition matrix}.
 
-Typically, this averaging is carried out over the transitions that were actually observed. However, this average can be calculations over transitions \emph{that were not actually performed}. If one counts only whether a move is made or not, one averages a number of either 0's or 1's. However, in any method that makes transitions between states, we need to calculate the probability that the transition would occur to decide whether we move or not, as in the \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo} algorithm (Eq.~\ref{eq:bal}).  This probability can be calculated and used in averaging even if the moves are not made. 
+Typically, this averaging is carried out over the transitions that were actually observed. However, this average can be calculations over transitions \emph{that were not actually performed}. If one counts only whether a move is made or not, one averages a number of either 0's or 1's. However, in any method that makes transitions between states, we need to calculate the probability that the transition would occur to decide whether we move or not, as in the \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo} algorithm (Eq.~\ref{eq:bal}).  This probability can be calculated and used in averaging even if the moves are not made.
 
 Interestingly, one can even compute this average of transition probability \hyperlink{ref:Distribution} {distributions} using a different transition probability formula than the one actually used to carry out jumps between states. For example, one can show that the \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo} criterion $(\mathrm{min} \{1,e^{-u_j+u_i})\})$ is more efficient to use to decide whether or not to move between two states, but the Barker criterion $\left(\frac{e^{-u_j}}{e^{u_j}+e^{u_i}}\right)$ is more efficient to average in order to calculate free energies~\citep{Liu:Biometrika:1996}.
 
@@ -806,7 +806,7 @@ Note that free energy estimated directly from population ratios will of course b
    \nu_i(t + \delta t) = \nu_i(t) + \sum_{j \neq i} (\nu_j(t) P_{j\rightarrow i} - \nu_i(t) P_{i\rightarrow j}).
    \label{eq:master_equation}
 \end{equation}
-This is a time-dependent equation, but can be shown to have an equilibrium stationary probability \hyperlink{ref:Distribution} {distribution} $\nu_i(\vx)$. Convergence of probability distributions is slow because the samples extracted from molecular dynamics simulations are correlated. However, by taking into account the conditional probability distribution (probability of an event happening given previous history), the statistical dependency of the MD trajectory is taken into account~\cite{Wu:JCP:2014,Wu:MMS:2014,Rosta2014,Wu:PNAS:2016a}. 
+This is a time-dependent equation, but can be shown to have an equilibrium stationary probability \hyperlink{ref:Distribution} {distribution} $\nu_i(\vx)$. Convergence of probability distributions is slow because the samples extracted from molecular dynamics simulations are correlated. However, by taking into account the conditional probability distribution (probability of an event happening given previous history), the statistical dependency of the MD trajectory is taken into account~\cite{Wu:JCP:2014,Wu:MMS:2014,Rosta2014,Wu:PNAS:2016a}.
 An even more accurate estimation of the free energies can therefore be achieved by building a Markov State Model from the transition count matrix, whereby the probability of each state is computed as the leading eigenvector of the transition matrix. In this case, it may not be necessary for single simulations to sample the entire state space, as long as each of the individual transitions is estimated accurately.  This is the basis for such methods as DHAM~\cite{Rosta2014}, dTRAM~\cite{Wu:JCP:2014,Wu:MMS:2014}, and TRAM~\cite{Wu:PNAS:2016a}, which are somewhat beyond the scope of this review, as they are advanced analysis methods, but not technically by themselves accelerated sampling methods.
 
 \subsection{Thermodynamic integration (TI)}
@@ -835,7 +835,7 @@ If $i$ and $j$ are neighboring states along $\lambda$ with a sufficiently small 
 \label{eq:TI}
 \end{equation}
 
-Other numerical integration formulas can of course be used, although usually there has not been found to be much advantage over the straightforward trapezoidal rule~\cite{Paliwal_comparison_2011}. 
+Other numerical integration formulas can of course be used, although usually there has not been found to be much advantage over the straightforward trapezoidal rule~\cite{Paliwal_comparison_2011}.
 
 
 \subsubsection{TI along a collective variable}
@@ -845,7 +845,7 @@ A generalization of Equation~\ref{eq:TI1} holds for the gradient of the \hyperli
 \frac{\mathrm{d} a(z)}{\mathrm{d} z} = - \left\langle F_\xi(\vx)  \right\rangle_{\xi(\vx) = z}
     \label{eq:TI_CV}
 \end{equation}
-Where the average is over all configuration with $\xi(\vx) = z$. 
+Where the average is over all configuration with $\xi(\vx) = z$.
 $F_\xi$ is a \textit{generalized force} that includes two terms:
 \begin{itemize}
     \item the energy gradient with respect to \hyperlink{ref:CV} {collective variable}s;
@@ -966,7 +966,7 @@ f_i &=& -\ln \left[\frac{1}{N}\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\nu_{mix}(\vx_
 
 \subsection{Weighted histogram analysis method (WHAM)}
 
-In its original formulation, WHAM consists in applying Boltzmann inversion (i.e. calculating free energies from probabilities) to histograms collected under a localizing potential (Section~\ref{sec:localization}), and joining the bias-corrected histograms in an iterative and statistically optimal way to reconstruct the global histogram, from which the global free energy \hyperlink{ref:FES} {profile} is calculated~\cite{kumars:WHAM}.  However, the same idea can apply to histograms collected at different temperatures or other sets of histograms, as long as the histograms overlap. 
+In its original formulation, WHAM consists in applying Boltzmann inversion (i.e. calculating free energies from probabilities) to histograms collected under a localizing potential (Section~\ref{sec:localization}), and joining the bias-corrected histograms in an iterative and statistically optimal way to reconstruct the global histogram, from which the global free energy \hyperlink{ref:FES} {profile} is calculated~\cite{kumars:WHAM}.  However, the same idea can apply to histograms collected at different temperatures or other sets of histograms, as long as the histograms overlap.
 
 One can start from the MBAR equations to derive WHAM as well. If one can histogram the data by energy into $i$ bins, then the sum over $n$ \textit{samples} in MBAR becomes a sum over $M$ energy \textit{bins} instead. The iterative equations of WHAM can be written as:
 \begin{eqnarray}
@@ -1032,7 +1032,7 @@ A range of methods are designed to flatten the energy \hyperlink{ref:FES} {lands
 
 This class of methods modifies the original configurational \hyperlink{ref:Distribution} {distribution} , lets the simulations converge to an equilibrium ensemble, but does not do so by localizing the simulations to specific regions of configuration space. Instead, sampling is biased by employing an external bias potential. Contrary to the adaptive methods presented in the next section, in this case the bias potential is pre-determined and static (Figure ~\ref{fig:scheme}).
 
-This is the case of the original Accelerated MD~\cite{Hamelberg2004} and Gaussian-accelerated MD~\cite{Miao2017, Wang2021} methods. In these methods, the form of the modified potential energy is determined by user-controlled parameters, lowering the energy barriers either for specific transitions (e.g. along dihedral angles), or within a given energy range. Note that these methods can also be run in an \hyperlink{ref:Adaptive} {adaptive} manner (Section~\ref{sec:abp_energy}). 
+This is the case of the original Accelerated MD~\cite{Hamelberg2004} and Gaussian-accelerated MD~\cite{Miao2017, Wang2021} methods. In these methods, the form of the modified potential energy is determined by user-controlled parameters, lowering the energy barriers either for specific transitions (e.g. along dihedral angles), or within a given energy range. Note that these methods can also be run in an \hyperlink{ref:Adaptive} {adaptive} manner (Section~\ref{sec:abp_energy}).
 
 Following the principle of \hyperlink{ref:IS} {importance sampling}, unbiased statistics can be recovered by \hyperlink{ref:Reweighting} {reweighting}.
 Success of this, however, depends crucially on good overlap between the \hyperlink{ref:BiasedDist} {biased} and unbiased distributions of configurations.
@@ -1063,7 +1063,7 @@ In \hyperlink{ref:Adaptive} {adaptive} biasing potential (ABP) methods, an exter
 
 Note that most ABP methods can also be used in conjunction with \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} simulations. In this case, the bias potential needs to be taken into account in the Monte Carlo acceptance probability (Equation~\ref{eq:bal}).
 
-The performance of ABP methods depends critically on the choice of the CVs, the CVs need to be chosen carefully and they should properly separate the relevant metastable states and correspond to essential slow degrees of freedom. Furthermore, most ABP methods are limited in the number of CVs that they can handle and generally we can use no more than three to four CVs, though there are ABP methods that can handle a larger number of CVs~\cite{Piana2007_bemeta,Pfaendtner2015_pbmetad}. 
+The performance of ABP methods depends critically on the choice of the CVs, the CVs need to be chosen carefully and they should properly separate the relevant metastable states and correspond to essential slow degrees of freedom. Furthermore, most ABP methods are limited in the number of CVs that they can handle and generally we can use no more than three to four CVs, though there are ABP methods that can handle a larger number of CVs~\cite{Piana2007_bemeta,Pfaendtner2015_pbmetad}.
 
 A wide range of ABP methods have been introduced throughout the years. In the following two Sections, we discuss two of these methods in detail, metadynamics~\cite{Laio-PNAS-2002,Barducci-PRL-2008,Valsson2016_ARPC_MetaD} and variationally enhanced sampling~\cite{Valsson_VES_PRL_2014,Valsson2020Handbook_VES}. Metadynamics is the most widely used ABP method and it has spurred the development of a great number of variants. Variationally enhanced sampling is a more recent ABP method that is based on the variational principle. For other ABP methods, it would be beyond the scope of this review to discuss all of them in detail, so we limit ourselves to give an non-exhaustive list of ABP methods. We refer the reader to the original references and review papers~\cite{Dickson_ABP-Review_2017,Shalini_Review_2019,Allison_Review_2020} on the subject for further details regarding these methods.
 
@@ -1099,7 +1099,7 @@ In well-tempered metadynamics~\cite{Barducci-PRL-2008}, the bias potential $U^{\
 U^{\mathrm{bias}}_{n}(\vz) = U^{\mathrm{bias}}_{n-1}(\vz) +
 % H_{0} \, \exp \left[-\frac{1}{2}\sum^{d}_{i=1} \frac{(z_i-z_{n,i})^2}{\sigma^2_i} \right]
 \exp \left[-\frac{1}{\gamma-1} \beta  U^{\mathrm{bias}}_{n-1}(\vz_n)   \right]
-\, G(\vz,\vz_{n}). 
+\, G(\vz,\vz_{n}).
 \end{align}
 Here $n$ is the current step number in the recursive updating of the bias potential (i.e., number of added Gaussian kernels; note that this is not the same as MD steps), $U^{\mathrm{bias}}_{0}(\vz)=0$, and the Gaussian kernels are scaled by the factor $\exp \left[-\frac{1}{\gamma-1}
 \beta U^{\mathrm{bias}}_{k-1}(\vz_n)   \right]$, with $\gamma$ a parameter called the bias factor. The Gaussian kernels are given by
@@ -1132,7 +1132,7 @@ G(\vz,\vz_{k})
 & =
 \sum_{k=1}^{n}
 H_{k} \,
-\exp \left[-\frac{1}{2}\sum^{d}_{i=1} \frac{(z_i-z_{k,i})^2}{\sigma^2_i} \right]
+\exp \left[-\frac{1}{2}\sum^{d}_{i=1} \frac{(z_i-z_{k,i})^2}{\sigma^2_i} \right],
 \end{align}
 where we write $H_{k} = H_{0} \, \exp \left[-\frac{1}{\gamma-1} \beta U^{\mathrm{bias}}_{k-1}(\vz_k)\right]$ as the height of the $k$-th added Gaussian.
 In the long time limit, the height $H_k$ goes to zero as the scaling factor $\exp \left[-\frac{1}{\gamma-1} \beta U^{\mathrm{bias}}_{k-1}(\vz_k)   \right]$ decreases as $\frac{1}{k}$~\cite{Barducci-PRL-2008,Dama-PRL-2014} (see Equation 3 in Ref~\cite{Barducci-PRL-2008}). Therefore, as the metadynamics simulations progresses, the change of the bias potential is smaller and it becomes quasi-stationary.
@@ -1140,7 +1140,7 @@ It has been proven~\cite{Dama-PRL-2014} that updating the bias potential accordi
 \begin{equation}
 \label{eq:wtmetad_asymptotic}
 U_{t}^{\mathrm{bias}}(\vz) = - \left(1-\frac{1}{\gamma} \right)
-A(\vz) + K(t)
+A(\vz) + K(t),
 \end{equation}
 where $K(t)$ is a time-dependent constant.
 Note that in the metadynamics literature, the \hyperlink{ref:FES} {FES} is generally denoted as $F(\vz)$ (or $F(\mathbf{s})$) instead of $A(\vz)$.
@@ -1158,7 +1158,7 @@ which can be viewed as a distribution where \hyperlink{ref:CV} {CV} fluctuations
 
 By taking the logarithm on both sides of Equation~\ref{eq:wtmetad_wtdist}, we can view the well-tempered distribution as sampling an effective \hyperlink{ref:FES} {FES},  $A_{\gamma}(\vz) = \frac{1}{\gamma} A(\vz)$ (up to a constant), where the barriers have been reduced by a value corresponding to the selected bias factor, as we can see in Figure~\ref{fig:MetaD}. This gives a rule of thumb for selecting the bias factor: it should be chosen such that the barriers become on the order of the thermal energy so that the system can easily migrate between \hyperlink{ref:metastab} {metastable} states on the simulation timescale.
 
-In the metadynamics literature, a temperature parameter $\Delta T$ is often used instead of the bias factor $\gamma$. Their relation is given by $\gamma = (T + \Delta T)/T$. We can re-write the well-tempered distribution in Equation~\ref{eq:wtmetad_wtdist} as 
+In the metadynamics literature, a temperature parameter $\Delta T$ is often used instead of the bias factor $\gamma$. Their relation is given by $\gamma = (T + \Delta T)/T$. We can re-write the well-tempered distribution in Equation~\ref{eq:wtmetad_wtdist} as
 \begin{equation}
 \label{eq:wtmetad_wtdist_deltaT}
 \tilde{\rho}(\vz) =
@@ -1169,7 +1169,7 @@ In the metadynamics literature, a temperature parameter $\Delta T$ is often used
 {e^{-\bar{\beta} \, A(\vz)}}
 {\int e^{-\bar{\beta} \, A(\vz)} \, d\vz},
 \end{equation}
-where $\bar{\beta}=\left[k_\mathrm{B}(T+\Delta T)\right]^{-1}$. This introduces another interpretation of well-tempered metadynamics. We can view the well-tempered distribution as sampling the \hyperlink{ref:CV} {CV}s at a higher temperature $T+\Delta T$ (but with the \hyperlink{ref:FES} {FES} $A(\vz)$ fixed). 
+where $\bar{\beta}=\left[k_\mathrm{B}(T+\Delta T)\right]^{-1}$. This introduces another interpretation of well-tempered metadynamics. We can view the well-tempered distribution as sampling the \hyperlink{ref:CV} {CV}s at a higher temperature $T+\Delta T$ (but with the \hyperlink{ref:FES} {FES} $A(\vz)$ fixed).
 
 Like most \hyperlink{ref:CV} {CV}-based enhanced sampling methods, metadynamics cannot work with too many \hyperlink{ref:CV} {CV}s. In practical applications, we are generally limited to biasing three to four \hyperlink{ref:CV} {CV}s. However, there are variants of metadynamics that allow us to employ a large number of \hyperlink{ref:CV} {CV}s, see Sections~\ref{sec:pb-metad} and~\ref{sec:be-metad}.
 
@@ -1179,25 +1179,25 @@ The \hyperlink{ref:FES} {FES} can be estimated directly from the bias potential 
 \begin{align}
 \label{eq:metad_sumhills}
 A(\vz) &=
-- \left(\frac{\gamma}{\gamma-1}\right) U_{t}^{\mathrm{bias}}(\vz) + 
+- \left(\frac{\gamma}{\gamma-1}\right) U_{t}^{\mathrm{bias}}(\vz) +
 \frac{1}{\beta}
-\ln 
+\ln
 \int \exp
 \left[
 \frac{\gamma}{\gamma-1} \beta U_{t}^{\mathrm{bias}}(\vz)
-\right] \, d\vz 
+\right] \, d\vz
 \nonumber
 \\
 & =
 - \left(\frac{\gamma}{\gamma-1}\right)
 \sum_{k=1}^{n}
 H_{k} \,
-\exp \left[-\frac{1}{2}\sum^{d}_{i=1} \frac{(z_i-z_{k,i})^2}{\sigma^2_i} \right] 
+\exp \left[-\frac{1}{2}\sum^{d}_{i=1} \frac{(z_i-z_{k,i})^2}{\sigma^2_i} \right]
 \nonumber \\
 & \phantom{=}
-+ 
++
 \frac{1}{\beta}
-\ln 
+\ln
 \int \exp
 \left[
 \frac{\gamma}{\gamma-1} \beta U_{t}^{\mathrm{bias}}(\vz)
@@ -1206,9 +1206,9 @@ H_{k} \,
 \end{align}
 where the second term is a time-dependent constant and allows us to assess the \hyperlink{ref:FES} {FES}'s convergence and measure error bars~\cite{tiwary_rewt,Valsson2016_ARPC_MetaD}. Here, the two terms will increase in magnitude with time, the first term with the sum over the Gaussians will become more negative, while the second term with the integral will become more positive. However, their sum will converge. Alternately, a common procedure to assess convergence is to compare \hyperlink{ref:FES} {FES}s obtained at different times by aligning their minimum to zero.
 
-We can also obtain the \hyperlink{ref:FES} {FES} via various post-processing \hyperlink{ref:Reweighting} {reweighting} procedures~\cite{bonomi_rewt,tiwary_rewt,Branduardi-JCTC-2012,Schafer_RewMetaD_2020,Giberti_IterRew_JCTC2019,10.1063/1.5123498,10.1016/j.cplett.2020.137384}. The most common way to achieve this task is the so-called $c(t)$ reweighting procedure~\cite{bonomi_rewt,tiwary_rewt} that takes the time-dependence of the bias potential into account. 
+We can also obtain the \hyperlink{ref:FES} {FES} via various post-processing \hyperlink{ref:Reweighting} {reweighting} procedures~\cite{bonomi_rewt,tiwary_rewt,Branduardi-JCTC-2012,Schafer_RewMetaD_2020,Giberti_IterRew_JCTC2019,10.1063/1.5123498,10.1016/j.cplett.2020.137384}. The most common way to achieve this task is the so-called $c(t)$ reweighting procedure~\cite{bonomi_rewt,tiwary_rewt} that takes the time-dependence of the bias potential into account.
 
-Starting from Equation~\ref{eq:biased_x_distribtion_rewritten}, we can re-write the biased configurational \hyperlink{ref:Distribution} {distribution} at time $t$ as 
+Starting from Equation~\ref{eq:biased_x_distribtion_rewritten}, we can re-write the biased configurational \hyperlink{ref:Distribution} {distribution} at time $t$ as
 \begin{equation}
 \label{eq:biased_prob_dist_with_c_of_t}
 \tilde{\nu}_{t}(\vx) = \nu(\vx) \, \exp
@@ -1218,19 +1218,19 @@ U_{t}^{\mathrm{bias}}(\xi(\vx))-c(t)
 \end{equation}
 where the time-dependent constant $c(t)$ is the logarithm of the ratio of the unbiased and biased partition functions (see Equation~\ref{eq:fraction_of_partition_functions}),
 \begin{equation}
-c(t) = 
+c(t) =
 \frac{1}{\beta} \ln \frac{Z}{\tilde{Z}(t)}.
 \end{equation}
-Here the biased partition function $\tilde{Z}(t)$ is explicitly time-dependent due to dependence on the \hyperlink{ref:Adaptive} {adaptive} metadynamics bias potential. 
-The unbiased and biased partition functions can be written as integrals over either the coordinates $\vx$ or the CVs $\vz$, 
+Here the biased partition function $\tilde{Z}(t)$ is explicitly time-dependent due to dependence on the \hyperlink{ref:Adaptive} {adaptive} metadynamics bias potential.
+The unbiased and biased partition functions can be written as integrals over either the coordinates $\vx$ or the CVs $\vz$,
 \begin{align}
-& Z = \int e^{-\beta U(\vx) } \, d\vx = \int e^{-\beta A(\vz) } \, d\vz \\
+& Z = \int e^{-\beta U(\vx) } \, d\vx = \int e^{-\beta A(\vz) } \, d\vz, \\
 & \tilde{Z}(t) = \int e^{-\beta\left [ U(\vx) + U_{t}^\mathrm{bias}(\xi(\vx)) \right]} \, d\vx = \int e^{-\beta\left [ A(\vz) + U_{t}^\mathrm{bias}(\vz) \right]} \, d\vz.
 \end{align}
 We can thus write the time-dependent constant $c(t)$ as \begin{equation}
 \label{eq:wtmetad_coft2}
-c(t) = 
-\frac{1}{\beta} \ln \frac{Z}{\tilde{Z}(t)} = 
+c(t) =
+\frac{1}{\beta} \ln \frac{Z}{\tilde{Z}(t)} =
 \frac{1}{\beta} \ln \frac
 {\int e^{-\beta A(\vz)} \,  d\vz }
 {\int e^{-\beta \left[ A(\vz) + U_{t}^{\mathrm{bias}}(\vz) \right]} \, d\vz }.
@@ -1243,7 +1243,7 @@ c(t) = \frac{1}{\beta} \ln
 {\int \exp \left[ \frac{\gamma}{\gamma-1} \beta U_{t}^{\mathrm{bias}}(\vz)  \right] d\vz }
 {\int \exp \left[ \frac{1}{\gamma-1} \beta U_{t}^{\mathrm{bias}}(\vz)  \right] d\vz },
 \end{equation}
-which is obtained by inserting Equation~\ref{eq:metad_sumhills} into Equation~\ref{eq:wtmetad_coft2}~\cite{tiwary_rewt,Valsson2016_ARPC_MetaD}. 
+which is obtained by inserting Equation~\ref{eq:metad_sumhills} into Equation~\ref{eq:wtmetad_coft2}~\cite{tiwary_rewt,Valsson2016_ARPC_MetaD}.
 
 The biased configurational \hyperlink{ref:Distribution} {distribution}  (Equation~\ref{eq:biased_prob_dist_with_c_of_t}) and the $c(t)$ (Equation~\ref{eq:wtmetad_coft_estimate}) allows us to reweight and calculate any average of an observable as
 \begin{equation}
@@ -1257,7 +1257,7 @@ U_{t}^{\mathrm{bias}}(\xi(\vx))-c(t)
 {\left\langle
 e^{\beta \left[
 U_{t}^{\mathrm{bias}}(\xi(\vx))-c(t)
-\right]} \right\rangle_{\tilde U}}, 
+\right]} \right\rangle_{\tilde U}},
 \end{equation}
 where $\langle \cdots \rangle_{\tilde U}$ indicates an \hyperlink{ref:ensemble_average} {ensemble average} in the biased metadynamics simulation (see Equation~\ref{eq:reweighting_bias_potential}). To perform the $c(t)$ reweighting in practice, we weight each configuration $\vx$, taken at time $t$, with weighting factor $e^{\beta\left[U_{t}^{\mathrm{bias}}(\xi(\vx))-c(t)\right]}$ acting at time $t$. We can think of the sum $U_{t}^{\mathrm{bias}}(\xi(\vx))-c(t)$ as a relative (or re-normalized) bias potential (the relative bias potential will converge while the two terms will still increase). This \hyperlink{ref:Reweighting} {reweighting} procedure assumes that the relative bias potential is quasi-stationary. Therefore, in practice, we ignore a short initial transient part of the simulation where the relative bias potential is not converged and still changing considerably.
 
@@ -1276,11 +1276,11 @@ e^{\beta
 U_{t=t_F}^{\mathrm{bias}}(\xi(\vx))
 } \rangle_{\tilde U}},
 \end{equation}
-where $t_F$ is the time at the end of the simulation. 
+where $t_F$ is the time at the end of the simulation.
 
 Using $O(\vx) = \delta(\vz-\xi(\vx))$ in Equation~\ref{wtmetad_reweighting} or~\ref{wtmetad_reweighting_lastbias} (see Equation~\ref{eq:fes_definition}), allows us to use \hyperlink{ref:Reweighting} {reweighting} to estimate the \hyperlink{ref:FES} {FES} as a function of the biased \hyperlink{ref:CV} {CV}s, or for any other set of \hyperlink{ref:CV} {CV}s. It is a good practice to compare the \hyperlink{ref:FES} {FES} estimated from the bias potential via Equation~\ref{eq:metad_sumhills} to the \hyperlink{ref:FES} {FES} estimated using \hyperlink{ref:Reweighting} {reweighting}. They should give the same results and a major disagreement would indicate that the simulation is not converged or that the \hyperlink{ref:CV} {CV}s might not be good enough. Furthermore, we can estimate error bars for reweighted \hyperlink{ref:FES} {FES}s using block averaging (see PLUMED tutorials~\cite{plumed_masterclass}).
 
-Other post-processing methods for obtaining the \hyperlink{ref:FES} {FES} include mean force integration~\cite{10.1063/1.5123498} and a weighted histogram analysis method adapted to metadynamics~\cite{10.1016/j.cplett.2020.137384}, which both allow for estimating the \hyperlink{ref:FES} {FES} by combining different independent metadynamics simulations.  Metadynamics has also been combined with Gaussian Process Regression for obtaining the \hyperlink{ref:FES} {FES}~\cite{Mones2016}. See the references for further details on these post-processing methods. 
+Other post-processing methods for obtaining the \hyperlink{ref:FES} {FES} include mean force integration~\cite{10.1063/1.5123498} and a weighted histogram analysis method adapted to metadynamics~\cite{10.1016/j.cplett.2020.137384}, which both allow for estimating the \hyperlink{ref:FES} {FES} by combining different independent metadynamics simulations.  Metadynamics has also been combined with Gaussian Process Regression for obtaining the \hyperlink{ref:FES} {FES}~\cite{Mones2016}. See the references for further details on these post-processing methods.
 
 
 \paragraph{Conventional metadynamics}
@@ -1321,7 +1321,7 @@ where $t_{i} = i\, dt$. By performing multiple simulations, one can obtain a dis
 10.1021/ja903045y,
 10.1103/physrevlett.110.108106,
 10.1063/1.5027728,
-10.1103/physreve.98.052408, 
+10.1103/physreve.98.052408,
 10.1063/5.0019100,
 10.1021/acs.jpclett.2c01807}
 
@@ -1355,7 +1355,7 @@ We refer the reader to the references for further details. Metadynamics has also
 Various variants of metadynamics are implemented in the PLUMED 2 enhanced sampling plug-in~\cite{Bonomi-CPC-2009,Tribello2014,plumed-nest}. PLUMED also includes numerous practical tutorials showing how to perform and analyze metadynamics simulations~\cite{plumed_masterclass}. Furthermore, a large number of example input files are
 available in the PLUMED-NEST~\cite{plumed-nest,plumed_nest_url}
 
-Metadynamics are also available in the external libraries SSAGES and the Colvars module (see Table~\ref{Table:Libraries})., and also is natively implemented in some MD codes such as CP2K and DESMOND, see Table~\ref{Table:Codes} and also Table 2 in Ref~\cite{BussiLaio_ReviewMetaD_2020}. 
+Metadynamics are also available in the external libraries SSAGES and the Colvars module (see Table~\ref{Table:Libraries})., and also is natively implemented in some MD codes such as CP2K and DESMOND, see Table~\ref{Table:Codes} and also Table 2 in Ref~\cite{BussiLaio_ReviewMetaD_2020}.
 
 \subsubsection{Variationally enhanced sampling}
 \label{sec:ves}
@@ -1383,7 +1383,7 @@ To obtain a better understanding of the functional in Equation~\ref{ves_omega}, 
 \begin{equation}
 \beta \Omega [U^{\mathrm{bias}}] = D_{\mathrm{KL}}(p_{\mathrm{tg}}||\tilde{\rho})-D_{\mathrm{KL}}(p_{\mathrm{tg}}||\rho),
 \end{equation}
-where $D_{\mathrm{KL}}(p||q)=\int p(\vx) \ln\frac{p(\vx)}{q(\vx)} \, d\vx$ is the Kullback-Leibler divergence between a probability distribution $p(\vx)$ and a probability distribution $q(\vx)$ (or more correctly, from  $q(\vx)$ to  $p(\vx)$ as the Kullback-Leibler divergence is not symmetric with respect to its arguments). Therefore, minimizing $\Omega [U^{\mathrm{bias}}]$ is equivalent to minimizing the Kullback-Leibler divergence (or the relative entropy or cross entropy) between the \hyperlink{ref:targetdist}{target distribution} $p_{\mathrm{tg}}(\vz)$ and the \hyperlink{ref:BiasedCVDist} {biased distribution} $\tilde{\rho}(\vz) \propto e^{-\beta \left[A(\vz) + U^\mathrm{bias}(\vz)\right]}$~\cite{Rubinstein-MetCompAppProb-1999,Shell-JCP-2008,Bilionis-JCompPhys-2012,Zhang_SIAM-JSC-2014}. Note that the second term, $D_{\mathrm{KL}}(p_{\mathrm{tg}}||\rho)$, is independent of $U^{\mathrm{bias}}(\vz)$ and is a constant for a given \hyperlink{ref:targetdist}{target distribution} $p_{\mathrm{tg}}(\vz)$. 
+where $D_{\mathrm{KL}}(p||q)=\int p(\vx) \ln\frac{p(\vx)}{q(\vx)} \, d\vx$ is the Kullback-Leibler divergence between a probability distribution $p(\vx)$ and a probability distribution $q(\vx)$ (or more correctly, from  $q(\vx)$ to  $p(\vx)$ as the Kullback-Leibler divergence is not symmetric with respect to its arguments). Therefore, minimizing $\Omega [U^{\mathrm{bias}}]$ is equivalent to minimizing the Kullback-Leibler divergence (or the relative entropy or cross entropy) between the \hyperlink{ref:targetdist}{target distribution} $p_{\mathrm{tg}}(\vz)$ and the \hyperlink{ref:BiasedCVDist} {biased distribution} $\tilde{\rho}(\vz) \propto e^{-\beta \left[A(\vz) + U^\mathrm{bias}(\vz)\right]}$~\cite{Rubinstein-MetCompAppProb-1999,Shell-JCP-2008,Bilionis-JCompPhys-2012,Zhang_SIAM-JSC-2014}. Note that the second term, $D_{\mathrm{KL}}(p_{\mathrm{tg}}||\rho)$, is independent of $U^{\mathrm{bias}}(\vz)$ and is a constant for a given \hyperlink{ref:targetdist}{target distribution} $p_{\mathrm{tg}}(\vz)$.
 
 
 In practice, $\Omega [U^{\mathrm{bias}}]$ is minimized by introducing a functional form for the bias potential $U_{\boldsymbol{\alpha}}^\mathrm{bias}(\vz)$ that depends on a set of variational parameters $\boldsymbol{\alpha}$. We then go from an abstract functional minimization to a minimization of the multidimensional function $\Omega(\boldsymbol{\alpha}) = \Omega [U_{\boldsymbol{\alpha}}^{\mathrm{bias}}]$. The elements of the gradient $\nabla \Omega(\boldsymbol{\alpha})$ are defined as
@@ -1415,7 +1415,7 @@ This could for example be a tensor product of one-dimensional basis functions li
 
 The \hyperlink{ref:targetdist}{target distribution} $p_{\mathrm{tg}}(\vz)$ can be chosen freely by the user. However, one needs to keep in mind that it should be chosen such that the sampling is easier than in the equilibrium \hyperlink{ref:Distribution} {distribution} . The most straightforward choice would be a uniform \hyperlink{ref:targetdist}{target distribution}, such that the aim to completely cancel out the \hyperlink{ref:FES} {FES} and flatten the sampling in the \hyperlink{ref:CV} {CV} space. However, that is generally not optimal. Instead it is better to only enhance \hyperlink{ref:CV} {CV} fluctuations to a certain degree and thus only partly cancel out the \hyperlink{ref:FES} {FES}~\cite{Valsson-JCTC-2015}. We can achieve this by employing a well-tempered distribution as in Equation~\ref{eq:wtmetad_wtdist} (see Figure~\ref{fig:MetaD}). The bias factor $\gamma$ determines how much we enhance \hyperlink{ref:CV} {CV} fluctuations. The well-tempered distribution is unknown \textit{a priori} so it needs be determined iteratively~\cite{Valsson-JCTC-2015}.
 
-Note that in variationally enhanced sampling, we generally do not need to account for time-dependent constants as in metadynamics when performing \hyperlink{ref:Reweighting} {reweighting}. It is sufficient to include the bias potential in the weights (see Equation~\ref{eq:reweighting_bias_potential}). In other words, we can obtain the unbiased equilibrium average of an observable as 
+Note that in variationally enhanced sampling, we generally do not need to account for time-dependent constants as in metadynamics when performing \hyperlink{ref:Reweighting} {reweighting}. It is sufficient to include the bias potential in the weights (see Equation~\ref{eq:reweighting_bias_potential}). In other words, we can obtain the unbiased equilibrium average of an observable as
 \begin{equation}
 \label{ves_reweighting}
 \langle O(\vx) \rangle = \frac{\langle O(\vx)
@@ -1425,11 +1425,11 @@ e^{
 U_{\boldsymbol{\alpha}}^{\mathrm{bias}}(\xi(\vx))
 }\rangle_{\tilde U_{\boldsymbol{\alpha}}}}
 {\left\langle
-e^{\beta 
+e^{\beta
 U_{\boldsymbol{\alpha}}^{\mathrm{bias}}(\xi(\vx))
-} \right\rangle_{\tilde U_{\boldsymbol{\alpha}}}}, 
+} \right\rangle_{\tilde U_{\boldsymbol{\alpha}}}},
 \end{equation}
-where $\langle \cdots \rangle_{\tilde U_{\boldsymbol{\alpha}}}$ indicates an \hyperlink{ref:ensemble_average} {ensemble average} in the biased simulation  This \hyperlink{ref:Reweighting} {reweighting} procedure assumes a quasi-stationary bias potential and thus is valid after a short initial transient (i.e., once the variational parameters $\boldsymbol{\alpha}$ are no longer changing substantially). 
+where $\langle \cdots \rangle_{\tilde U_{\boldsymbol{\alpha}}}$ indicates an \hyperlink{ref:ensemble_average} {ensemble average} in the biased simulation  This \hyperlink{ref:Reweighting} {reweighting} procedure assumes a quasi-stationary bias potential and thus is valid after a short initial transient (i.e., once the variational parameters $\boldsymbol{\alpha}$ are no longer changing substantially).
 
 The \hyperlink{ref:FES} {FES} can be estimated directly from the bias potential though Equation~\ref{ves_biaspotential}. Furthermore, the \hyperlink{ref:FES} {FES}, both for the biased \hyperlink{ref:CV} {CV}s and for any other \hyperlink{ref:CV} {CV}s, can be obtained through \hyperlink{ref:Reweighting} {reweighting} by using $O(\vx) = \delta(\vz-\xi(\vx))$ in Equation~\ref{ves_reweighting} (see Equation~\ref{eq:fes_definition}). For the reweighted FES, we can also estimate error bars. As for metadynamics, it is a good practice to estimate the \hyperlink{ref:FES} {FES} both from the bias potential and through \hyperlink{ref:Reweighting} {reweighting} and compare the results. Furthermore, in cases where the bias potential might not have sufficient variational flexibility to represent the underlying \hyperlink{ref:FES} {FES}, the reweighted results can be more accurate.
 
@@ -1450,7 +1450,7 @@ Variationally enhanced sampling is implemented in the VES Code module of PLUMED 
 \subsubsection{Wang-Landau and other adaptive biasing potential methods using the potential energy as a collective variable}
 \label{sec:abp_energy}
 
-A certain category of enhanced sampling methods can be loosely defined as \hyperlink{ref:Adaptive} {adaptive} biasing potential methods using the potential energy $U$ as a CV, even though they might not be explicitly formulated in terms of a bias potential. The most well-known example in this category is the Wang-Landau method~\footnote{The Wang-Landau procedure for converging weights can also be used with other algorithms with discrete states, such as the \hyperlink{ref:ExpEns} {expanded ensemble} algorithms; see Section~\ref{sec:singlestate} for further details}~\cite{wang-landau:prl:2001:wang-landau}. 
+A certain category of enhanced sampling methods can be loosely defined as \hyperlink{ref:Adaptive} {adaptive} biasing potential methods using the potential energy $U$ as a CV, even though they might not be explicitly formulated in terms of a bias potential. The most well-known example in this category is the Wang-Landau method~\footnote{The Wang-Landau procedure for converging weights can also be used with other algorithms with discrete states, such as the \hyperlink{ref:ExpEns} {expanded ensemble} algorithms; see Section~\ref{sec:singlestate} for further details}~\cite{wang-landau:prl:2001:wang-landau}.
 
 What unites many of these methods is that they aim to sample a potential energy distribution $p_{\mathrm{tg}}(U)$ (i.e., a target potential energy distribution) that is broadened or expanded as compared to the unbiased distribution corresponding to the simulation temperature. Thus, they can be considered as sampling from a ensemble where the sampling should be easier~\footnote{sometimes called a generalized ensemble in the literature, see Section~\ref{sec:generalized-ensemble}.}. A well known example of this is the multicanonical (or multithermal) ensemble where the aim to sample the potential energy near uniformly in a given range~\cite{Berg1992_Multicanonical}. The idea can also be extended to multithermal-multibaric simulations by incorporating the volume as a variable whose dynamics is biased or modified~\cite{Okumura_MultiTP_2004,Shell_MultiTP_2002}. Furthermore, sometime only a subset of the potential energy is used to better focus the sampling enhancement~\cite{Yang_SITS_2009}. Other methods in this category include for example
 the multicanonical ensemble~\cite{Berg1992_Multicanonical},
@@ -1466,7 +1466,7 @@ U_\mathrm{bias}(U) = - A(U) -\frac{1}{\beta} \ln p_{\mathrm{tg}}(U) = - U + \fra
 \end{equation}
 where $\Omega(U) = \int \delta(U-U(\vx)) \, d\vx$ is the configurational \hyperlink{ref:density_of_states}{density of states} that is related to the free energy as function of $U$ through $A(U)=U - \frac{1}{\beta} \ln \Omega(U)$, and we ignore unimportant constants. Therefore, we can loosely define these methods as adaptive \hyperlink{ref:biasingE} {biasing} potential methods using the potential energy $U$ as a \hyperlink{ref:CV} {CV}. From this equation, we can also see a certain theoretical equivalence between methods that work with the density of states, such as Wang-Landau sampling and statistical temperature MD, and methods that work with the free energy, such as metadynamics, see Ref~\cite{Junghans2014wte-wl} for further discussion on this point.
 
-Furthermore, closely related to this category are accelerated MD~\cite{Hamelberg2004} and Gaussian-accelerated MD~\cite{Miao2017, Wang2021}. These methods employ a bias potential acting on the potential energy (or generally a subset of it, e.g., only the dihedral angle terms of the potential energy) to lower the energy barriers of specific transitions. These methods do not directly aim to sample a given \hyperlink{ref:targetdist} {target distribution}, but rather employ a bias potential (e.g., a harmonic potential in the case of Gaussian-accelerated MD) that is designed to lower energy barriers of specific transitions. The bias potential depends on a few so-called boost parameters that are generally \hyperlink{ref:Adaptive} {adaptively} determined through a series of equilibration runs. 
+Furthermore, closely related to this category are accelerated MD~\cite{Hamelberg2004} and Gaussian-accelerated MD~\cite{Miao2017, Wang2021}. These methods employ a bias potential acting on the potential energy (or generally a subset of it, e.g., only the dihedral angle terms of the potential energy) to lower the energy barriers of specific transitions. These methods do not directly aim to sample a given \hyperlink{ref:targetdist} {target distribution}, but rather employ a bias potential (e.g., a harmonic potential in the case of Gaussian-accelerated MD) that is designed to lower energy barriers of specific transitions. The bias potential depends on a few so-called boost parameters that are generally \hyperlink{ref:Adaptive} {adaptively} determined through a series of equilibration runs.
 
 
 \subsection{Adaptive biasing force (ABF)}
@@ -1480,7 +1480,7 @@ Furthermore, closely related to this category are accelerated MD~\cite{Hamelberg
     \label{fig:ABF}
 \end{figure}
 
-The \hyperlink{ref:Adaptive} {adaptive} biasing force method (ABF)\cite{Darve2001, Comer2015} belongs to the same category of methods as the adaptive \hyperlink{ref:biasingE} {biasing} potential methods~\ref{fig:scheme}. Contrary to those, however, it is rooted in free energy estimation by thermodynamic integration (Section~\ref{sec:fe_estimators:TI}).
+The \hyperlink{ref:Adaptive} {adaptive} biasing force method (ABF)~\cite{Darve2001, Comer2015} belongs to the same category of methods as the adaptive \hyperlink{ref:biasingE} {biasing} potential methods~\ref{fig:scheme}. Contrary to those, however, it is rooted in free energy estimation by thermodynamic integration (Section~\ref{sec:fe_estimators:TI}).
 In ABF, the gradient of the free energy with respect to selected \hyperlink{ref:CV} {CV}s $\vz = \xi(\vx)$ is estimated, and that estimate is used to apply a time-dependent external force $\vF^\mathrm{ABF}_t(\vz)$ that counteracts the estimated free energy gradient, enhancing sampling along those coordinates.
 
 The principle is the following (Figure ~\ref{fig:ABF}):
@@ -1488,7 +1488,7 @@ The principle is the following (Figure ~\ref{fig:ABF}):
  \item A small number of \hyperlink{ref:CV} {collective variables} slow degrees of freedom $\vz=\xi(\vx)$  are chosen.
  \item In the simulation, the gradient of the free energy \hyperlink{ref:FES} {surface} $A(\vz)$  is estimated as:
 \begin{equation}
-    \nabla_\vz A(\vz) = - \left\langle \vF_\xi(\vx)  \right\rangle_{\xi(\vx) = \vz}
+    \nabla_\vz A(\vz) = - \left\langle \vF_\xi(\vx)  \right\rangle_{\xi(\vx) = \vz}.
 \end{equation}
 That is, as the conditional \hyperlink{ref:ensemble_average} {ensemble average} of a collective force $\vF_\xi(\vx)$ at a given value of $\xi(\vx)$.
  \item When sufficient sampling (determined by the adaptation rate) is collected to have a reliable estimate of the average force at the current value of $\vz$, a \hyperlink{ref:biasingE} {biasing} force $\vF^\mathrm{ABF}_t(\vz)$ equal to the opposite of this average is applied.
@@ -1585,16 +1585,16 @@ ABF-FUNN is part of SSAGES~\cite{Sidky2018}.
 \section{Generalized ensemble and replica exchange methods}
 \label{sec:generalized-ensemble}
 
-A broad category of simulation methodologies known as \hyperlink{ref:GenEns} {generalized ensemble}~\cite{okamoto:biopolymers:2001:generalized-ensemble} (also sometimes referred to \emph{extended ensemble}~\cite{iba:intl-j-mod-phys-c:2001:extended-ensemble}) algorithms have become popular over the last two decades. These methods follow a strategy that is orthogonal to the methods presented so far: in this class of methods, the original configurational \hyperlink{ref:Distribution} {distribution}  is preserved, and the sampling is enhanced by exploiting transitions to other ensembles (Figure~\ref{fig:scheme}). 
+A broad category of simulation methodologies known as \hyperlink{ref:GenEns} {generalized ensemble}~\cite{okamoto:biopolymers:2001:generalized-ensemble} (also sometimes referred to \emph{extended ensemble}~\cite{iba:intl-j-mod-phys-c:2001:extended-ensemble}) algorithms have become popular over the last two decades. These methods follow a strategy that is orthogonal to the methods presented so far: in this class of methods, the original configurational \hyperlink{ref:Distribution} {distribution}  is preserved, and the sampling is enhanced by exploiting transitions to other ensembles (Figure~\ref{fig:scheme}).
 The main  algorithmic classes in this category are \hyperlink{ref:ReplEx} {replica exchange},~\cite{geyer:conference-proceedings:1991:replica-exchange} which includes parallel tempering~\cite{hukushima-nemoto:j-phys-soc-jpn:1996:parallel-tempering,hansmann:chem-phys-lett:1997:parallel-tempering-monte-carlo,sugita-okamoto:chem-phys-lett:1999:parallel-tempering-md} and Hamiltonian exchange~\cite{sugita-kitao-okamoto:jcp:2000:hamiltonian-exchange,fukunishi-watanabe-takada:jcp:2002:hamiltonian-exchange,jang-shin-pak:prl:2003:hamiltonian-exchange,kwak-hansmann:prl:2005:hamiltonian-exchange}, among others, and the serial equivalent, the method of \hyperlink{ref:ExpEns} {expanded ensemble}s~\cite{lyubartsev:jcp:1992:expanded-ensembles}, which includes simulated tempering~\cite{marinari-parisi:europhys-lett:1992:simulated-tempering,geyer-thompson:j-am-stat-assoc:1995:expanded-ensembles} and simulated scaling~\cite{li-fajer-yang:jcp:2007:simulated-scaling}.
 
 In both \hyperlink{ref:ReplEx} {replica exchange} and \hyperlink{ref:ExpEns} {expanded ensemble} algorithms, a mixture of thermodynamic states are sampled within the same simulation framework. Simulations are able to access all of the  thermodynamic states through a stochastic hopping process between these thermodynamic states.  In the rest of the discussion of both \hyperlink{ref:ReplEx} {replica exchange} and expanded ensembles, we will often use ``states'' as shorthand for thermodynamically defined \hyperlink{ref:Macrostate} {macrostate}s, which all share the same configuration space $\Sigma$, but each of which have different probabilities due to the differences in $T$, $P$, or Hamiltonian parameters.
 
 In \hyperlink{ref:ExpEns} {expanded ensemble} simulations, the states are explored in a single simulation via a biased random walk in state space; in \hyperlink{ref:ReplEx} {replica exchange} simulations, multiple coupled simulations are carried out in parallel, and periodically the simulations exchange thermodynamic states with each other, keeping the same number of simulations at each state. Both methods, if implemented correctly, and potentially after an initial equilibration stage, allow estimation of equilibrium expectations at each state as well as free energy differences between states.
 
-The primary reason for introducing switching between thermodynamic states is that the transitions between these different thermodynamic states can reduce correlation times in configurational sampling at any given thermodynamic state and increase sampling efficiency relative to straightforward sampling of a single state. This acceleration is because the simulations can ``go around''  kinetic barriers within any of these single states. This is done by escaping to a neighboring state where, by chance or better yet, by design, the free energy barriers are lower.  For this switching between states to work, each thermodynamic state must have neighbors which have a moderate overlap (perhaps 5-20\%, depending on the method) in the configuration space each samples. Overall state space must be connected, which means that there must exist pathways between all the states. 
+The primary reason for introducing switching between thermodynamic states is that the transitions between these different thermodynamic states can reduce correlation times in configurational sampling at any given thermodynamic state and increase sampling efficiency relative to straightforward sampling of a single state. This acceleration is because the simulations can ``go around''  kinetic barriers within any of these single states. This is done by escaping to a neighboring state where, by chance or better yet, by design, the free energy barriers are lower.  For this switching between states to work, each thermodynamic state must have neighbors which have a moderate overlap (perhaps 5-20\%, depending on the method) in the configuration space each samples. Overall state space must be connected, which means that there must exist pathways between all the states.
 
-This class of methods therefore only works when the states are designed to have overlap, such as \hyperlink{ref:Alchemical} {alchemical} intermediates, temperatures, or harmonic \hyperlink{ref:biasingE} {biasing} potentials, and not when the states are defined by values of a collective variable. One can however approximate the computation of a collective variable while still using an overlapping states method.  One can use series of harmonic \hyperlink{ref:biasingE} {biasing} functions with that are closely spaced enough to still overlap in sampled configurations. For example, if one was interested in the free energy as a function of the center of mass of two molecules, one could put a series of harmonic biases on these distance, with spring constants that allowed the distances to fluctuate by enough that neighboring simulations would share some visited distances with each other. Unlike the methods use partitioning of the collective variable, one is not guaranteed to get good sampling at each value of the collective variable if the harmonic potentials are too spread apart, or the spring constants are too strong. But because the states have overlap, all of the methods of analysis and simulation used for such simulations are the ones used for overlapping state methods.  This parallel between methods demonstrates again how many ways the different ``ingredients`` in free energy calculations can be combined.   
+This class of methods therefore only works when the states are designed to have overlap, such as \hyperlink{ref:Alchemical} {alchemical} intermediates, temperatures, or harmonic \hyperlink{ref:biasingE} {biasing} potentials, and not when the states are defined by values of a collective variable. One can however approximate the computation of a collective variable while still using an overlapping states method.  One can use series of harmonic \hyperlink{ref:biasingE} {biasing} functions with that are closely spaced enough to still overlap in sampled configurations. For example, if one was interested in the free energy as a function of the center of mass of two molecules, one could put a series of harmonic biases on these distance, with spring constants that allowed the distances to fluctuate by enough that neighboring simulations would share some visited distances with each other. Unlike the methods use partitioning of the collective variable, one is not guaranteed to get good sampling at each value of the collective variable if the harmonic potentials are too spread apart, or the spring constants are too strong. But because the states have overlap, all of the methods of analysis and simulation used for such simulations are the ones used for overlapping state methods.  This parallel between methods demonstrates again how many ways the different ``ingredients`` in free energy calculations can be combined.
 
 Because of their popularity, these algorithms for simulating multiple simulations with different states and their properties have been the subject of intense study over recent years.
 For example, given optimal weights, \hyperlink{ref:ExpEns} {expanded ensemble} simulations have been shown to have provably higher exchange acceptance rates than \hyperlink{ref:ReplEx} {replica exchange} simulations using the same set of thermodynamic states~\cite{park:pre:2008:simulated-tempering}.
@@ -1655,7 +1655,7 @@ One of the main limitations of \hyperlink{ref:ReplEx} {replica exchange} is the 
     \centering
 \begin{tabular}{c|c|c}
 \includegraphics[width=0.33\textwidth]{Figures/diagnostic_figures/goodmixing.png} & \includegraphics[width=0.33\textwidth]{Figures/diagnostic_figures/slowmixing.png}&
-\includegraphics[width=0.33\textwidth]{Figures/diagnostic_figures/sepmixing.png} 
+\includegraphics[width=0.33\textwidth]{Figures/diagnostic_figures/sepmixing.png}
 \end{tabular}
     \caption{Three examples of state indices plotted as a function of time for replica exchange simulations, plotted with a color gradient on the state index.  On the left, all replicas travel between all states multiple times, suggesting good mixing of states on this timescale.  In the center, exchanges are occurring slowly and not making the trip from top to bottom, suggesting that simulation might be more efficient if additional replicas were added, reducing the spacing between replicas were run. On the right, we have a bottleneck in the middle of the state space, preventing mixing of all the states together, even though states 0--4 and 5--9 can mix readily. For the similar expanded ensemble cases, see Figure~\ref{fig:diagnostic_expanded}.}
     \label{fig:diagnostic_replica}
@@ -1666,7 +1666,7 @@ If one is using temperature replica simulations, then the width of the energy di
 A common problem, even when the average overlap between simulations is reasonable, is to have a ``bottleneck'' where the set of simulations separates into two essentially independent set of simulations that only exchange between themselves. This usually defeats the purpose of the \hyperlink{ref:ReplEx} {replica exchange} simulation, since the simulations cannot move between all of the states, especially since the system of interest is often at one end of the chain of replicas, and the ``fastest'' system at the other. Plotting the state index of each of the replicas versus time can help reveal these sorts of issues.
 
 
-A related diagnostic quantity to look at is the matrix of transitions between states, where each entry correspond to the transitions from state $i$ to state $j$ (which ones are the rows and which ones are columns is a matter of convention).  One generally wants each replica to transition to another state at least 30\% of the time that exchanges are proposed; if replicas are transitioning at a slower rate, then sampling can be improved by increasing the spacing; or if some transitions are occurring more frequently than that, reallocating the spacing. However, if the spacing is \textit{too} small, then it will take too long for each replica visit all of the states, so there is a delicate balance. 
+A related diagnostic quantity to look at is the matrix of transitions between states, where each entry correspond to the transitions from state $i$ to state $j$ (which ones are the rows and which ones are columns is a matter of convention).  One generally wants each replica to transition to another state at least 30\% of the time that exchanges are proposed; if replicas are transitioning at a slower rate, then sampling can be improved by increasing the spacing; or if some transitions are occurring more frequently than that, reallocating the spacing. However, if the spacing is \textit{too} small, then it will take too long for each replica visit all of the states, so there is a delicate balance.
 
 
 One important note is that in the development of many \hyperlink{ref:ReplEx} {replica exchange} methods, there is frequently an assumption that the states contain some natural ordering, so that one can definitively say the configurations that result from simulations at $i$ are more similar to the configurations generated in state $i-1$ and $i+1$ than they are similar to any other states.  A number of methods of choosing how to exchange therefore assume this ordering, but a natural ordering may not exist in the general case.  Such an ordering is straightforward when states are selected points along a single \hyperlink{ref:Alchemical} {alchemical} variable $\lambda$ or temperature $T$, but when instead thermodynamic states are defined in a multidimensional space, say \emph{both} $T$ and $\lambda$, no such ordering may exist, and some of the schemes for exchange in replica exchange may not apply.
@@ -1744,7 +1744,7 @@ If we think of sampling this joint space in configuration and state in the conte
 \nu(k | \vx) &=& \frac{e^{g_k}q_k(\vx)}{\sum\limits_{k'=1}^K e^{g_{k'}}q_{k'}(\vx)} = \frac{e^{g_k - u_k(\vx)}}{\sum\limits_{k'=1}^K e^{g_{k'} - u_{k'}(\vx)}} .\label{equation:expanded-ensemble-gibbs-update}
 \end{eqnarray}
 
-Sampling from the conditional probability \hyperlink{ref:Distribution} {distribution} 
+Sampling from the conditional probability \hyperlink{ref:Distribution} {distribution}
 $\nu(\vx | k)$ is just standard molecular dynamics sampling that generates time-correlated samples. Fortunately, the sampling in $\nu(k | \vx)$ is often much simpler.   If we have
 discrete states which can be enumerated, we can simply calculate
 $u_k(\vx)$ for each state and select randomly the state $k$ to move to according to $\nu(k|\vx)$.  The
@@ -1850,7 +1850,7 @@ It is still not clear what the best approach is to initialize the biasing weight
     \centering
 \begin{tabular}{c|c|c}
 \includegraphics[width=0.33\textwidth]{Figures/diagnostic_figures/goodmixing_exp.png} & \includegraphics[width=0.33\textwidth]{Figures/diagnostic_figures/slowmixing_exp.png}&
-\includegraphics[width=0.33\textwidth]{Figures/diagnostic_figures/sepmixing_exp.png} 
+\includegraphics[width=0.33\textwidth]{Figures/diagnostic_figures/sepmixing_exp.png}
 \end{tabular}
     \caption{Three examples of the state index trajectory in an expanded ensemble simulation in one dimension. On the left, the simulation travels from top to bottom state multiple times, suggesting good mixing of states on this timescale.  In the center, jumps between states are occurring slowly, and the simulation is not spanning the entire replica range, suggesting the spacing between states may need to be decreased (i.e. overlap between states increased), or weights may need to be improved. On the right, we have a bottleneck in the middle of the states, preventing the overall simulation from mixing easily through the entire range of states. Although states and 0--4 and 5--9 can mix readily, the overall simulation timescales are slow, and the overlap and weights of that transition should be examined to improve sampling. For similar  replica exchange cases, see Figure~\ref{fig:diagnostic_replica}.}
     \label{fig:diagnostic_expanded}
@@ -1858,13 +1858,13 @@ It is still not clear what the best approach is to initialize the biasing weight
 
 \subsubsection{Convergence and diagnosing problems in expanded ensemble simulations}
 
-Unsurprisingly, measuring convergence and diagnostics for expanded ensemble are very similar to those of replica exchange.  A necessary (but not sufficient) requirement for expanded ensemble simulations to have converged is if all thermodynamic states are being visited evenly (or, if the target distribution is some other uneven distribution, according to that distribution). This equal visitation does not have to be exact; if the most visited states are visited twice as much as the least visited states, the free energies will still be accurately estimated. However, if not all states are visited, or some are visited significantly less (say, an order of magnitude) than others, the free energies of the unvisited states will most likely not be accurately estimated.  Note that there is an additional problem that can occur with expanded ensemble compared to replica exchange that can lead to poor transitions between states; not only can overlap between states be low, but the biases on each state can be poorly estimated, so both of these criteria must be checked. 
+Unsurprisingly, measuring convergence and diagnostics for expanded ensemble are very similar to those of replica exchange.  A necessary (but not sufficient) requirement for expanded ensemble simulations to have converged is if all thermodynamic states are being visited evenly (or, if the target distribution is some other uneven distribution, according to that distribution). This equal visitation does not have to be exact; if the most visited states are visited twice as much as the least visited states, the free energies will still be accurately estimated. However, if not all states are visited, or some are visited significantly less (say, an order of magnitude) than others, the free energies of the unvisited states will most likely not be accurately estimated.  Note that there is an additional problem that can occur with expanded ensemble compared to replica exchange that can lead to poor transitions between states; not only can overlap between states be low, but the biases on each state can be poorly estimated, so both of these criteria must be checked.
 
-As with replica exchange, another important quantity to measure is the movement of the auxiliary state variable over the total possible values; in one dimension, this means exploring the range from the lowest to the highest values (see Figure~\ref{fig:diagnostic_expanded}) If there is not a substantial number of transitions across the entire range, perhaps 20--40, then it is likely that the weights along the variable are not well-estimated. It is not uncommon to see good mixing of states in both the upper and lower range, but very few transitions in between these, which usually means that the free energy differences within the upper and lower ranges might be much better estimated than the overall free energy difference between these two groups of states.  
+As with replica exchange, another important quantity to measure is the movement of the auxiliary state variable over the total possible values; in one dimension, this means exploring the range from the lowest to the highest values (see Figure~\ref{fig:diagnostic_expanded}) If there is not a substantial number of transitions across the entire range, perhaps 20--40, then it is likely that the weights along the variable are not well-estimated. It is not uncommon to see good mixing of states in both the upper and lower range, but very few transitions in between these, which usually means that the free energy differences within the upper and lower ranges might be much better estimated than the overall free energy difference between these two groups of states.
 
-Similarly to replica exchange, one can also check the transition matrix generated from the counts or probabilities of going from state $i$ to state $j$, and one should decrease the spacing (or reallocate the spacing from better transitioning intervals to worse transitioning intervals) so that transitions occur approximately 30\% of the time.  As with replica exchange, tight spacing does increase the amount of time it takes for each replica to move back and forth between all states, so the proper balance must be struck. 
+Similarly to replica exchange, one can also check the transition matrix generated from the counts or probabilities of going from state $i$ to state $j$, and one should decrease the spacing (or reallocate the spacing from better transitioning intervals to worse transitioning intervals) so that transitions occur approximately 30\% of the time.  As with replica exchange, tight spacing does increase the amount of time it takes for each replica to move back and forth between all states, so the proper balance must be struck.
 
-Note that equal visitation of all states does not of course guarantee sampling in the coordinate space. The hope is that some expanded ensemble states can travel through the slow degrees of freedom faster than others, but this depends highly on how useful definition of the auxiliary states is. One must thus explicitly check the slow degrees of freedom of the system to see if enhanced sampling actually occurred. 
+Note that equal visitation of all states does not of course guarantee sampling in the coordinate space. The hope is that some expanded ensemble states can travel through the slow degrees of freedom faster than others, but this depends highly on how useful definition of the auxiliary states is. One must thus explicitly check the slow degrees of freedom of the system to see if enhanced sampling actually occurred.
 
 \subsubsection{Public implementations of expanded ensemble methods}
 
@@ -2248,7 +2248,7 @@ We would also like to thank the people who have commented on GitHub to help make
     \item REAP - Reinforcement Learning Based Adaptive Sampling
     \item REST - Replica Exchange Solute Tempering
     \item SAMS - Self-Adjusted Mixture Sampling
-    \item SGMD - Self-Guided Molecular Dynamics 
+    \item SGMD - Self-Guided Molecular Dynamics
     \item SGLD - Self-Guided Langevin Dynamics
     \item TALOS - Targeted Adversarial Learning Optimized Sampling
     \item TAMD - Temperature Accelerated Molecular dynamics
