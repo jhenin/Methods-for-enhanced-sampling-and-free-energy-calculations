@@ -776,7 +776,7 @@ For generality and cleanness of presentation, \hyperlink{ref:reduced} {reduced} 
 
 Given a set of sampled configurations that visits two states $i$ and $j$, their reduced \hyperlink{ref:FE} {free energy} difference $f_{ij}$ can be estimated by estimating free energies between states by taking the ratio of the time spent in each state, a process called Boltzmann inversion, by approximating Equation~\eqref{eq:BoltzmannDistr}:
 \begin{equation}
-\Delta f_{ij} = -\ln \frac{N_j}{N_i}
+\Delta f_{ij} = -\ln \frac{N_j}{N_i},
 \label{eq:boltzmann_inversion}
 \end{equation}
 where $f_{ij}$ is the \hyperlink{ref:reduced} {reduced} free energy, and $N_i$ and $N_j$ are the numbers of observed configurations in states $i$ and $j$.  This equation holds for whatever division into states one uses. However, this is only true if the simulation samples the equilibrium between states $i$ and $j$, or equivalently, if it is long enough such that many transitions between those states have been observed~\cite{No2009}. If a list of several states is defined, for example 1,2, \ldots,$K$, then estimates from neighboring states can be chained to compute relative free energies for the entire list of states, by estimating $f_{12} + f_{23} = -\ln \frac{N_2}{N_1} + -\ln \frac{N_3}{N_2} =   -\ln \frac{N_3}{N_1} = f_{13}$, and so forth. If the states are defined as bins along \hyperlink{ref:CV} {collective variable}s, this yields a (discretized) free energy \hyperlink{ref:FES} {profile} along those variables. This idea extends to the calculation of continuous probability \hyperlink{ref:Distribution} {distributions} and \hyperlink{ref:FES} {free energy surfaces}. In that case, the probability distribution can be estimated using a kernel density estimator (KDE) or a Gaussian Mixture Model (GMM)~\cite{Westerlund2017}.
@@ -793,7 +793,7 @@ The transition probabilities between states, which could be along one or more di
 
 If one is considering a simulation that allows transitions between two states $i$ and $j$, then this implies the average of the transition probabilities between states is equal to the ratio of the partition functions between the states of interest \cite{deOliveira:EPJB:1998,Wang:JoSP:2002,escobedo_transition_2006}. Specifically:
 \begin{equation}
-e^{f_j-f_i} = \frac{Z_i}{Z_j} = \frac{\left \langle  P_{i\rightarrow j}(x)\right\rangle}{\left \langle P_{j\rightarrow i}(x) \right \rangle}
+e^{f_j-f_i} = \frac{Z_i}{Z_j} = \frac{\left \langle  P_{i\rightarrow j}(x)\right\rangle}{\left \langle P_{j\rightarrow i}(x) \right \rangle},
 \end{equation}
 where $P_{i\rightarrow j}(x)$ is the probability of accepting a move from state $i$ to state $j$ proposed from configuration $\vx$. For simplicity we assume that the probability of moves proposed from $i$ to $j$ is equal to the probability of transition from $j$ to $i$; more general transitions can also be included~\cite{escobedo_transition_2006}. We can construct a matrix of all possible transitions between any pair of states; hence we can call this a transition count matrix or \textit{transition matrix}.
 
@@ -818,20 +818,20 @@ Thermodynamic integration is a family of free energy estimators that express the
 
 When the reduced potential energy is a function $u_\lambda$ of a smooth coupling parameter $\lambda$ that connects all states of interest (e.g. in \hyperlink{ref:Alchemical} {alchemical} perturbations), a continuous free energy $f(\lambda)$ is defined, the derivative of which is the ``mean force'' at a fixed value of $\lambda$:
 \begin{equation}
-\frac{\mathrm{d}f}{\mathrm{d}\lambda} =\left\langle \frac{\partial u_\lambda}{\partial \lambda} \right\rangle_\lambda
+\frac{\mathrm{d}f}{\mathrm{d}\lambda} =\left\langle \frac{\partial u_\lambda}{\partial \lambda} \right\rangle_\lambda,
 \label{eq:TI1}
 \end{equation}
-Where the averaging is over samples obtained with the given value of $\lambda$.
+where the averaging is over samples obtained with the given value of $\lambda$.
 
 If states $i$ and $j$ correspond to values $\lambda_i$ and $\lambda_j$ of the continuous coupling parameter, then the free energy difference between states $i$ and $j$, $\Delta f_{ij}$, is
 \begin{equation}
-\Delta f_{ij} = \int_{\lambda_i}^{\lambda_j}  \left\langle \frac{\partial u_\lambda}{\partial \lambda} \right\rangle_\lambda \mathrm{d}\lambda
+\Delta f_{ij} = \int_{\lambda_i}^{\lambda_j}  \left\langle \frac{\partial u_\lambda}{\partial \lambda} \right\rangle_\lambda \mathrm{d}\lambda.
 \label{eq:TI2}
 \end{equation}
 
 If $i$ and $j$ are neighboring states along $\lambda$ with a sufficiently small difference $\Delta \lambda_{ij}$, the integral can be approximated by the trapezoidal rule:
 \begin{equation}
-\Delta f_{ij} = \frac{\Delta \lambda_{ij}}{2}\left[\left\langle \frac{\partial u_\lambda}{\partial \lambda} \right\rangle_{\lambda_i} + \left\langle \frac{\partial u_\lambda}{\partial \lambda} \right\rangle_{\lambda_j}\right]
+\Delta f_{ij} = \frac{\Delta \lambda_{ij}}{2}\left[\left\langle \frac{\partial u_\lambda}{\partial \lambda} \right\rangle_{\lambda_i} + \left\langle \frac{\partial u_\lambda}{\partial \lambda} \right\rangle_{\lambda_j}\right].
 \label{eq:TI}
 \end{equation}
 
@@ -842,20 +842,20 @@ Other numerical integration formulas can of course be used, although usually the
 
 A generalization of Equation~\ref{eq:TI1} holds for the gradient of the \hyperlink{ref:reduced} {reduced} \hyperlink{ref:FES} {FES} $a(\vz)$ over a single \hyperlink{ref:CV} {collective variable} $z = \xi(\vx)$:
 \begin{equation}
-\frac{\mathrm{d} a(z)}{\mathrm{d} z} = - \left\langle F_\xi(\vx)  \right\rangle_{\xi(\vx) = z}
+\frac{\mathrm{d} a(z)}{\mathrm{d} z} = - \left\langle F_\xi(\vx)  \right\rangle_{\xi(\vx) = z},
     \label{eq:TI_CV}
 \end{equation}
-Where the average is over all configuration with $\xi(\vx) = z$.
+where the average is over all configuration with $\xi(\vx) = z$.
 $F_\xi$ is a \textit{generalized force} that includes two terms:
 \begin{itemize}
     \item the energy gradient with respect to \hyperlink{ref:CV} {collective variable}s;
-    \item a geometric, \textit{Jacobian} term due to the curvature of the isosurfaces of a nonlinear CV $\xi$ (see~\cite{lelievre-rousset-stoltz-07-a, Henin2010a, Comer2015} for details).
+    \item a geometric, \textit{Jacobian} term due to the curvature of the isosurfaces of a nonlinear CV $\xi$ (see Refs~\cite{lelievre-rousset-stoltz-07-a, Henin2010a, Comer2015} for details).
 \end{itemize}
 
 More precisely, the ``free energy gradient with respect to the CVs'' is a partial derivative, which is not well-defined unless one specifies a complete set of generalized coordinates including the CVs~\cite{Henin2004}.
 This complicated or even intractable process can be circumvented~\cite{denOtter2000, Ciccotti2005} by noting that the force may be projected onto a CV $\xi_i$ along an arbitrary vector field  $\vb_i$, verifying for all $i,j$:
 \begin{equation}
-    \vb_i \cdot \nabla_\vx \xi_j = \delta_{i,j}
+    \vb_i \cdot \nabla_\vx \xi_j = \delta_{i,j},
 \end{equation}
 that is, each $\vb_i$ has a scalar product of 1 with the gradient of $\xi_i$ and is orthogonal to the gradients of all other CVs.
 In the case of a single CV, one possible choice of $\vb$ that satisfies this condition is to make it proportional to the gradient of $\xi$ with an appropriate normalization factor:
@@ -864,7 +864,7 @@ $ \vb(\vx) = 1/(|\nabla \xi|^2) \nabla \xi$.
 Then the following expression for the generalized force along coordinate $\xi_i$ holds~\cite{Ciccotti2005}:
 \begin{equation}
 \label{eq:TI_Ciccotti}
-\vF_{\xi_i}(\vx) = - \vb_i(\vx) \cdot \nabla_\vx u(\vx) + \nabla_\vx \cdot \vb_i(\vx)
+\vF_{\xi_i}(\vx) = - \vb_i(\vx) \cdot \nabla_\vx u(\vx) + \nabla_\vx \cdot \vb_i(\vx),
 \end{equation}
 where the first term is the projection of atomic forces $-\nabla_\vx u$ onto the CV, and the second is the Jacobian term described above, computed as the divergence of $\vb_i$.
 
@@ -876,12 +876,12 @@ Integrating the gradient to obtain the \hyperlink{ref:FES} {free energy surface}
 Take the example of a \hyperlink{ref:CV} {collective variable} measuring the distance $r$ between two particles. Here, the gradient of the \textit{free energy \hyperlink{ref:FES} {surface}} depends on the geometry of the CV. Given a complete coordinate transform from Cartesian to generalized coordinates including $r$, which is necessary to define partial derivatives with respect to $r$, one may write~\cite{Henin2010a}:
 \begin{equation}
     \frac{\mathrm{d}a}{\mathrm{d}r} = \left\langle \frac{\partial u}{\partial r}
-    - \frac{2}{r} \right\rangle_{\xi(\vx) = r}
+    - \frac{2}{r} \right\rangle_{\xi(\vx) = r}.
     \label{eq:fes_grad}
 \end{equation}
 As mentioned in Section~\ref{sec:glossary}, the historic definition of the \hyperlink{ref:PMF} {``potential of mean force'' (PMF)} for $r$ is simply the potential arising from the mean force and corresponds to the first term in Equation~\ref{eq:fes_grad}:
 \begin{equation}
-    \frac{\mathrm{d} w}{\mathrm{d} r} = \left\langle \frac{\partial u}{\partial r} \right\rangle_{\xi(\vx) = r}
+    \frac{\mathrm{d} w}{\mathrm{d} r} = \left\langle \frac{\partial u}{\partial r} \right\rangle_{\xi(\vx) = r}.
     \label{eq:pmf_grad}
 \end{equation}
 
@@ -902,8 +902,9 @@ These estimators (exponential averaging, BAR, MBAR and WHAM) rely on the overlap
 
 The total free energy difference between two such states is, by definition:
 \begin{align}
-    e^{-\Delta f_{ij}} &=  \frac{\int e^{-u_j} \, d\vx}{\int e^{-u_i} \, d\vx}\\
-    &= \frac{\int e^{-u_i}  e^{-(u_j-u_i)} \, d\vx}{\int e^{-u_i} \, d\vx}
+    e^{-\Delta f_{ij}} &=  \frac{\int e^{-u_j} \, d\vx}{\int e^{-u_i} \, d\vx}
+    \nonumber \\
+    &= \frac{\int e^{-u_i}  e^{-(u_j-u_i)} \, d\vx}{\int e^{-u_i} \, d\vx}.
 \end{align}
 On the right-hand side, one can recognize the expression for an \hyperlink{ref:ensemble_average} {ensemble average} in state $i$.
 Thus the free energy difference can be written:
@@ -929,12 +930,12 @@ the method~\cite{bennett:jcp:1976:fe-estimate,shirts_comparison_2005,fenwick-esc
 
 One standard approach is to derive the thermodynamic identity:
 \begin{eqnarray}
-\Delta f_{ij} = \ln \frac{\left\langle \frac{1}{1 + \exp(-\Delta u_{ij}+c))}\right\rangle_j}{\left \langle \frac{1}{1 + \exp(\Delta u_{ij}-c)}\right\rangle_i} + c-\ln\frac{N_j}{N_i}
+\Delta f_{ij} = \ln \frac{\left\langle \frac{1}{1 + \exp(-\Delta u_{ij}+c))}\right\rangle_j}{\left \langle \frac{1}{1 + \exp(\Delta u_{ij}-c)}\right\rangle_i} + c-\ln\frac{N_j}{N_i},
 \end{eqnarray}
-Where $c$ is an arbitrary constant. This expression is an asymptotically unbiased estimator (meaning, if enough data is collected, it will converge to the correct answer) for any choice
+where $c$ is an arbitrary constant. This expression is an asymptotically unbiased estimator (meaning, if enough data is collected, it will converge to the correct answer) for any choice
 of $c$. However, one can prove that the lowest variance estimate of free energy is obtained when $c=\Delta f_{ij}$~\cite{bennett:jcp:1976:fe-estimate}. To find $\Delta f_{ij}$, this equation needs to be solved self-consistently, resulting in the equation one can solve for $c$, and therefore $f_{ij}$ as well:
 \begin{equation}
-\sum_{i=1}^{N_j} \frac{1}{1 + \exp(-\Delta u_{ij}+c))} - \sum_{j=1}^{N_i} \frac{1}{1 + \exp(\Delta u_{ij})-c} = 0
+\sum_{i=1}^{N_j} \frac{1}{1 + \exp(-\Delta u_{ij}+c))} - \sum_{j=1}^{N_i} \frac{1}{1 + \exp(\Delta u_{ij})-c} = 0.
 \end{equation}
 This can be solved by a number of numerical techniques as implemented in many codes, such as $\texttt{pymbar}$~\cite{shirts-chodera:jcp:2008:mbar} and $\texttt{gmx bar}$~\cite{lindahl_2021}.
 
@@ -946,10 +947,10 @@ Several variants, which can be useful in specific cases, use fixed $c$~\cite{fen
 If we carry out simulations at $K$ different thermodynamic states,
 then the free energies of all of the states can be estimated as:
 \begin{equation}
-f_i = -\ln \left[\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\sum_k N_k e^{f_k-u_k(\vx_n)}}\right]
+f_i = -\ln \left[\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\sum_k N_k e^{f_k-u_k(\vx_n)}}\right],
 \label{eq:MBAR}
 \end{equation}
-Where $N$ is a sum over all of the samples collected at any of the $K$ states.
+where $N$ is a sum over all of the samples collected at any of the $K$ states.
 Since there is one equation for each of the free energies $f_i$ from each of the $K$ states, this leads to a series of $K$ that must be solved for the set of $f_i$~\footnote{Effectively, there are only $K-1$ independent free energies since the set of free energies has an arbitrary reference zero.}. This is a set of implicit equations since the $f_k$ appear on both sides of the equations. Similarly to BAR, there are a standard ways to solve this set of equations implemented in a number of different codes~\cite{shirts-chodera:jcp:2008:mbar,tan_binless_2012,Zhang:JPCL:2015}.
 
 MBAR also allows the computation of high precision uncertainties in the $\Delta
@@ -960,7 +961,7 @@ MBAR can also be seen as exponential averaging to \hyperlink{ref:targetdist} {ta
 \begin{eqnarray}
 f_i &=& -\ln \left[\frac{1}{N}\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\nu_{mix}(\vx_n)}\right] \nonumber\\
 \nu_{mix}(\vx) &=& \sum_k \frac{N_k}{N} e^{f_k-u_k(\vx)} \nonumber \\
-               &=& \sum_k \frac{N_k}{N} \nu_k(\vx)
+               &=& \sum_k \frac{N_k}{N} \nu_k(\vx).
 \end{eqnarray}
 
 
@@ -970,10 +971,11 @@ In its original formulation, WHAM consists in applying Boltzmann inversion (i.e.
 
 One can start from the MBAR equations to derive WHAM as well. If one can histogram the data by energy into $i$ bins, then the sum over $n$ \textit{samples} in MBAR becomes a sum over $M$ energy \textit{bins} instead. The iterative equations of WHAM can be written as:
 \begin{eqnarray}
-P_{i,k} = \frac{\sum_{k=1}^K n_{k,i} e^{-u_{k,i}}}{\sum_{j=1}^{K}n_k {e^{f_j-u_{j,i}}}}\qquad
-e^{-f_k} = \sum_{m=1}^M P_{m,k}
+P_{i,k} &=& \frac{\sum_{k=1}^K n_{k,i} e^{-u_{k,i}}}{\sum_{j=1}^{K}n_k {e^{f_j-u_{j,i}}}}
+\\
+e^{-f_k} &=& \sum_{m=1}^M P_{m,k},
 \end{eqnarray}
-Where $n_{k,i}$ are the counts in each bin from the $k$th state, $P_{i,k}$ is the probability distribution of bin $i$ in the $k$th state,  $u_{k,i}$ is the energy of the system in the $i$th bin and $k$th state~\cite{kumars:WHAM}. These are equivalent; in the WHAM equations, instead of directly summing over all $n$ samples, we first sum over all of the samples in each bin $n_{k,i}$ from each state to get $P_{i,k}$, and then sum over all bins to get the free energy. When the bins in WHAM are shrunk to have zero width (i.e. down to $\delta$ functions), then the WHAM equations become equivalent to MBAR, as the sum again becomes a sum over samples. If there are many samples, WHAM can be significantly faster than MBAR. However, WHAM only gives similar results to MBAR if the bins are narrow enough for the energy $u$ and probability $P_i$ to both be approximately constant within a bin.
+where $n_{k,i}$ are the counts in each bin from the $k$th state, $P_{i,k}$ is the probability distribution of bin $i$ in the $k$th state,  $u_{k,i}$ is the energy of the system in the $i$th bin and $k$th state~\cite{kumars:WHAM}. These are equivalent; in the WHAM equations, instead of directly summing over all $n$ samples, we first sum over all of the samples in each bin $n_{k,i}$ from each state to get $P_{i,k}$, and then sum over all bins to get the free energy. When the bins in WHAM are shrunk to have zero width (i.e. down to $\delta$ functions), then the WHAM equations become equivalent to MBAR, as the sum again becomes a sum over samples. If there are many samples, WHAM can be significantly faster than MBAR. However, WHAM only gives similar results to MBAR if the bins are narrow enough for the energy $u$ and probability $P_i$ to both be approximately constant within a bin.
 
 \section{Out-of-equilibrium / driven methods}
 \label{sec:Out-of-equilibrium_driven}
