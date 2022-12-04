@@ -1926,11 +1926,10 @@ The extended \hyperlink{ref:Langevin} {Langevin dynamics} reads:
     + \sqrt{ \frac{2 \gamma M}{\beta}} \; d\mathbf{W}_t \\
     d\lambda &= m_\lambda^{-1} p_\lambda \, dt\\
     d p_\lambda &= \left( k^\mathrm{ext} (\xi(\vx) - \lambda)  - \overline\gamma p_\lambda \right) dt
-    + \sqrt{ \frac{2 \bar\gamma m_\lambda}{ \overline\beta}} dW_t
+    + \sqrt{ \frac{2 \bar\gamma m_\lambda}{ \overline\beta}} dW_t.
 \end{array}
 \right.
 \end{equation}
-
 Note that the Langevin equation on $\lambda$ is based on a separate temperature factor $\overline \beta$ and friction coefficient $\overline{\gamma}$.
 
 TAMD relies on the regime where $\overline{\gamma} \gg \gamma$ (the extended dynamics is slower than the original one) and $\beta \gg \frac{1}{k^\mathrm{ext}}$ (tight coupling). Then the dynamics on $\lambda$ becomes uncoupled from the dynamics of $\vx$ and converges~\cite{MV06} to an effective dynamics of the form (in the overdamped case $\gamma \gg 1$):
