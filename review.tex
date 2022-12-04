@@ -1224,7 +1224,7 @@ c(t) =
 Here the biased partition function $\tilde{Z}(t)$ is explicitly time-dependent due to dependence on the \hyperlink{ref:Adaptive} {adaptive} metadynamics bias potential.
 The unbiased and biased partition functions can be written as integrals over either the coordinates $\vx$ or the CVs $\vz$,
 \begin{align}
-& Z = \int e^{-\beta U(\vx) } \, d\vx = \int e^{-\beta A(\vz) } \, d\vz, \\
+& Z = \int e^{-\beta U(\vx) } \, d\vx = \int e^{-\beta A(\vz) } \, d\vz \\
 & \tilde{Z}(t) = \int e^{-\beta\left [ U(\vx) + U_{t}^\mathrm{bias}(\xi(\vx)) \right]} \, d\vx = \int e^{-\beta\left [ A(\vz) + U_{t}^\mathrm{bias}(\vz) \right]} \, d\vz.
 \end{align}
 We can thus write the time-dependent constant $c(t)$ as \begin{equation}
@@ -1613,17 +1613,17 @@ In a replica exchange simulation, we consider $K$ simulations, with one simulati
 
 The current state of the \hyperlink{ref:ReplEx} {replica exchange} simulation at any time is given by $(X,S)$, where $X$ is a vector of the configurations of \emph{all} of the replicas, $X \equiv \{\vx_1, \vx_2, \ldots, \vx_K\}$, and $S \equiv\{s_1,\ldots,s_K\} \in \mathcal{S}_K$ is a permutation of the state labels $\{1, \ldots, K\}$ associated with each of the replica configurations $\{\vx_1, \ldots, \vx_K\}$. Then the joint probability density of the entire set of all simulations $\mathcal{Q}$ is given by
 \begin{eqnarray}
-\mathcal{Q}(X, S) &\propto& \prod_{i=1}^{K} \nu_{s_i}(\vx_i) \propto \exp\left[-\sum_{i=1}^K u_{s_i}(\vx_i)\right]
+\mathcal{Q}(X, S) &\propto& \prod_{i=1}^{K} \nu_{s_i}(\vx_i) \propto \exp\left[-\sum_{i=1}^K u_{s_i}(\vx_i)\right],
 \label{eq:parallereplica}
 \end{eqnarray}
-Where $\mu_{s_i}$ and $u_{s_i}$ are the normalized \hyperlink{ref:Distribution}{probability distributions} and the \hyperlink{ref:reduced}{reduced} energies of the $s_i$ state, respectively.
+where $\mu_{s_i}$ and $u_{s_i}$ are the normalized \hyperlink{ref:Distribution}{probability distributions} and the \hyperlink{ref:reduced}{reduced} energies of the $s_i$ state, respectively.
 The conditional densities, upon specifying a particular order of the replicas $S$, is given by:
 \begin{eqnarray}
-\mathcal{Q}(X | S) &=& \prod_{i=1}^K \left[ \frac{e^{-u_{s_i}(\vx_i)}}{\int_\Omega dx \, e^{-u_{s_i}(\vx_i)}}\right]
+\mathcal{Q}(X | S) &=& \prod_{i=1}^K \left[ \frac{e^{-u_{s_i}(\vx_i)}}{\int_\Omega dx \, e^{-u_{s_i}(\vx_i)}}\right],
 \end{eqnarray}
 and
 \begin{eqnarray}
-\mathcal{Q}(S | X) &=& \frac{\exp\left[- \sum\limits_{i=1}^K u_{s_i}(\vx_i) \right]}{\sum\limits_{S' \in \mathcal{S}_K} \exp\left[- \sum\limits_{i=1}^K u_{s'_i}(\vx_i) \right]}
+\mathcal{Q}(S | X) &=& \frac{\exp\left[- \sum\limits_{i=1}^K u_{s_i}(\vx_i) \right]}{\sum\limits_{S' \in \mathcal{S}_K} \exp\left[- \sum\limits_{i=1}^K u_{s'_i}(\vx_i) \right]}.
 \end{eqnarray}
 Note that this is more complicated than the equations for a single simulation: we need an equation that describes the state of all of the replicas, since they all are coupled together. With the conditional densities, we can then describe how to make jumps in coordinate space (which just ends up being independent, standard dynamics in each replica) and jumps in permutations of the replica (described in more detail below).
 
@@ -1631,7 +1631,7 @@ In the most standard \hyperlink{ref:ReplEx} {replica exchange} simulation algori
 For example, one such scheme involves attempting to exchange either the set of state index pairs $\{(1,2), (3,4), \ldots\}$ or $\{(2,3), (4,5), \ldots\}$, chosen with equal probability. Each state index pair $(i,j)$ exchange attempt is carried out independently, with the exchange of states $i$ and $j$ associated with configurations $\vx_i$ and $\vx_j$, respectively, accepted with the standard \hyperlink{ref:MetropolisMonteCarlo} {Metropolis} probability
 \begin{eqnarray}
 \label{eq:re_exchange_prob}
-P_\mathrm{accept}(\vx_i, i, \vx_j, j) &=& \min\left\{ 1, \frac{e^{-[u_i(\vx_j)+u_j(\vx_i)]}}{e^{-[u_i(\vx_i) + u_j(\vx_j)]}}\right\}
+P_\mathrm{accept}(\vx_i, i, \vx_j, j) &=& \min\left\{ 1, \frac{e^{-[u_i(\vx_j)+u_j(\vx_i)]}}{e^{-[u_i(\vx_i) + u_j(\vx_j)]}}\right\}.
 \label{eq:metropolis-replica}
 \end{eqnarray}
 However, it is also possible to sample from the space of all possible permutations, which can in some cases improve sampling~\cite{shirts_gibbssamp}.
@@ -1767,7 +1767,7 @@ histogram is updated by 1.  The weight $g_i$ of that state is updated by some us
 weight of the reference state is subtracted from all states after each step, as only the weight differences matter physically. As an algorithm, this is written as:
 \begin{eqnarray}
 h_{\mathrm{new}}(i) = h_{\mathrm{old}}(i) + 1 \\
-g_{i,\mathrm{new}} = g_{i,\mathrm{old}} - \delta
+g_{i,\mathrm{new}} = g_{i,\mathrm{old}} - \delta.
 \label{eq:wang-landau}
 \end{eqnarray}
 The Wang-Landau algorithm is self-correcting; if a state is visited more frequently than it should, its weight decreases, resulting in fewer visits to that state.  Eventually, the weight falls back to the correct range.  In the original Wang-Landau scheme, the $\delta$ increment is decreased during the simulation when the histogram $h(i)$ reaches a specified flatness criteria, meaning none of the histograms is lower than the average occupancy, often set at 80\%~\cite{wang-landau:prl:2001:wang-landau}.  When a sufficiently flat histogram is reached, $\delta$ is reduced by multiplying by a scaling factor $0<s<1$, typically $s=1/2$ as proposed in the original algorithm~\cite{wang-landau:prl:2001:wang-landau}, and the histograms are set to zero again.
@@ -1792,9 +1792,7 @@ A number of closely related methods have been developed that update multiple sta
 
 \paragraph{Transition matrix approaches}
 %JH \hyperlink{ref:MetropolisMonteCarlo} {Monte Carlo} Approaches}
-The simplest way to use this concept is to directly compute the transition matrix and calculate free energies, and thus the weights $g_k$ to use from this matrix~\cite{siderius_2013}. Assuming one uses \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo}, rather than collecting histograms, we collect the transitions from each state $i$ to $j$ in a matrix $C$
-
-It can be updated with any of the following:
+The simplest way to use this concept is to directly compute the transition matrix and calculate free energies, and thus the weights $g_k$ to use from this matrix~\cite{siderius_2013}. Assuming one uses \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo}, rather than collecting histograms, we collect the transitions from each state $i$ to $j$ in a matrix $C$. This matrix can be updated with any of the following:
 \begin{enumerate}
 \item Transitions actually performed (adding 1 if the transition occurs, 0 if it does not)\label{item:actual}
 \item The probability of acceptance of a proposed move whether or not it was accepted.\label{item:proposal}
@@ -1803,35 +1801,35 @@ It can be updated with any of the following:
 
 The free energy difference between any two states $i$ and $j$ can then be estimated, either at each step, or at some interval, as
 \begin{equation}
-f_{ij} = - \ln \langle C_{ij}/C_{ji} \rangle
+f_{ij} = - \ln \langle C_{ij}/C_{ji} \rangle,
 \label{eq:transitionmc}
 \end{equation}
-And the weights to apply can simply be set from $f$.
+and the weights to apply can simply be set from $f$.
 
 \paragraph{Asymptotically optimal weights}
 We can also update all weights simultaneously by \hyperlink{ref:Reweighting} {reweighting} the information gathered at the current state. Several variants of this approach have been proposed. These include the accelerated weight histogram (AWH) method~\cite{Lidmar2012} and the independently developed self-adjusted mixture sampling (SAMS)~\cite{tan_optimally_2017}.
 
 The basic idea of these variants is to use the \hyperlink{ref:GibbsSampler} {Gibbs sampler} to transition between states. After $N_x$ configurational updates with fixed state $i$, a new state $j$ is proposed using the \hyperlink{ref:GibbsSampler} {Gibbs sampler} probabilities $\alpha(j|\vx, i)$:
 \begin{equation}\label{eq:gibbsproposal}
-  \alpha(j|\vx, i) = \nu(i|\vx)
+  \alpha(j|\vx, i) = \nu(i|\vx),
 \end{equation}
 where $\nu(i|\vx)$ is given in Equation~\ref{equation:expanded-ensemble-gibbs-update}.
 
 In the self-adjusted mixture sampling variant, the weights are updated at each step. Using the transition rule defined in Equation~\ref{equation:expanded-ensemble-gibbs-update}, the rule for updating is:
 \begin{eqnarray}
-g_{i,new} = g_{i,old} - t^{-1}\nu(\vx|k)
+g_{i,new} = g_{i,old} - t^{-1}\nu(\vx|k),
 \end{eqnarray}
 where $t$ is a timescale that is ideally the number of uncorrelated steps in $(k,\vx)$ space that have been taken in the algorithm so far~\footnote{$t$ is not necessarily the number of timesteps taken so far in the simulation: if the correlation time in configuration space is slow, then updating the weights at every step, or updating them every step without a scaling factor to make their contribution smaller might lead to premature convergence of the biases on a subset of the conformational states.}.
 
 In the accelerated weight histogram approach, a histogram of the weights for each state is maintained during the simulation. The weight histogram is then updated using the computed $\nu(i|\vx)$ weights:
 \begin{equation}
-h_{\mathrm{new}}(i) = h_{\mathrm{old}}(i) + \nu(i|\vx)
+h_{\mathrm{new}}(i) = h_{\mathrm{old}}(i) + \nu(i|\vx).
 \label{eq:awh-weight-histogram}
 \end{equation}
 
 Every $N_I$ iterations, the simulation weights are updated according to:
 \begin{equation}
-g_{i,\mathrm{new}} = g_{i,\mathrm{old}} - \ln{\frac{h_{\mathrm{new}}(i)K}{N}}
+g_{i,\mathrm{new}} = g_{i,\mathrm{old}} - \ln{\frac{h_{\mathrm{new}}(i)K}{N}},
 \label{eq:awh_free_energy_up}
 \end{equation}
 where $N$ is the total number of samples collected up to that point and $K$ is the number of states.
