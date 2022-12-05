@@ -429,7 +429,8 @@ In practice, most free energy surface calculations concern a Helmholtz free ener
 If two \hyperlink{ref:Macrostate} {macrostate}s $\A$ and $\B$ correspond to domains of \hyperlink{ref:CV} {collective variable} space, then the probability ratio can be obtained from a free energy surface $A(\vz)$ by integrating its exponential (the associated density) over the corresponding domains:
 \begin{align}
   \Delta F_{\A,\B} &=
-  -\beta^{-1} \ln \frac{Z_\A}{Z_\B}\\
+  -\beta^{-1} \ln \frac{Z_\A}{Z_\B}
+  \nonumber \\
   & =  -\beta^{-1} \ln
   \frac{\int_\A e^{-\beta A(\vz)} \, d\vz}
   {\int_\B e^{-\beta A(\vz)} \, d\vz}.
@@ -595,8 +596,10 @@ where
 \begin{align}
 \label{eq:fraction_of_partition_functions}
 \frac{Z}{\tilde{Z}} & =
-\frac{\int e^{-\beta U(\vx)} \, d\vx} {\int e^{-\beta \tilde{U}(\vx)} \, d\vx} =
-\frac{\int  e^{\beta U^\mathrm{bias}(\vx)} \, e^{-\beta \tilde{U}(\vx)} \, d\vx} {\int e^{-\beta \tilde{U}(\vx)} \, d\vx} =
+\frac{\int e^{-\beta U(\vx)} \, d\vx} {\int e^{-\beta \tilde{U}(\vx)} \, d\vx}
+\nonumber \\
+& =
+\frac{\int  e^{\beta U^\mathrm{bias}(\vx)} \, e^{-\beta \tilde{U}(\vx)} \, d\vx} {\int e^{-\beta \tilde{U}(\vx)} \, d\vx}
 \nonumber \\
 & =
 \int  e^{\beta U^\mathrm{bias}(\vx)} \, \tilde{\nu}(\vx) \, d\vx
@@ -632,7 +635,7 @@ If the sampled distribution is $\tilde \nu(x)$ and the original, unmodified dist
 \end{align}
 where the final average is taken from samples obtained from the modified distribution $\tilde \nu$, but the expectation is in the original distribution $\nu$.  This reweighting can be done effectively whenever the ratio $\frac{\nu(\vx)}{\tilde \nu(\vx)}$ doesn't vary much over the $\vx$ sampled.
 
-In the specific example of where $\tilde \nu(\vx)$ corresponds to a simulation with an added bias potential $U^{bias}$ (see Equation~\ref{eq:biased_x_distribtion_rewritten}), then the average of an observable $O(\vx)$ over the distribution $\nu(\vx)$ can be estimated by:
+In the specific example of where $\tilde \nu(\vx)$ corresponds to a simulation with an added bias potential $U^{\mathrm{bias}}$ (see Equation~\ref{eq:biased_x_distribtion_rewritten}), then the average of an observable $O(\vx)$ over the distribution $\nu(\vx)$ can be estimated by:
 \begin{align}
 \label{eq:reweighting_bias_potential}
 \langle O(\vx) \rangle &= \left \langle O(\vx) \frac{\tilde{Z}}{Z}e^{\beta U^\mathrm{bias}(\vx)} \right \rangle_{\tilde U} \nonumber  \\
@@ -729,7 +732,7 @@ In the latter case, if $U = U^\mathrm{unscaled} + U^\mathrm{scaled}$, scaling $U
 \end{equation}
 Then the Boltzmann factor is
 \begin{equation}
-e^{\frac{U^\mathrm{unscaled}}{k_\mathrm{B}T} + \frac{U^{scaled}}{k_\mathrm{B} \tilde T}},
+e^{\frac{U^\mathrm{unscaled}}{k_\mathrm{B}T} + \frac{U^{\mathrm{scaled}}}{k_\mathrm{B} \tilde T}},
 \end{equation}
 and the scaled degrees of freedom have probabilities consistent with the different $\tilde T$.
 
@@ -792,9 +795,9 @@ Given a set of sampled configurations that visits two states $i$ and $j$, their 
 \end{equation}
 where $f_{ij}$ is the \hyperlink{ref:reduced} {reduced} free energy, and $N_i$ and $N_j$ are the numbers of observed configurations in states $i$ and $j$.  This equation holds for whatever division into states one uses. However, this is only true if the simulation samples the equilibrium between states $i$ and $j$, or equivalently, if it is long enough such that many transitions between those states have been observed~\cite{No2009}. If a list of several states is defined, for example 1,2, \ldots,$K$, then estimates from neighboring states can be chained to compute relative free energies for the entire list of states, by estimating $f_{12} + f_{23} = -\ln \frac{N_2}{N_1} + -\ln \frac{N_3}{N_2} =   -\ln \frac{N_3}{N_1} = f_{13}$, and so forth. If the states are defined as bins along \hyperlink{ref:CV} {collective variable}s, this yields a (discretized) free energy \hyperlink{ref:FES} {profile} along those variables. This idea extends to the calculation of continuous probability \hyperlink{ref:Distribution} {distributions} and \hyperlink{ref:FES} {free energy surfaces}. In that case, the probability distribution can be estimated using a kernel density estimator (KDE) or a Gaussian Mixture Model (GMM)~\cite{Westerlund2017}.
 
-Convergence of this ratio can be accelerated by \hyperlink{ref:IS} {importance sampling}: adding \hyperlink{ref:biasingE} {biasing} potentials $u^{bias}_i$ and $u^{bias}_j$, with $\Delta u^{bias}_{ij}=u^{bias}_j - u^{bias}_i$.
-If the bias $u^{bias}_i$ depends only on the state $i$, and is constant over $\vx$ within a state, the free energy can be estimated by simply subtracting the bias from the free energy estimate of the histogram in Equation~\ref{eq:boltzmann_inversion}: \begin{equation}
-\Delta f_{ij} = -\ln \frac{N_j}{N_i} - \Delta u^{bias}_{ij}.
+Convergence of this ratio can be accelerated by \hyperlink{ref:IS} {importance sampling}: adding \hyperlink{ref:biasingE} {biasing} potentials $u^{\mathrm{bias}}_i$ and $u^{\mathrm{bias}}_j$, with $\Delta u^{\mathrm{bias}}_{ij}=u^{\mathrm{bias}}_j - u^{\mathrm{bias}}_i$.
+If the bias $u^{\mathrm{bias}}_i$ depends only on the state $i$, and is constant over $\vx$ within a state, the free energy can be estimated by simply subtracting the bias from the free energy estimate of the histogram in Equation~\ref{eq:boltzmann_inversion}: \begin{equation}
+\Delta f_{ij} = -\ln \frac{N_j}{N_i} - \Delta u^{\mathrm{bias}}_{ij}.
 \label{eq:boltzmann_inversion_biased}
 \end{equation}
 
@@ -969,11 +972,18 @@ f_{ij}$'s, as it can take into account the correlations in $f_i$ and
 $f_j$ thanks to their simultaneous estimation.  A key fact is that the MBAR system of equations reduces precisely to the equation for BAR for estimating the free energy difference between two states~\cite{shirts-chodera:jcp:2008:mbar}.
 
 MBAR can also be seen as exponential averaging to \hyperlink{ref:targetdist} {target distributions} described by the \hyperlink{ref:reduced} {reduced} potential $u_i(\vx)$ from the \emph{mixture distribution} $\nu_{mix}(\vx)$~\cite{reweighting_mixture_distribution}. Specifically, the mixture distribution is formed by combining all the samples from all simulations that are put into the mixture, proportional to the number of samples $N_k$ from each simulation.  Using Equation~\ref{eq:expav}, we can then rewrite Equation~\ref{eq:MBAR} as:
+\begin{equation}
+f_i = -\ln \left[\frac{1}{N}\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\nu_{mix}(\vx_n)}\right],
+\end{equation}
+with
 \begin{align}
-f_i &= -\ln \left[\frac{1}{N}\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\nu_{mix}(\vx_n)}\right] \\
-\nu_{mix}(\vx) &= \sum_k \frac{N_k}{N} e^{f_k-u_k(\vx)} \nonumber \\
-               &= \sum_k \frac{N_k}{N} \nu_k(\vx).
+\nu_{mix}(\vx) &= \sum_k \frac{N_k}{N} e^{f_k-u_k(\vx)},
+\nonumber \\
+&= \sum_k \frac{N_k}{N} \nu_k(\vx).
 \end{align}
+
+
+
 
 
 \subsection{Weighted histogram analysis method (WHAM)}
@@ -981,11 +991,13 @@ f_i &= -\ln \left[\frac{1}{N}\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\nu_{mix}(\vx_n
 In its original formulation, WHAM consists in applying Boltzmann inversion (i.e. calculating free energies from probabilities) to histograms collected under a localizing potential (Section~\ref{sec:localization}), and joining the bias-corrected histograms in an iterative and statistically optimal way to reconstruct the global histogram, from which the global free energy \hyperlink{ref:FES} {profile} is calculated~\cite{kumars:WHAM}.  However, the same idea can apply to histograms collected at different temperatures or other sets of histograms, as long as the histograms overlap.
 
 One can start from the MBAR equations to derive WHAM as well. If one can histogram the data by energy into $i$ bins, then the sum over $n$ \textit{samples} in MBAR becomes a sum over $M$ energy \textit{bins} instead. The iterative equations of WHAM can be written as:
-\begin{align}
-P_{i,k} &= \frac{\sum_{k=1}^K n_{k,i} e^{-u_{k,i}}}{\sum_{j=1}^{K}n_k {e^{f_j-u_{j,i}}}}
-\\
-e^{-f_k} &= \sum_{m=1}^M P_{m,k},
-\end{align}
+\begin{equation}
+P_{i,k} = \frac{\sum_{k=1}^K n_{k,i} e^{-u_{k,i}}}{\sum_{j=1}^{K}n_k {e^{f_j-u_{j,i}}}},
+\end{equation}
+with
+\begin{equation}
+e^{-f_k} = \sum_{m=1}^M P_{m,k},
+\end{equation}
 where $n_{k,i}$ are the counts in each bin from the $k$th state, $P_{i,k}$ is the probability distribution of bin $i$ in the $k$th state,  $u_{k,i}$ is the energy of the system in the $i$th bin and $k$th state~\cite{kumars:WHAM}. These are equivalent; in the WHAM equations, instead of directly summing over all $n$ samples, we first sum over all of the samples in each bin $n_{k,i}$ from each state to get $P_{i,k}$, and then sum over all bins to get the free energy. When the bins in WHAM are shrunk to have zero width (i.e. down to $\delta$ functions), then the WHAM equations become equivalent to MBAR, as the sum again becomes a sum over samples. If there are many samples, WHAM can be significantly faster than MBAR. However, WHAM only gives similar results to MBAR if the bins are narrow enough for the energy $u$ and probability $P_i$ to both be approximately constant within a bin.
 
 \section{Out-of-equilibrium / driven methods}
@@ -1235,11 +1247,14 @@ c(t) =
 \frac{1}{\beta} \ln \frac{Z}{\tilde{Z}(t)}.
 \end{equation}
 Here the biased partition function $\tilde{Z}(t)$ is explicitly time-dependent due to dependence on the \hyperlink{ref:Adaptive} {adaptive} metadynamics bias potential.
-The unbiased and biased partition functions can be written as integrals over either the coordinates $\vx$ or the CVs $\vz$,
-\begin{align}
-& Z = \int e^{-\beta U(\vx) } \, d\vx = \int e^{-\beta A(\vz) } \, d\vz \\
-& \tilde{Z}(t) = \int e^{-\beta\left [ U(\vx) + U_{t}^\mathrm{bias}(\xi(\vx)) \right]} \, d\vx = \int e^{-\beta\left [ A(\vz) + U_{t}^\mathrm{bias}(\vz) \right]} \, d\vz.
-\end{align}
+The unbiased and biased partition functions can be written as integrals over either the coordinates $\vx$ or the CVs $\vz$, that is,
+\begin{equation}
+Z = \int e^{-\beta U(\vx) } \, d\vx = \int e^{-\beta A(\vz) } \, d\vz,
+\end{equation}
+and
+\begin{equation}
+\tilde{Z}(t) = \int e^{-\beta\left [ U(\vx) + U_{t}^\mathrm{bias}(\xi(\vx)) \right]} \, d\vx = \int e^{-\beta\left [ A(\vz) + U_{t}^\mathrm{bias}(\vz) \right]} \, d\vz.
+\end{equation}
 We can thus write the time-dependent constant $c(t)$ as \begin{equation}
 \label{eq:wtmetad_coft2}
 c(t) =
@@ -1750,12 +1765,16 @@ between states to Monte Carlo for now, as dynamics in a continuous $\mathbf{\lam
 
 One possibility is to make steps to neighboring states, much like in \hyperlink{ref:ReplEx} {replica exchange}; if the states have a natural ordering, this is perfectly reasonable. However, they may not be a natural ordering, for example when there are multiple neighboring states in dimension higher than one, or if temperature and external biases are combined.
 
-If we think of sampling this joint space in configuration and state in the context of Gibbs sampling, an \hyperlink{ref:ExpEns} {expanded ensemble} simulation can proceed by alternating between sampling from the two conditional \hyperlink{ref:Distribution} {distribution} s,
-\begin{align}
-\nu(\vx | k) &= \frac{q_k(\vx)}{\int_\Gamma  \, q_k(\vx) \, d\vx}  = \frac{e^{-u_k(\vx)}}{\int_\Gamma  \, e^{-u_k(\vx)} \, d\vx }  \\
-\nu(k | \vx) &= \frac{e^{g_k}q_k(\vx)}{\sum\limits_{k'=1}^K e^{g_{k'}}q_{k'}(\vx)} = \frac{e^{g_k - u_k(\vx)}}{\sum\limits_{k'=1}^K e^{g_{k'} - u_{k'}(\vx)}}.
-\label{equation:expanded-ensemble-gibbs-update}
-\end{align}
+If we think of sampling this joint space in configuration and state in the context of Gibbs sampling, an \hyperlink{ref:ExpEns} {expanded ensemble} simulation can proceed by alternating between sampling from the two conditional \hyperlink{ref:Distribution} {distribution}s,
+\begin{equation}
+\nu(\vx | k) = \frac{q_k(\vx)}{\int_\Gamma  \, q_k(\vx) \, d\vx}  = \frac{e^{-u_k(\vx)}}{\int_\Gamma  \, e^{-u_k(\vx)} \, d\vx },
+\label{equation:expanded-ensemble-gibbs-update_1}
+\end{equation}
+and
+\begin{equation}
+\nu(k | \vx) = \frac{e^{g_k}q_k(\vx)}{\sum\limits_{k'=1}^K e^{g_{k'}}q_{k'}(\vx)} = \frac{e^{g_k - u_k(\vx)}}{\sum\limits_{k'=1}^K e^{g_{k'} - u_{k'}(\vx)}}.
+\label{equation:expanded-ensemble-gibbs-update_2}
+\end{equation}
 
 Sampling from the conditional probability \hyperlink{ref:Distribution} {distribution}
 $\nu(\vx | k)$ is just standard molecular dynamics sampling that generates time-correlated samples. Fortunately, the sampling in $\nu(k | \vx)$ is often much simpler.   If we have
@@ -1778,11 +1797,15 @@ algorithm~\footnote{Not to be confused with the Wang-Landau method of enhanced s
 The approach is as follows. We keep track of a histogram $h(i)$ of visits to each thermodynamic state during the \hyperlink{ref:ExpEns} {expanded ensemble} simulation.  When a state is visited, the corresponding
 histogram is updated by 1.  The weight $g_i$ of that state is updated by some user-chosen increment $-\delta$.  $\delta$ itself is reduced by a monotonically decreasing function as the simulation proceeds until the changes in the $g_i$ weights go to zero. The choice of how $\delta$ decreases is discussed later. The
 weight of the reference state is subtracted from all states after each step, as only the weight differences matter physically. As an algorithm, this is written as:
-\begin{align}
-h_{\mathrm{new}}(i) &= h_{\mathrm{old}}(i) + 1 \\
-g_{i,\mathrm{new}} &= g_{i,\mathrm{old}} - \delta.
-\label{eq:wang-landau}
-\end{align}
+\begin{equation}
+h_{\mathrm{new}}(i) = h_{\mathrm{old}}(i) + 1,
+\label{eq:wang-landau_1}
+\end{equation}
+and 
+\begin{equation}
+g_{i,\mathrm{new}} = g_{i,\mathrm{old}} - \delta.
+\label{eq:wang-landau_2}
+\end{equation}
 The Wang-Landau algorithm is self-correcting; if a state is visited more frequently than it should, its weight decreases, resulting in fewer visits to that state.  Eventually, the weight falls back to the correct range.  In the original Wang-Landau scheme, the $\delta$ increment is decreased during the simulation when the histogram $h(i)$ reaches a specified flatness criteria, meaning none of the histograms is lower than the average occupancy, often set at 80\%~\cite{wang-landau:prl:2001:wang-landau}.  When a sufficiently flat histogram is reached, $\delta$ is reduced by multiplying by a scaling factor $0<s<1$, typically $s=1/2$ as proposed in the original algorithm~\cite{wang-landau:prl:2001:wang-landau}, and the histograms are set to zero again.
 
 \paragraph{$1/t$ modifications to Wang-Landau}
@@ -1826,9 +1849,9 @@ The basic idea of these variants is to use the \hyperlink{ref:GibbsSampler} {Gib
 \begin{equation}\label{eq:gibbsproposal}
   \alpha(j|\vx, i) = \nu(i|\vx),
 \end{equation}
-where $\nu(i|\vx)$ is given in Equation~\ref{equation:expanded-ensemble-gibbs-update}.
+where $\nu(i|\vx)$ is given in Equation~\ref{equation:expanded-ensemble-gibbs-update_2}.
 
-In the self-adjusted mixture sampling variant, the weights are updated at each step. Using the transition rule defined in Equation~\ref{equation:expanded-ensemble-gibbs-update}, the rule for updating is:
+In the self-adjusted mixture sampling variant, the weights are updated at each step. Using the transition rule defined in Equation~\ref{equation:expanded-ensemble-gibbs-update_1}, the rule for updating is:
 \begin{equation}
 g_{i,new} = g_{i,old} - t^{-1}\nu(\vx|k),
 \end{equation}
