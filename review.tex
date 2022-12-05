@@ -257,8 +257,8 @@ The best-known classical dynamics is Hamiltonian dynamics:
 \begin{equation}
 \left\{
 \begin{array}{ll}
-    d\vx &= M^{-1} \vp \,  dt \\
-    d\vp &= -\nabla_\vx U(\vx) \, dt
+    d\vx = M^{-1} \vp \,  dt \\
+    d\vp = -\nabla_\vx U(\vx) \, dt,
 \end{array}
 \right.
     \label{eq:md}
@@ -268,8 +268,8 @@ A simplistic, discrete-time version of the above with time step $\delta t$ is:
 \begin{equation}
 \left\{
 \begin{array}{ll}
-    \delta \vx &= M^{-1} \vp \, \delta t \\
-    \delta \vp &= -\nabla_\vx U(\vx) \, \delta t
+    \delta \vx = M^{-1} \vp \, \delta t \\
+    \delta \vp = -\nabla_\vx U(\vx) \, \delta t.
     \label{eq:md_discrete}
 \end{array}
 \right.
@@ -288,9 +288,9 @@ An example of isothermal dynamics is \hypertarget{ref:Langevin} {Langevin dynami
 \begin{equation}
 \left\{
 \begin{array}{ll}
-    d\vx &= M^{-1} \vp \,  dt \\
-    d\vp &= \left(-\nabla_\vx U(\vx) - \gamma \vp \right) dt
-    + \sqrt{ \frac{2 \gamma M}{\beta}} \; d\mathbf{W}_t
+    d\vx = M^{-1} \vp \,  dt \\
+    d\vp = \left(-\nabla_\vx U(\vx) - \gamma \vp \right) dt
+    + \sqrt{ \frac{2 \gamma M}{\beta}} \; d\mathbf{W}_t,
 \end{array}
 \right.
 \end{equation}
@@ -300,8 +300,8 @@ To make the difference between Hamiltonian dynamics and Langevin dynamics more i
 \begin{equation}
 \left\{
 \begin{array}{ll}
-    \delta\vx &= M^{-1} \vp \, \delta t \\
-    \delta\vp &= \left(-\nabla_\vx U(\vx) - \gamma \vp + \sqrt{ \frac{2 \gamma M}{ \beta \delta t}} \, \mathbf{G} \right) \delta t
+    \delta\vx = M^{-1} \vp \, \delta t \\
+    \delta\vp = \left(-\nabla_\vx U(\vx) - \gamma \vp + \sqrt{ \frac{2 \gamma M}{ \beta \delta t}} \, \mathbf{G} \right) \delta t,
     \label{eq:Langevin_discrete}
 \end{array}
 \right.
@@ -315,21 +315,21 @@ Langevin dynamics will be used as a basic example in later sections of this revi
 
 The Boltzmann distribution (which characterizes the canonical ensemble) in phase space has the following probability density:
 \begin{equation}
-\mu(\vx, \vp) = \frac{1}{Q} e^{-\beta (U(\vx) + K(\vp))}
+\mu(\vx, \vp) = \frac{1}{Q} e^{-\beta (U(\vx) + K(\vp))},
 \label{eq:BoltzmannDistr}
 \end{equation}
 where $ \displaystyle Q = \int e^{-\beta (U(\vx) + K(\vp))} d\vx d\vp$ is the normalization factor, known as partition function.
 
 The physical meaning of $\mu$ is a probability per unit volume of $(\vx, \vp)$ space. The probability of a region of phase space $\Sigma$ is:
 \begin{equation}
-    P(\Sigma) = \int_\Sigma \mu(\vx, \vp) \, d\vx d\vp
+    P(\Sigma) = \int_\Sigma \mu(\vx, \vp) \, d\vx d\vp.
 \end{equation}
 
 In most cases, the energy is a sum of a potential term that depends only on positions and a kinetic term that depends only on momenta, as written in Eq.~\ref{eq:BoltzmannDistr}.
 Then the momenta are statistically independent from the system configuration, hence their distribution is that of the ideal gas and does not bear significant information on any specific system.
 This leads to a simple expression for the configurational distribution, where the momenta and kinetic energy do not appear:
 \begin{equation}
-\nu(\vx) = \int \mu(\vx, \vp) \, d\vp = \frac{1}{Z} \, e^{-\beta U(\vx)}
+\nu(\vx) = \int \mu(\vx, \vp) \, d\vp = \frac{1}{Z} \, e^{-\beta U(\vx)},
 \end{equation}
 where $Z$ is the configurational partition function, $ Z = \int e^{-\beta U(\vx)} \, d\vx$ . Sometimes, it may also be useful to define an unnormalized version of the configurational distribution, $q(\vx)$, such that $\nu(\vx) = \frac{1}{Z}q(\vx)$. There exist equivalent definitions of distributions for the isothermal-isobaric ensemble (NPT), which can be found in most statistical mechanics books~\cite{Zuckerman2010, Tuckerman2010}.
 
@@ -342,7 +342,15 @@ Macrostates are experimentally distinguishable or measurable states of a system.
 They can be described formally either in terms of the thermodynamic state variables ($E$, $T$, $P$, $V$, or parameters of the Hamiltonian) or by specifying specific regions of configuration space (that is, disjoint sets of \hyperlink{ref:Microstate} {microstates}). A macrostate, besides being just a collection of microstates, also specifies a probability associated with each microstate that is contained in the microstate. The term ``thermodynamic state'' is often used synonymously with macrostate, as the macrostates that we are most generally interested in studying with molecular simulation are macrostates that are completely defined by the specification of the macroscopic thermodynamic variables.
 
 \hypertarget{ref:density_of_states}{\paragraph{Density of states}}
-The density of states $\Omega(E)$ is defined as the number of states in a system that have a specific total energy $E$.  It can be mathematically expressed as $\Omega(E) = \int \delta(E-H(\vx,\vp))\, d\vx d\vp$, where $\delta$ is a Dirac delta function that is zero everywhere except where $E=H(\vx,\vp)$. The entropy $S$ as a function of $E$ is then simply $S(E)=k_\mathrm{B} \ln \Omega(E)$. Additionally, the configurational density of states is defined as the number of states that have a specific potential energy $U$ and is computed as $\Omega(U) = \int \delta(U-U(\vx))\, d\vx$, and the configurational entropy $S$ as a function of $U$ is $S(U)=k_\mathrm{B} \ln \Omega(U)$.
+The density of states $\Omega(E)$ is defined as the number of states in a system that have a specific total energy $E$.  It can be mathematically expressed as
+\begin{equation}
+\Omega(E) = \int \delta(E-H(\vx,\vp))\, d\vx d\vp,
+\end{equation}
+where $\delta$ is a Dirac delta function that is zero everywhere except where $E=H(\vx,\vp)$. The entropy $S$ as a function of $E$ is then simply $S(E)=k_\mathrm{B} \ln \Omega(E)$. Additionally, the configurational density of states is defined as the number of states that have a specific potential energy $U$ and is computed as
+\begin{equation}
+\Omega(U) = \int \delta(U-U(\vx))\, d\vx,
+\end{equation}
+and the configurational entropy $S$ as a function of $U$ is $S(U)=k_\mathrm{B} \ln \Omega(U)$.
 
 \hypertarget{ref:FE} {\paragraph{Free energy}}
 In the canonical \hyperlink{ref:Ensemble} {ensemble}, the Helmholtz free energy $F$ is a property of a \hyperlink{ref:Macrostate} {macrostate} of a system, and is proportional to the logarithm of its partition function, which measures its statistical weight compared to other \hyperlink{ref:Macrostate} {macrostate}s:
@@ -370,8 +378,8 @@ An expression or algorithm that takes simulation data and estimates a numerical 
 We define the reduced energy function $u_i(\vx)$
 for state $i$ to be
 \begin{eqnarray}
-u_i(\vx) &=& \beta_i ( U_i(\vx) \;
-+ p_i V(\vx)) \label{equation:reduced-energy}
+u_i(\vx) &=& \beta_i ( U_i(\vx) + p_i V(\vx)),
+\label{equation:reduced-energy}
 \end{eqnarray}
 where the pressure-volume term $p_i V(\vx)$ is only included in the case of a constant pressure \hyperlink{ref:Ensemble} {ensemble}.
 Other terms, such as chemical potentials, may be added to generalize to other ensembles.
@@ -550,7 +558,7 @@ A biasing energy, also called bias energy, is an extra energetic term $U^\mathrm
 In molecular dynamics, a bias energy
 $U^\mathrm{bias}(\vx)$ gives rise to a bias force $\vF^\mathrm{bias}(\vx) = -\nabla_{\vx} U^\mathrm{bias}(\vx)$, so that the total biased force $\tilde{\vF}(\vx)$ is
 \begin{equation}
-\tilde{\vF}(\vx) = -\nabla_{\vx} \tilde U(\vx) = \vF(\vx) + \vF^\mathrm{bias}(\vx)
+\tilde{\vF}(\vx) = -\nabla_{\vx} \tilde U(\vx) = \vF(\vx) + \vF^\mathrm{bias}(\vx).
 \end{equation}
 The bias $U^\mathrm{bias}(\vx)$ is often a function of low-dimension \hyperlink{ref:CV} {collective variable}s $\vz = \xi(\vx)$, and can be written $U^\mathrm{bias}(\xi(\vx))$ so that in this case, the biased potential energy function is:
 \begin{equation}
@@ -558,9 +566,9 @@ The bias $U^\mathrm{bias}(\vx)$ is often a function of low-dimension \hyperlink{
 \end{equation}
 The resulting biasing force on atoms is calculated using the chain rule:
 \begin{align}
-\tilde{\vF}(\vx) &= -\nabla_{\vx} \tilde U(\vx) \\
-&= \vF(\vx) -\nabla_{\vx} [ U^\mathrm{bias}(\xi(\vx))]\\
-\tilde{\vF}(\vx)&= \vF(\vx) - \left . \frac{dU^\mathrm{bias}}{dz}\right |_{z=\xi(\vx)} \; \nabla_{\vx}\xi(\vx).
+\tilde{\vF}(\vx) &= -\nabla_{\vx} \tilde U(\vx) \nonumber \\
+&= \vF(\vx) -\nabla_{\vx} [ U^\mathrm{bias}(\xi(\vx))] \nonumber \\
+&= \vF(\vx) - \left . \frac{dU^\mathrm{bias}}{dz}\right |_{z=\xi(\vx)} \; \nabla_{\vx}\xi(\vx).
 \end{align}
 This requires the computation of the gradient $\nabla_{\vx}\xi(\vx)$ of the collective variable with respect to atomic Cartesian coordinates.
 
@@ -578,7 +586,9 @@ This can be re-written as
 \frac{1}{\tilde{Z}} \, e^{-\beta\left [ U(\vx) + U^\mathrm{bias}(\vx) \right]}
 \nonumber \\
 & =
-\frac{1}{Z} \, e^{-\beta U(\vx)} \, \frac{Z}{\tilde{Z}} \, e^{-\beta U^\mathrm{bias}(\vx)} =
+\frac{1}{Z} \, e^{-\beta U(\vx)} \, \frac{Z}{\tilde{Z}} \, e^{-\beta U^\mathrm{bias}(\vx)}
+\nonumber \\
+& =
 \nu(\vx) \, \frac{Z}{\tilde{Z}} \, e^{-\beta U^\mathrm{bias}(\vx)},
 \end{align}
 where
@@ -589,7 +599,9 @@ where
 \frac{\int  e^{\beta U^\mathrm{bias}(\vx)} \, e^{-\beta \tilde{U}(\vx)} \, d\vx} {\int e^{-\beta \tilde{U}(\vx)} \, d\vx} =
 \nonumber \\
 & =
-\int  e^{\beta U^\mathrm{bias}(\vx)} \, \tilde{\nu}(\vx) \, d\vx =
+\int  e^{\beta U^\mathrm{bias}(\vx)} \, \tilde{\nu}(\vx) \, d\vx
+\nonumber \\
+& =
 \langle e^{\beta U^\mathrm{bias}(\vx)} \rangle_{\tilde U},
 \end{align}
 where $\langle \cdots \rangle_{\tilde U}$ indicates an \hyperlink{ref:ensemble_average} {ensemble average} under the biased \hyperlink{ref:Distribution} {distribution} $\tilde{\nu}(\vx)$.
@@ -613,20 +625,20 @@ In practice, the  sampled distribution is chosen to emphasize samples that contr
 Reweighting involves calculating averages and free energies of one \hyperlink{ref:Distribution} {distribution} using samples from another one, as occurs in \hyperlink{ref:IS} {importance sampling}, though it can be used in other situations as well. The distribution that one samples from  may be one explicitly generated by a biased simulation or performed at a different temperature, or one that is a mixture of several sampled distributions~\cite{reweighting_mixture_distribution}.
 
 If the sampled distribution is $\tilde \nu(x)$ and the original, unmodified distribution is $\nu(\vx)$, then the average of some observable $O(\vx)$ is calculated as
-\begin{eqnarray}
-\langle O(\vx) \rangle &=& \int  O(\vx) \nu(\vx) d\vx \nonumber \\
-&=& \int O(\vx) \frac{\nu(\vx)}{\tilde \nu(\vx)} \tilde \nu(\vx) d\vx\nonumber \\
-&=& \left \langle O(\vx)  \frac{\nu(\vx)}{\tilde{\nu}(\vx)} \right \rangle_{\tilde \nu}
-\end{eqnarray}
+\begin{align}
+\langle O(\vx) \rangle &= \int  O(\vx) \nu(\vx) d\vx \nonumber \\
+&= \int O(\vx) \frac{\nu(\vx)}{\tilde \nu(\vx)} \tilde \nu(\vx) d\vx\nonumber \\
+&= \left \langle O(\vx)  \frac{\nu(\vx)}{\tilde{\nu}(\vx)} \right \rangle_{\tilde \nu},
+\end{align}
 where the final average is taken from samples obtained from the modified distribution $\tilde \nu$, but the expectation is in the original distribution $\nu$.  This reweighting can be done effectively whenever the ratio $\frac{\nu(\vx)}{\tilde \nu(\vx)}$ doesn't vary much over the $\vx$ sampled.
 
 In the specific example of where $\tilde \nu(\vx)$ corresponds to a simulation with an added bias potential $U^{bias}$ (see Equation~\ref{eq:biased_x_distribtion_rewritten}), then the average of an observable $O(\vx)$ over the distribution $\nu(\vx)$ can be estimated by:
-\begin{eqnarray}
+\begin{align}
 \label{eq:reweighting_bias_potential}
-\langle O(\vx) \rangle &=& \left \langle O(\vx) \frac{\tilde{Z}}{Z}e^{\beta U^\mathrm{bias}(\vx)} \right \rangle_{\tilde U} \nonumber  \\
- &=& \frac{\langle O(\vx) \, e^{\beta U^\mathrm{bias}(\vx)} \rangle_{\tilde U}}
+\langle O(\vx) \rangle &= \left \langle O(\vx) \frac{\tilde{Z}}{Z}e^{\beta U^\mathrm{bias}(\vx)} \right \rangle_{\tilde U} \nonumber  \\
+ &= \frac{\langle O(\vx) \, e^{\beta U^\mathrm{bias}(\vx)} \rangle_{\tilde U}}
 {\langle e^{\beta U^\mathrm{bias}(\vx)} \rangle_{\tilde U}},
-\end{eqnarray}
+\end{align}
 where the \hyperlink{ref:ensemble_average} {ensemble average}s are taken according to the \hyperlink{ref:BiasedDist} {biased distribution} arising from the biased potential energy $\tilde U(\vx)$. The term in the denominator is the exponential averaging estimate of $\frac{Z}{\tilde Z}$ (see Equation~\ref{eq:fraction_of_partition_functions} and Section~\ref{sec:fe_estimators:EXP} for more detail).
 
 \hypertarget{ref:BiasedCVDist} {\paragraph{Biased CV distribution}}
@@ -660,16 +672,15 @@ To sample the canonical \hyperlink{ref:Distribution} {distribution} of $(\vx, \l
 \begin{equation}
 \left\{
 \begin{array}{ll}
-d\vx &= M^{-1} \vp \, dt\\
-d\vp &= \left(-\nabla_\vx U^\text{ext}(\vx,  \lambda) - \gamma \vp \right) dt
+d\vx = M^{-1} \vp \, dt\\
+d\vp = \left(-\nabla_\vx U^\text{ext}(\vx,  \lambda) - \gamma \vp \right) dt
     + \sqrt{ \frac{2 \gamma M}{\beta}} \; d\mathbf{W}_t\\
-d\lambda &= m_\lambda^{-1} p_\lambda \, dt \\
-dp_\lambda &= \left(-\frac{\partial U^\text{ext}(\vx, \lambda)}{\partial \lambda} - \gamma_\lambda p_\lambda \right) dt
-    + \sqrt{ \frac{2 \gamma_\lambda m_\lambda}{ \beta }} dW_t
+d\lambda = m_\lambda^{-1} p_\lambda \, dt \\
+dp_\lambda = \left(-\frac{\partial U^\text{ext}(\vx, \lambda)}{\partial \lambda} - \gamma_\lambda p_\lambda \right) dt
+    + \sqrt{ \frac{2 \gamma_\lambda m_\lambda}{ \beta }} dW_t,
 \end{array}
 \right.
 \end{equation}
-
 where $m_\lambda$ is a fictitious mass associated to $\lambda$.
 While the two phrases are essentially synonymous, the term $\lambda$-dynamics is mostly used when a continuous dynamic variable $\lambda$ connects physically meaningful, and sometimes discrete, states, such as in \hyperlink{ref:Alchemical} {alchemical} transformations.
 On the other hand, the term extended Lagrangian (or extended Hamiltonian) is more often used when the fictitious coordinate $\lambda$ follows a \hyperlink{ref:CV} {collective variable} $\xi(\vx)$, typically coupled through a harmonic potential: $U^\text{ext}(\vx, \lambda) = U(\vx) + \frac{k^\mathrm{ext}}{2}|\xi(\vx)-\lambda|^2$.
@@ -686,7 +697,7 @@ In order for this to preserve the underlying Boltzmann distribution, proposals m
 
 In addition, the Metropolis (or Metropolis-Hastings algorithms), can also be used to propose new parameters, such as a change in the temperature of the system, or a change in the potential energy of the system governed by an auxiliary parameter $\lambda$:
 \begin{equation}
-    P(i\rightarrow j) = \min\left\{1,e^{-\left[\beta_i U(\lambda_i,\vx)-\beta_j U(\lambda_j,\vx)\right]}\right\}
+    P(i\rightarrow j) = \min\left\{1,e^{-\left[\beta_i U(\lambda_i,\vx)-\beta_j U(\lambda_j,\vx)\right]}\right\}.
 \end{equation}
 
 \hypertarget{ref:GibbsSampler} {\paragraph{Gibbs sampler}}
@@ -718,7 +729,7 @@ In the latter case, if $U = U^\mathrm{unscaled} + U^\mathrm{scaled}$, scaling $U
 \end{equation}
 Then the Boltzmann factor is
 \begin{equation}
-e^{\frac{U^\mathrm{unscaled}}{k_BT} + \frac{U^{scaled}}{K_B \tilde T}}
+e^{\frac{U^\mathrm{unscaled}}{k_BT} + \frac{U^{scaled}}{k_B \tilde T}},
 \end{equation}
 and the scaled degrees of freedom have probabilities consistent with the different $\tilde T$.
 
