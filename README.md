@@ -17,10 +17,10 @@ This paper is being developed as a living document, open to changes from the com
 
 ## List of Released Versions
 <!-- update this when you decide to release a version either by preprint or when submitted to LiveCoMS-->
-- v0.5: Initial submisson to LiveCoMS, and posted on [arXiv](https://arxiv.org/abs/2202.04164).
-- v0.7: Revised submisson to LiveCoMS, and posted on [arXiv](https://arxiv.org/abs/2202.04164).
+- v0.5: Initial submisson to LiveCoMS, and posted on [arXiv](https://arxiv.org/abs/2202.04164v1).
+- v0.7: Revised submisson to LiveCoMS, and posted on [arXiv](https://arxiv.org/abs/2202.04164v2).
 
 ## Changelog
 <!-- Here, record summaries of important changes. A granular discussion of changes will be kept in GitHub by issue tracking.-->
-- 9 February 2022: Version v0.5 submitted to to LiveCoMS, and posted on arXiv.
-- 19 August 2022: Version v0.7 (revision) submitted to to LiveCoMS, and posted on arXiv.
+- 9 February 2022: Version v0.5 submitted to to LiveCoMS, and posted on [arXiv](https://arxiv.org/abs/2202.04164v1).
+- 19 August 2022: Version v0.7 (revision) submitted to to LiveCoMS, and posted on [arXiv](https://arxiv.org/abs/2202.04164v2).
