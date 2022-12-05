@@ -729,7 +729,7 @@ In the latter case, if $U = U^\mathrm{unscaled} + U^\mathrm{scaled}$, scaling $U
 \end{equation}
 Then the Boltzmann factor is
 \begin{equation}
-e^{\frac{U^\mathrm{unscaled}}{k_BT} + \frac{U^{scaled}}{k_B \tilde T}},
+e^{\frac{U^\mathrm{unscaled}}{k_\mathrm{B}T} + \frac{U^{scaled}}{k_\mathrm{B} \tilde T}},
 \end{equation}
 and the scaled degrees of freedom have probabilities consistent with the different $\tilde T$.
 
@@ -1854,7 +1854,7 @@ Although we do not prove it here, AWH is actually an close approximation to SAMS
 
 One common problem with all of these near-optimal methods is that they are only optimal in the asymptotic limit, when a large number of uncorrelated samples have been collected.  If only a small number of samples have been collected, they may not converge quickly, and indeed may tend to keep samples in the same thermodynamic state for quite a while.
 
-It is still not clear what the best approach is to initialize the biasing weights until the number of samples reach the asymptotic limit.  The current general approach is to run the original Wang-Landau approach with a large initial increment size without reducing the weights until some predetermined point. This predetermined point varies between approaches and implementations.  The simulation is kept in this initial phase until the histograms are roughly equal using weights somewhat near $k_BT$, and then switching to a variant of the asymptotically optimal methods. However, it is not really known if this is optimal, and there are still choices to make, such as the initial bias added to each step.
+It is still not clear what the best approach is to initialize the biasing weights until the number of samples reach the asymptotic limit.  The current general approach is to run the original Wang-Landau approach with a large initial increment size without reducing the weights until some predetermined point. This predetermined point varies between approaches and implementations.  The simulation is kept in this initial phase until the histograms are roughly equal using weights somewhat near $k_\mathrm{B}T$, and then switching to a variant of the asymptotically optimal methods. However, it is not really known if this is optimal, and there are still choices to make, such as the initial bias added to each step.
 
 
 \begin{figure*}[!ht]
