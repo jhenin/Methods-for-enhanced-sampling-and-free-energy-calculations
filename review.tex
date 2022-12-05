@@ -325,7 +325,7 @@ The physical meaning of $\mu$ is a probability per unit volume of $(\vx, \vp)$ s
     P(\Sigma) = \int_\Sigma \mu(\vx, \vp) \, d\vx d\vp.
 \end{equation}
 
-In most cases, the energy is a sum of a potential term that depends only on positions and a kinetic term that depends only on momenta, as written in Eq.~\ref{eq:BoltzmannDistr}.
+In most cases, the energy is a sum of a potential term that depends only on positions and a kinetic term that depends only on momenta, as written in Equation~\ref{eq:BoltzmannDistr}.
 Then the momenta are statistically independent from the system configuration, hence their distribution is that of the ideal gas and does not bear significant information on any specific system.
 This leads to a simple expression for the configurational distribution, where the momenta and kinetic energy do not appear:
 \begin{equation}
@@ -377,10 +377,10 @@ An expression or algorithm that takes simulation data and estimates a numerical 
 
 We define the reduced energy function $u_i(\vx)$
 for state $i$ to be
-\begin{eqnarray}
-u_i(\vx) &=& \beta_i ( U_i(\vx) + p_i V(\vx)),
+\begin{equation}
+u_i(\vx) = \beta_i ( U_i(\vx) + p_i V(\vx)),
 \label{equation:reduced-energy}
-\end{eqnarray}
+\end{equation}
 where the pressure-volume term $p_i V(\vx)$ is only included in the case of a constant pressure \hyperlink{ref:Ensemble} {ensemble}.
 Other terms, such as chemical potentials, may be added to generalize to other ensembles.
 For each state $i$, $\beta_i$ is the inverse temperature, $U_i(\vx)$ the potential energy function (which may include external \hyperlink{ref:biasingE} {biasing} potentials), $p_i$ the external pressure.
@@ -688,10 +688,10 @@ These methods are also referred to as ``extended-system dynamics.''  Note that m
 
 \hypertarget{ref:MetropolisMonteCarlo} {\paragraph{Metropolis Monte Carlo}}
 A Metropolis Monte Carlo step makes some change in the system in a way that preserves the underlying probability \hyperlink{ref:Distribution} {distribution} (usually the Boltzmann distribution).  Taking the canonical \hyperlink{ref:Ensemble} {ensemble} for specificity, the simplest rule is to propose some new coordinate $\vx^\prime$, and change from $\vx$ to $\vx^\prime$ with probability
-\begin{eqnarray}
+\begin{equation}
 P(\vx\rightarrow \vx^\prime) = \min\left\{1, e^{-\left[\beta U(\vx^\prime)-\beta U(\vx)\right]}\right\}.
 \label{eq:bal}
-\end{eqnarray}
+\end{equation}
 This means that the move always occurs if the energy is lowered (probability is increased), and sometimes occurs if the energy is higher, with the probability given in Equation~\ref{eq:bal}.
 In order for this to preserve the underlying Boltzmann distribution, proposals must be made in a symmetric way, such that the probability of being at $\vx^\prime$ and proposing $\vx$ is the same as being in $\vx$ and proposing $\vx^\prime$. This is satisfied by simple rules like translating or rotating particles a symmetric amount from the current position, but care must be taken for more complex coordinate transformations like torsional displacement volume changes, or polymer chain moves~\cite{Siepmann_mp_1992}.  It is in fact possible to choose new states with asymmetric or biased probabilities if those biases and asymmetries are properly accounted for; this generalization is called a \emph{Metropolis-Hastings} step~\cite{Hastings_biometrika_1970}.
 
@@ -793,7 +793,7 @@ Given a set of sampled configurations that visits two states $i$ and $j$, their 
 where $f_{ij}$ is the \hyperlink{ref:reduced} {reduced} free energy, and $N_i$ and $N_j$ are the numbers of observed configurations in states $i$ and $j$.  This equation holds for whatever division into states one uses. However, this is only true if the simulation samples the equilibrium between states $i$ and $j$, or equivalently, if it is long enough such that many transitions between those states have been observed~\cite{No2009}. If a list of several states is defined, for example 1,2, \ldots,$K$, then estimates from neighboring states can be chained to compute relative free energies for the entire list of states, by estimating $f_{12} + f_{23} = -\ln \frac{N_2}{N_1} + -\ln \frac{N_3}{N_2} =   -\ln \frac{N_3}{N_1} = f_{13}$, and so forth. If the states are defined as bins along \hyperlink{ref:CV} {collective variable}s, this yields a (discretized) free energy \hyperlink{ref:FES} {profile} along those variables. This idea extends to the calculation of continuous probability \hyperlink{ref:Distribution} {distributions} and \hyperlink{ref:FES} {free energy surfaces}. In that case, the probability distribution can be estimated using a kernel density estimator (KDE) or a Gaussian Mixture Model (GMM)~\cite{Westerlund2017}.
 
 Convergence of this ratio can be accelerated by \hyperlink{ref:IS} {importance sampling}: adding \hyperlink{ref:biasingE} {biasing} potentials $u^{bias}_i$ and $u^{bias}_j$, with $\Delta u^{bias}_{ij}=u^{bias}_j - u^{bias}_i$.
-If the bias $u^{bias}_i$ depends only on the state $i$, and is constant over $\vx$ within a state, the free energy can be estimated by simply subtracting the bias from the free energy estimate of the histogram in Eq.~\ref{eq:boltzmann_inversion}: \begin{equation}
+If the bias $u^{bias}_i$ depends only on the state $i$, and is constant over $\vx$ within a state, the free energy can be estimated by simply subtracting the bias from the free energy estimate of the histogram in Equation~\ref{eq:boltzmann_inversion}: \begin{equation}
 \Delta f_{ij} = -\ln \frac{N_j}{N_i} - \Delta u^{bias}_{ij}.
 \label{eq:boltzmann_inversion_biased}
 \end{equation}
@@ -808,7 +808,7 @@ e^{f_j-f_i} = \frac{Z_i}{Z_j} = \frac{\left \langle  P_{i\rightarrow j}(x)\right
 \end{equation}
 where $P_{i\rightarrow j}(x)$ is the probability of accepting a move from state $i$ to state $j$ proposed from configuration $\vx$. For simplicity we assume that the probability of moves proposed from $i$ to $j$ is equal to the probability of transition from $j$ to $i$; more general transitions can also be included~\cite{escobedo_transition_2006}. We can construct a matrix of all possible transitions between any pair of states; hence we can call this a transition count matrix or \textit{transition matrix}.
 
-Typically, this averaging is carried out over the transitions that were actually observed. However, this average can be calculations over transitions \emph{that were not actually performed}. If one counts only whether a move is made or not, one averages a number of either 0's or 1's. However, in any method that makes transitions between states, we need to calculate the probability that the transition would occur to decide whether we move or not, as in the \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo} algorithm (Eq.~\ref{eq:bal}).  This probability can be calculated and used in averaging even if the moves are not made.
+Typically, this averaging is carried out over the transitions that were actually observed. However, this average can be calculations over transitions \emph{that were not actually performed}. If one counts only whether a move is made or not, one averages a number of either 0's or 1's. However, in any method that makes transitions between states, we need to calculate the probability that the transition would occur to decide whether we move or not, as in the \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo} algorithm (Equation~\ref{eq:bal}).  This probability can be calculated and used in averaging even if the moves are not made.
 
 Interestingly, one can even compute this average of transition probability \hyperlink{ref:Distribution} {distributions} using a different transition probability formula than the one actually used to carry out jumps between states. For example, one can show that the \hyperlink{ref:MetropolisMonteCarlo} {Metropolis Monte Carlo} criterion $(\mathrm{min} \{1,e^{-u_j+u_i})\})$ is more efficient to use to decide whether or not to move between two states, but the Barker criterion $\left(\frac{e^{-u_j}}{e^{u_j}+e^{u_i}}\right)$ is more efficient to average in order to calculate free energies~\citep{Liu:Biometrika:1996}.
 
@@ -940,9 +940,9 @@ obtain an optimal value of the free energy difference $\Delta f_{ij}$ given $N_i
 the method~\cite{bennett:jcp:1976:fe-estimate,shirts_comparison_2005,fenwick-escobedo:jcp:2003:replica-exchange-expanded-ensembles}; see these references for the detailed derivations.
 
 One standard approach is to derive the thermodynamic identity:
-\begin{eqnarray}
+\begin{equation}
 \Delta f_{ij} = \ln \frac{\left\langle \frac{1}{1 + \exp(-\Delta u_{ij}+c))}\right\rangle_j}{\left \langle \frac{1}{1 + \exp(\Delta u_{ij}-c)}\right\rangle_i} + c-\ln\frac{N_j}{N_i},
-\end{eqnarray}
+\end{equation}
 where $c$ is an arbitrary constant. This expression is an asymptotically unbiased estimator (meaning, if enough data is collected, it will converge to the correct answer) for any choice
 of $c$. However, one can prove that the lowest variance estimate of free energy is obtained when $c=\Delta f_{ij}$~\cite{bennett:jcp:1976:fe-estimate}. To find $\Delta f_{ij}$, this equation needs to be solved self-consistently, resulting in the equation one can solve for $c$, and therefore $f_{ij}$ as well:
 \begin{equation}
@@ -968,12 +968,12 @@ MBAR also allows the computation of high precision uncertainties in the $\Delta
 f_{ij}$'s, as it can take into account the correlations in $f_i$ and
 $f_j$ thanks to their simultaneous estimation.  A key fact is that the MBAR system of equations reduces precisely to the equation for BAR for estimating the free energy difference between two states~\cite{shirts-chodera:jcp:2008:mbar}.
 
-MBAR can also be seen as exponential averaging to \hyperlink{ref:targetdist} {target distributions} described by the \hyperlink{ref:reduced} {reduced} potential $u_i(\vx)$ from the \emph{mixture distribution} $\nu_{mix}(\vx)$~\cite{reweighting_mixture_distribution}. Specifically, the mixture distribution is formed by combining all the samples from all simulations that are put into the mixture, proportional to the number of samples $N_k$ from each simulation.  Using eq.~\ref{eq:expav}, we can then rewrite Equation~\ref{eq:MBAR} as:
-\begin{eqnarray}
-f_i &=& -\ln \left[\frac{1}{N}\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\nu_{mix}(\vx_n)}\right] \nonumber\\
-\nu_{mix}(\vx) &=& \sum_k \frac{N_k}{N} e^{f_k-u_k(\vx)} \nonumber \\
-               &=& \sum_k \frac{N_k}{N} \nu_k(\vx).
-\end{eqnarray}
+MBAR can also be seen as exponential averaging to \hyperlink{ref:targetdist} {target distributions} described by the \hyperlink{ref:reduced} {reduced} potential $u_i(\vx)$ from the \emph{mixture distribution} $\nu_{mix}(\vx)$~\cite{reweighting_mixture_distribution}. Specifically, the mixture distribution is formed by combining all the samples from all simulations that are put into the mixture, proportional to the number of samples $N_k$ from each simulation.  Using Equation~\ref{eq:expav}, we can then rewrite Equation~\ref{eq:MBAR} as:
+\begin{align}
+f_i &= -\ln \left[\frac{1}{N}\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\nu_{mix}(\vx_n)}\right] \\
+\nu_{mix}(\vx) &= \sum_k \frac{N_k}{N} e^{f_k-u_k(\vx)} \nonumber \\
+               &= \sum_k \frac{N_k}{N} \nu_k(\vx).
+\end{align}
 
 
 \subsection{Weighted histogram analysis method (WHAM)}
@@ -981,11 +981,11 @@ f_i &=& -\ln \left[\frac{1}{N}\sum_{n=1}^N \frac{e^{-u_i(\vx_n)}}{\nu_{mix}(\vx_
 In its original formulation, WHAM consists in applying Boltzmann inversion (i.e. calculating free energies from probabilities) to histograms collected under a localizing potential (Section~\ref{sec:localization}), and joining the bias-corrected histograms in an iterative and statistically optimal way to reconstruct the global histogram, from which the global free energy \hyperlink{ref:FES} {profile} is calculated~\cite{kumars:WHAM}.  However, the same idea can apply to histograms collected at different temperatures or other sets of histograms, as long as the histograms overlap.
 
 One can start from the MBAR equations to derive WHAM as well. If one can histogram the data by energy into $i$ bins, then the sum over $n$ \textit{samples} in MBAR becomes a sum over $M$ energy \textit{bins} instead. The iterative equations of WHAM can be written as:
-\begin{eqnarray}
-P_{i,k} &=& \frac{\sum_{k=1}^K n_{k,i} e^{-u_{k,i}}}{\sum_{j=1}^{K}n_k {e^{f_j-u_{j,i}}}}
+\begin{align}
+P_{i,k} &= \frac{\sum_{k=1}^K n_{k,i} e^{-u_{k,i}}}{\sum_{j=1}^{K}n_k {e^{f_j-u_{j,i}}}}
 \\
-e^{-f_k} &=& \sum_{m=1}^M P_{m,k},
-\end{eqnarray}
+e^{-f_k} &= \sum_{m=1}^M P_{m,k},
+\end{align}
 where $n_{k,i}$ are the counts in each bin from the $k$th state, $P_{i,k}$ is the probability distribution of bin $i$ in the $k$th state,  $u_{k,i}$ is the energy of the system in the $i$th bin and $k$th state~\cite{kumars:WHAM}. These are equivalent; in the WHAM equations, instead of directly summing over all $n$ samples, we first sum over all of the samples in each bin $n_{k,i}$ from each state to get $P_{i,k}$, and then sum over all bins to get the free energy. When the bins in WHAM are shrunk to have zero width (i.e. down to $\delta$ functions), then the WHAM equations become equivalent to MBAR, as the sum again becomes a sum over samples. If there are many samples, WHAM can be significantly faster than MBAR. However, WHAM only gives similar results to MBAR if the bins are narrow enough for the energy $u$ and probability $P_i$ to both be approximately constant within a bin.
 
 \section{Out-of-equilibrium / driven methods}
@@ -1625,28 +1625,27 @@ In these methods, we label the different $K$ thermodynamic states either using a
 In a replica exchange simulation, we consider $K$ simulations, with one simulation in each of the $K$ thermodynamic states. In many cases, the data gathered in all of the states is important to calculate observables. However, in other cases, only one simulation actually samples a state of interest, and the other simulations are added exclusively to aid the sampling in one way or another.
 
 The current state of the \hyperlink{ref:ReplEx} {replica exchange} simulation at any time is given by $(X,S)$, where $X$ is a vector of the configurations of \emph{all} of the replicas, $X \equiv \{\vx_1, \vx_2, \ldots, \vx_K\}$, and $S \equiv\{s_1,\ldots,s_K\} \in \mathcal{S}_K$ is a permutation of the state labels $\{1, \ldots, K\}$ associated with each of the replica configurations $\{\vx_1, \ldots, \vx_K\}$. Then the joint probability density of the entire set of all simulations $\mathcal{Q}$ is given by
-\begin{eqnarray}
-\mathcal{Q}(X, S) &\propto& \prod_{i=1}^{K} \nu_{s_i}(\vx_i) \propto \exp\left[-\sum_{i=1}^K u_{s_i}(\vx_i)\right],
+\begin{equation}
+\mathcal{Q}(X, S) \propto \prod_{i=1}^{K} \nu_{s_i}(\vx_i) \propto \exp\left[-\sum_{i=1}^K u_{s_i}(\vx_i)\right],
 \label{eq:parallereplica}
-\end{eqnarray}
+\end{equation}
 where $\mu_{s_i}$ and $u_{s_i}$ are the normalized \hyperlink{ref:Distribution}{probability distributions} and the \hyperlink{ref:reduced}{reduced} energies of the $s_i$ state, respectively.
 The conditional densities, upon specifying a particular order of the replicas $S$, is given by:
-\begin{eqnarray}
-\mathcal{Q}(X | S) &=& \prod_{i=1}^K \left[ \frac{e^{-u_{s_i}(\vx_i)}}{\int_\Omega dx \, e^{-u_{s_i}(\vx_i)}}\right],
-\end{eqnarray}
+\begin{equation}
+\mathcal{Q}(X | S) = \prod_{i=1}^K \left[ \frac{e^{-u_{s_i}(\vx_i)}}{\int_\Omega dx \, e^{-u_{s_i}(\vx_i)}}\right],
+\end{equation}
 and
-\begin{eqnarray}
-\mathcal{Q}(S | X) &=& \frac{\exp\left[- \sum\limits_{i=1}^K u_{s_i}(\vx_i) \right]}{\sum\limits_{S' \in \mathcal{S}_K} \exp\left[- \sum\limits_{i=1}^K u_{s'_i}(\vx_i) \right]}.
-\end{eqnarray}
+\begin{equation}
+\mathcal{Q}(S | X) = \frac{\exp\left[- \sum\limits_{i=1}^K u_{s_i}(\vx_i) \right]}{\sum\limits_{S' \in \mathcal{S}_K} \exp\left[- \sum\limits_{i=1}^K u_{s'_i}(\vx_i) \right]}.
+\end{equation}
 Note that this is more complicated than the equations for a single simulation: we need an equation that describes the state of all of the replicas, since they all are coupled together. With the conditional densities, we can then describe how to make jumps in coordinate space (which just ends up being independent, standard dynamics in each replica) and jumps in permutations of the replica (described in more detail below).
 
 In the most standard \hyperlink{ref:ReplEx} {replica exchange} simulation algorithms, a proposed new permutation $S$ of the state of the set of all systems $(X,S)$  only considers exchanges between states that are currently neighboring each other~\cite{hukushima-nemoto:j-phys-soc-jpn:1996:parallel-tempering,hansmann:chem-phys-lett:1997:parallel-tempering-monte-carlo,sugita-okamoto:chem-phys-lett:1999:parallel-tempering-md,sugita-kitao-okamoto:jcp:2000:hamiltonian-exchange,fukunishi-watanabe-takada:jcp:2002:hamiltonian-exchange,jang-shin-pak:prl:2003:hamiltonian-exchange,kwak-hansmann:prl:2005:hamiltonian-exchange}.
 For example, one such scheme involves attempting to exchange either the set of state index pairs $\{(1,2), (3,4), \ldots\}$ or $\{(2,3), (4,5), \ldots\}$, chosen with equal probability. Each state index pair $(i,j)$ exchange attempt is carried out independently, with the exchange of states $i$ and $j$ associated with configurations $\vx_i$ and $\vx_j$, respectively, accepted with the standard \hyperlink{ref:MetropolisMonteCarlo} {Metropolis} probability
-\begin{eqnarray}
+\begin{equation}
+P_\mathrm{accept}(\vx_i, i, \vx_j, j) = \min\left\{ 1, \frac{e^{-[u_i(\vx_j)+u_j(\vx_i)]}}{e^{-[u_i(\vx_i) + u_j(\vx_j)]}}\right\}.
 \label{eq:re_exchange_prob}
-P_\mathrm{accept}(\vx_i, i, \vx_j, j) &=& \min\left\{ 1, \frac{e^{-[u_i(\vx_j)+u_j(\vx_i)]}}{e^{-[u_i(\vx_i) + u_j(\vx_j)]}}\right\}.
-\label{eq:metropolis-replica}
-\end{eqnarray}
+\end{equation}
 However, it is also possible to sample from the space of all possible permutations, which can in some cases improve sampling~\cite{shirts_gibbssamp}.
 
 Because \hyperlink{ref:ReplEx} {replica exchange} is so general, only requiring that the $K$ states have the same coordinates but any reasonable reduced potentials $u_i$ that have overlap with each other, then there are many different variants that attempt to solve different sampling problems by defining different $u_i$.
@@ -1662,7 +1661,7 @@ Various \hyperlink{ref:ReplEx} {replica exchange} techniques have a long history
 
 \subsubsection{Estimating convergence and diagnosing issues in replica exchange simulations}
 
-One of the main limitations of \hyperlink{ref:ReplEx} {replica exchange} is the need to have simulations with some overlap with each other that are arranged to exchange. Otherwise, the swaps will occur with too low of a probability, resulting in an inefficient exchange scheme (i.e. $P_\mathrm{accept}$ between some pairs of replicas in eq.~\ref{eq:metropolis-replica} will tend to $0$). If the replica spacing in the auxiliary variable is chosen poorly, it is very common for many of the replicas to remain in the same few states for the entire simulation, a clear indication of poor global overlap. A necessary (though not sufficient) check on the global overlap of the simulation is to make sure that each individual simulation can travel between all of the different states, preferably multiple times in the same simulation (see Figure~\ref{fig:diagnostic_replica}).
+One of the main limitations of \hyperlink{ref:ReplEx} {replica exchange} is the need to have simulations with some overlap with each other that are arranged to exchange. Otherwise, the swaps will occur with too low of a probability, resulting in an inefficient exchange scheme (i.e. $P_\mathrm{accept}$ between some pairs of replicas in Equation~\ref{eq:re_exchange_prob} will tend to $0$). If the replica spacing in the auxiliary variable is chosen poorly, it is very common for many of the replicas to remain in the same few states for the entire simulation, a clear indication of poor global overlap. A necessary (though not sufficient) check on the global overlap of the simulation is to make sure that each individual simulation can travel between all of the different states, preferably multiple times in the same simulation (see Figure~\ref{fig:diagnostic_replica}).
 
 \begin{figure*}[!ht]
     \centering
@@ -1691,15 +1690,15 @@ One important note is that in the development of many \hyperlink{ref:ReplEx} {re
 
 \subsection{Expanded Ensemble}
 \hyperlink{ref:ExpEns} {Expanded ensemble} simulations~\cite{lyubartsev:jcp:1992:expanded-ensembles} use many of the same concepts as \hyperlink{ref:ReplEx} {replica exchange} simulations, but a single simulation moves between $K$ states. Specifically, a single replica or ``walker'' samples pairs $(\vx,k)$ from a joint \hyperlink{ref:Distribution} {distribution}  of configurations $\vx \in \Gamma$ and state indices $k \in \{1,\ldots,K\}$ given by,
-\begin{eqnarray}
-\nu(\vx,k) &\propto& e^{g_k-u_k(\vx)},
-\end{eqnarray}
+\begin{equation}
+\nu(\vx,k) \propto e^{g_k-u_k(\vx)},
+\end{equation}
 where $g_k$ is an optional (but usually necessary for effective sampling) state-dependent weighting factor that adjusts the relative probability of the simulation visiting each of the $k$ states.
 
 The \emph{conditional} distribution of the state index $k$ given $\vx$ is specifically:
-\begin{eqnarray}
-\nu(k | \vx) &=& \frac{e^{g_k - u_k(\vx)}}{\sum\limits_{k'=1}^K e^{g_{k'} - u_{k'}(\vx)}}.
-\end{eqnarray}
+\begin{equation}
+\nu(k | \vx) = \frac{e^{g_k - u_k(\vx)}}{\sum\limits_{k'=1}^K e^{g_{k'} - u_{k'}(\vx)}}.
+\end{equation}
 
 If we were to sample independently in the joint $(\vx,k)$ space with all of the $g_k=0$
 we would find that we would be spending more time in the states with the lowest free energies $f_k$.  If we wish to visit
@@ -1752,10 +1751,11 @@ between states to Monte Carlo for now, as dynamics in a continuous $\mathbf{\lam
 One possibility is to make steps to neighboring states, much like in \hyperlink{ref:ReplEx} {replica exchange}; if the states have a natural ordering, this is perfectly reasonable. However, they may not be a natural ordering, for example when there are multiple neighboring states in dimension higher than one, or if temperature and external biases are combined.
 
 If we think of sampling this joint space in configuration and state in the context of Gibbs sampling, an \hyperlink{ref:ExpEns} {expanded ensemble} simulation can proceed by alternating between sampling from the two conditional \hyperlink{ref:Distribution} {distribution} s,
-\begin{eqnarray}
-\nu(\vx | k) &=& \frac{q_k(\vx)}{\int_\Gamma  \, q_k(\vx) \, d\vx}  = \frac{e^{-u_k(\vx)}}{\int_\Gamma  \, e^{-u_k(\vx)} \, d\vx }  \\
-\nu(k | \vx) &=& \frac{e^{g_k}q_k(\vx)}{\sum\limits_{k'=1}^K e^{g_{k'}}q_{k'}(\vx)} = \frac{e^{g_k - u_k(\vx)}}{\sum\limits_{k'=1}^K e^{g_{k'} - u_{k'}(\vx)}} .\label{equation:expanded-ensemble-gibbs-update}
-\end{eqnarray}
+\begin{align}
+\nu(\vx | k) &= \frac{q_k(\vx)}{\int_\Gamma  \, q_k(\vx) \, d\vx}  = \frac{e^{-u_k(\vx)}}{\int_\Gamma  \, e^{-u_k(\vx)} \, d\vx }  \\
+\nu(k | \vx) &= \frac{e^{g_k}q_k(\vx)}{\sum\limits_{k'=1}^K e^{g_{k'}}q_{k'}(\vx)} = \frac{e^{g_k - u_k(\vx)}}{\sum\limits_{k'=1}^K e^{g_{k'} - u_{k'}(\vx)}}.
+\label{equation:expanded-ensemble-gibbs-update}
+\end{align}
 
 Sampling from the conditional probability \hyperlink{ref:Distribution} {distribution}
 $\nu(\vx | k)$ is just standard molecular dynamics sampling that generates time-correlated samples. Fortunately, the sampling in $\nu(k | \vx)$ is often much simpler.   If we have
@@ -1778,11 +1778,11 @@ algorithm~\footnote{Not to be confused with the Wang-Landau method of enhanced s
 The approach is as follows. We keep track of a histogram $h(i)$ of visits to each thermodynamic state during the \hyperlink{ref:ExpEns} {expanded ensemble} simulation.  When a state is visited, the corresponding
 histogram is updated by 1.  The weight $g_i$ of that state is updated by some user-chosen increment $-\delta$.  $\delta$ itself is reduced by a monotonically decreasing function as the simulation proceeds until the changes in the $g_i$ weights go to zero. The choice of how $\delta$ decreases is discussed later. The
 weight of the reference state is subtracted from all states after each step, as only the weight differences matter physically. As an algorithm, this is written as:
-\begin{eqnarray}
-h_{\mathrm{new}}(i) = h_{\mathrm{old}}(i) + 1 \\
-g_{i,\mathrm{new}} = g_{i,\mathrm{old}} - \delta.
+\begin{align}
+h_{\mathrm{new}}(i) &= h_{\mathrm{old}}(i) + 1 \\
+g_{i,\mathrm{new}} &= g_{i,\mathrm{old}} - \delta.
 \label{eq:wang-landau}
-\end{eqnarray}
+\end{align}
 The Wang-Landau algorithm is self-correcting; if a state is visited more frequently than it should, its weight decreases, resulting in fewer visits to that state.  Eventually, the weight falls back to the correct range.  In the original Wang-Landau scheme, the $\delta$ increment is decreased during the simulation when the histogram $h(i)$ reaches a specified flatness criteria, meaning none of the histograms is lower than the average occupancy, often set at 80\%~\cite{wang-landau:prl:2001:wang-landau}.  When a sufficiently flat histogram is reached, $\delta$ is reduced by multiplying by a scaling factor $0<s<1$, typically $s=1/2$ as proposed in the original algorithm~\cite{wang-landau:prl:2001:wang-landau}, and the histograms are set to zero again.
 
 \paragraph{$1/t$ modifications to Wang-Landau}
@@ -1829,9 +1829,9 @@ The basic idea of these variants is to use the \hyperlink{ref:GibbsSampler} {Gib
 where $\nu(i|\vx)$ is given in Equation~\ref{equation:expanded-ensemble-gibbs-update}.
 
 In the self-adjusted mixture sampling variant, the weights are updated at each step. Using the transition rule defined in Equation~\ref{equation:expanded-ensemble-gibbs-update}, the rule for updating is:
-\begin{eqnarray}
+\begin{equation}
 g_{i,new} = g_{i,old} - t^{-1}\nu(\vx|k),
-\end{eqnarray}
+\end{equation}
 where $t$ is a timescale that is ideally the number of uncorrelated steps in $(k,\vx)$ space that have been taken in the algorithm so far~\footnote{$t$ is not necessarily the number of timesteps taken so far in the simulation: if the correlation time in configuration space is slow, then updating the weights at every step, or updating them every step without a scaling factor to make their contribution smaller might lead to premature convergence of the biases on a subset of the conformational states.}.
 
 In the accelerated weight histogram approach, a histogram of the weights for each state is maintained during the simulation. The weight histogram is then updated using the computed $\nu(i|\vx)$ weights:
@@ -1934,11 +1934,11 @@ The extended \hyperlink{ref:Langevin} {Langevin dynamics} reads:
 \begin{equation}
 \left\{
 \begin{array}{ll}
-    d\vx &= M^{-1} \vp \,  dt \\
-    d\vp &= \left(-\nabla_\vx U(\vx) + k^\mathrm{ext} ( \lambda -\xi(\vx)) - \gamma \vp \right) dt
+    d\vx = M^{-1} \vp \,  dt \\
+    d\vp = \left(-\nabla_\vx U(\vx) + k^\mathrm{ext} ( \lambda -\xi(\vx)) - \gamma \vp \right) dt
     + \sqrt{ \frac{2 \gamma M}{\beta}} \; d\mathbf{W}_t \\
-    d\lambda &= m_\lambda^{-1} p_\lambda \, dt\\
-    d p_\lambda &= \left( k^\mathrm{ext} (\xi(\vx) - \lambda)  - \overline\gamma p_\lambda \right) dt
+    d\lambda = m_\lambda^{-1} p_\lambda \, dt\\
+    d p_\lambda = \left( k^\mathrm{ext} (\xi(\vx) - \lambda)  - \overline\gamma p_\lambda \right) dt
     + \sqrt{ \frac{2 \bar\gamma m_\lambda}{ \overline\beta}} dW_t.
 \end{array}
 \right.
