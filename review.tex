@@ -4,7 +4,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% PREAMBLE
 \RequirePackage[hyphens]{url}
-\documentclass[9pt,review]{livecoms}
+\documentclass[9pt,pubversion]{livecoms}
 % Use the 'onehalfspacing' option for 1.5 line spacing
 % Use the 'doublespacing' option for 2.0 line spacing
 % Use the 'lineno' option for adding line numbers.
@@ -467,11 +467,11 @@ $\bullet$ &   $-\beta^{-1} \ln(\bullet)$ \\
 \hline
 probability density $\nu(\vx)$  & potential energy  $U(\vx)$\\
 $\downarrow$ &  \\
-\textit{integrate over $\vx$ at constant $\vz$} & \\
+\textit{integrate $\vx$ at constant $\vz$} & \\
 $\downarrow$ &  \\
 marginal probability density $\rho(\vz)$ & free energy surface $A(\vz)$ \\
 $\downarrow$ &  \\
-\textit{integrate over $\vz$ in $\Sigma$} & \\
+\textit{integrate $\vz$ over $\Sigma$} & \\
 $\downarrow$ &  \\
 probability (measure) $P(\Sigma)$  & free energy  $F(\Sigma)$\\
 \end{tabular}
@@ -889,7 +889,7 @@ Integrating the gradient to obtain the \hyperlink{ref:FES} {free energy surface}
 
 \subsubsection{Significance of the Jacobian term}
 
-Take the example of a \hyperlink{ref:CV} {collective variable} measuring the distance $r$ between two particles. Here, the gradient of the \textit{free energy \hyperlink{ref:FES} {surface}} depends on the geometry of the CV. Given a complete coordinate transform from Cartesian to generalized coordinates including $r$, which is necessary to define partial derivatives with respect to $r$, one may write~\cite{Henin2010a}:
+Take the example of a \hyperlink{ref:CV} {collective variable} measuring the distance $r$ between two particles. Here, the gradient of the \textit{\hyperlink{ref:FES} {free energy surface}} depends on the geometry of the CV. Given a complete coordinate transform from Cartesian to generalized coordinates including $r$, which is necessary to define partial derivatives with respect to $r$, one may write~\cite{Henin2010a}:
 \begin{equation}
     \frac{\mathrm{d}a}{\mathrm{d}r} = \left\langle \frac{\partial u}{\partial r}
     - \frac{2}{r} \right\rangle_{\xi(\vx) = r}.
