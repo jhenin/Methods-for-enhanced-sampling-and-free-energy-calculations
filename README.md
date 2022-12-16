@@ -13,11 +13,11 @@ Please use the following citation for the review:
 
 Hénin, J. ., Lelièvre, T., Shirts, M. R., Valsson, O., & Delemotte, L. (2022). Enhanced Sampling Methods for Molecular Dynamics Simulations [Article v1.0]. Living Journal of Computational Molecular Science, 4(1), 1583. https://doi.org/10.33011/livecoms.4.1.1583
 
-Or in BibTex format
+Or in BibTeX format:
 ```
 @article{Henin_Lelievre_Shirts_Valsson_Delemotte_2022, 
          place={Boulder, CO, USA}, 
-         author={Hénin, Jérôme and Lelièvre, Tony and Shirts, Michael R. and Valsson, Omar and Delemotte, Lucie}, 
+         author={H{\'e}nin, J{\'e}r{\^o}me and Leli{\`e}vre, Tony and Shirts, Michael R. and Valsson, Omar and Delemotte, Lucie}, 
          title={Enhanced Sampling Methods for Molecular Dynamics Simulations [Article v1.0]}, 
          journal={Living Journal of Computational Molecular Science}, 
          volume={4}, 
